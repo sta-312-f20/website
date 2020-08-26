@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Welcome to Statistical Learning</title>
+    <title>Welcome to Linear Models</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dr. D’Agostino McGowan" />
     <script src="libs/header-attrs/header-attrs.js"></script>
@@ -15,7 +15,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Welcome to Statistical Learning
+# Welcome to Linear Models
 ### Dr. D’Agostino McGowan
 
 ---
@@ -50,191 +50,213 @@ class: middle, center
 
 Everything you will need will be posted at:
 
-# [bit.ly/sta-363-f20](http://bit.ly/sta-363-f20)
+# [bit.ly/sta-312-f20](http://bit.ly/sta-312-f20)
+
+---
+class: center, middle
+
+### "truth … is much too complicated to allow anything but approximations" - John von Neumann
+
+&lt;img src = "https://farkasdilemma.files.wordpress.com/2013/01/vonneumann.png" height = "350"&gt; &lt;/img&gt;
+&lt;font size = "2"&gt;
+John von Neumann, wearer of funny hats via &lt;a href = "https://farkasdilemma.wordpress.com/2013/01/04/john-von-neumannm-wearer-of-funny-hats/"&gt; farkasdilemma.wordpress.com&lt;/a&gt; &lt;/font&gt;
 
 ---
 
-# Statistical Learning Problems
+class: center, middle
 
-.pull-left[
-* Identify risk factors for breast cancer
-]
+### "Statistics is using data and knowledge about randomness to condense, communicate, and contextualize information and provide insight into the setting from which the data came." - Jo Hardin
 
-.pull-right[
-![](img/01/breast-cancer.jpg)
-]
+&lt;img src = "https://research.pomona.edu/johardin/files/2012/08/jo_headshot3-3.png" height = "270"&gt; &lt;/img&gt;
 
-.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie &amp; Tibshirani_
-]]
+&lt;font size = "2"&gt;
+Jo Hardin &lt;a href = "https://research.pomona.edu/johardin/files/2012/08/jo_headshot3-3.png"&gt; https://research.pomona.edu/johardin/&lt;/a&gt; &lt;/font&gt;
+
+---
+class: center, middle
+
+### "All models are wrong, but some are useful" - George Box
+
+&lt;img height="400" alt="GeorgeEPBox" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/GeorgeEPBox.jpg/256px-GeorgeEPBox.jpg"&gt;&lt;/img&gt;
+&lt;font size = "2"&gt;
+DavidMCEddy at en.wikipedia &lt;a href = "https://creativecommons.org/licenses/by-sa/3.0"&gt; CC BY-SA 3.0 &lt;/a&gt;, via Wikimedia Commons &lt;/font&gt;
 
 ---
 
-# Statistical Learning Problems
-
-.pull-left[
-&lt;font color="grey"&gt;
-* Identify risk factors for breast cancer
-&lt;/font&gt;
-* Customize an email spam detection system
-]
-
-.pull-right[
-* **Data**: 4601 labeled emails sent to _George_ who works at _HP Labs_ 
-* **Input features**: frequencies of words and punctuation
-]
-
-| george | you | hp | free | ! | edu | remove
---|-----|-----|----|-----|-----|----|------
-**spam** | 0.00 | 2.26 | 0.02 | 0.52 | 0.51 | 0.01 | 0.28
-**email** | 2.27 | 1.27 | 0.90 | 0.07 | 0.11 | 0.29 | 0.01
-
-.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie &amp; Tibshirani_
-]]
-
----
-
-
-# Statistical Learning Problems
-
-.pull-left[
-&lt;font color="grey"&gt;
-* Identify risk factors for breast cancer
-* Customize an email spam detection system
-&lt;/font&gt;
-* Identify numbers in handwritten zip code
-]
-
-.pull-right[
-![](img/01/zipcode.png)
-]
-
-.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie &amp; Tibshirani_
-]]
-
----
-
-# Statistical Learning Problems
-
-.pull-left[
-&lt;font color="grey"&gt;
-* Identify risk factors for breast cancer
-* Customize an email spam detection system
-* Identify numbers in handwritten zip code
-&lt;/font&gt;
-* Establish the relationship between variables in population survey data
-]
-
-.pull-right[
-Income survey data for males from the central Atlantic region of US, 2009
-
-&lt;img src = "img/01/wage1.png" height = 350&gt;&lt;/img&gt;
-
-]
-
-.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie &amp; Tibshirani_
-]]
-
----
-
-# Statistical Learning Problems
-
-.pull-left[
-&lt;font color="grey"&gt;
-* Identify risk factors for breast cancer
-* Customize an email spam detection system
-* Identify numbers in handwritten zip code
-* Establish the relationship between variables in population survey data
-&lt;/font&gt;
-* Classify pixels of an image
-]
-
-
-.pull-right[
-&lt;img src = "img/01/land-use.png" height = 300&gt;&lt;/img&gt;
-.small[
-Usage `\(\in\)` {red soil, cotton, vegetation stubble, mixture, gray soil, damp
-gray soil}
-]
-]
-
-.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie &amp; Tibshirani_
-]]
-
----
-
-## ✌️ types of statistical learning
-
-.large[
-* Supervised Learning
-* Unsupervised Learning
-]
----
-
-## Supervised Learning
-
-.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie &amp; Tibshirani_
-]]
-
-* **outcome variable**: `\(Y\)`, (dependent variable,
-response, target)
---
-
-* **predictors**: vector of `\(p\)` predictors, `\(X\)`, (inputs,
-regressors, covariates, features, independent variables)
---
-
-* In the **regression problem**, `\(Y\)` is quantitative (e.g price,
-blood pressure)
---
-
-* In the **classification** problem, `\(Y\)` takes values in a finite,
-unordered set (survived/died, digit 0-9, cancer class of
-tissue sample)
---
-
-* We have **training data** `\((x_1, y_1), \dots, (x_N, y_N)\)`. These are
-observations (examples, instances) of these measurements
-
----
-
-## Supervised Learning
+class: center, middle
 
 .question[
-What do you think are some objectives here?
+# data = model + error
 ]
 
---
-
-### Objectives
-
-* Accurately predict unseen test cases
-* Understand which inputs affect the outcome, and how
-* Assess the quality of our predictions and inferences
-
-.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie &amp; Tibshirani_
-]]
 ---
 
-## Unsupervised Learning
+class: center, middle
 
-.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie &amp; Tibshirani_
-]]
+.question[
+ $$ 
+ \LARGE y = f(\mathbf{X}) + \epsilon 
+ $$
+]
 
-* No outcome variable, just a set of predictors (features)
-measured on a set of samples
---
+# 🗣 math speak 
 
-* objective is more fuzzy -- find groups of samples that
-behave similarly, find features that behave similarly, find
-linear combinations of features with the most variation
---
+---
 
-* difficult to know how well your are doing
---
+class: center, middle
 
-* different from supervised learning, but can be useful as a
-pre-processing step for supervised learning
+.question[
+ $$ 
+ \LARGE y = \color{blue}{f(\mathbf{X})} + \epsilon 
+ $$
+]
 
+# model
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE y = f(\color{blue}{\mathbf{X}}) + \epsilon 
+ $$
+]
+
+# data (to build the model)
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE \color{blue}y = f(\mathbf{X}) + \epsilon 
+ $$
+]
+
+# data (outcome)
+
+
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE y = \color{blue}{\beta_0 + \beta_1X
+ }+ \epsilon 
+ $$
+]
+
+# Simple Linear Regression
+
+---
+
+class: center, middle
+
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+&lt;font size = "2"&gt; Bob at Easel from  &lt;a href = "https://en.wikipedia.org/wiki/File:Bob_at_Easel.jpg"&gt;Wikipedia&lt;/a&gt;&lt;/font&gt;
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+![](01-welcome_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+]
+
+### Data: [FiveThirtyEight](https://fivethirtyeight.com/features/a-statistical-analysis-of-the-work-of-bob-ross/)
+
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+![](01-welcome_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+]
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+![](01-welcome_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+]
+
+.question[
+ $$ 
+ \LARGE y = \color{blue}{\beta_0 + \beta_1X
+ }+ \epsilon 
+ $$
+]
+
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+![](01-welcome_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+]
+
+.question[
+ $$ 
+ \text{# of paintings with clouds} = \color{blue}{\beta_0 + \beta_1 season
+ }+ \epsilon 
+ $$
+]
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+![](01-welcome_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+]
+
+.question[
+ $$ 
+ \text{# of paintings with clouds} = \color{blue}{\beta_0 + \beta_1 season
+ }+ \epsilon 
+ $$
+]
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+![](01-welcome_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+]
+
+.question[
+ $$ 
+ \text{# of paintings with clouds} = \color{blue}{\beta_0 + \beta_1 f(season)
+ }+ \epsilon 
+ $$
+]
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE y = \color{blue}{\beta_0 + \beta_1X_1 + \beta_2X_2+...
+ }+ \epsilon 
+ $$
+]
+
+# Multiple Linear Regression
 
 ---
 class: center, middle
@@ -254,7 +276,7 @@ class: center, middle
 
 class: inverse
 
-<div class="countdown" id="timer_5f458bc0" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5f466446" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
