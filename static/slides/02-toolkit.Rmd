@@ -11,6 +11,19 @@ output:
       countIncrementalSlides: false
 ---
 
+<style>
+.remark-slide-content:after {
+    content: "";
+    position: absolute;
+    bottom: 5px;
+    right: 810px;
+    height: 70px;
+    width: 81px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("img/dmds.png");
+}
+</style>
 ```{r child = "setup.Rmd"}
 ```
 
