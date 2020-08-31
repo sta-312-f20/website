@@ -15,6 +15,7 @@ lessons:
   - date: "Tues, Sep 1"
     title: "Meet the toolkit"
     slides: "02-toolkit.html"
+    video: "https://youtu.be/DHaRaJo7AVI"
   - title: "Lab 01: Welcome to R + LaTeX!"
     lab: "01-hello-r.html"
   - date: "Thurs, Sep 3"
