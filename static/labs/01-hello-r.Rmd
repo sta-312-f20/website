@@ -1,0 +1,241 @@
+---
+title: "Lab 01 - Hello R!"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: lab.css
+link-citations: yes
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE     # for regression output
+)
+```
+
+**Due:** Thursday 2020-09-03 at 5pm
+
+# Introduction
+
+```{marginfigure}
+R is the name of the programming language itself and RStudio is a convenient interface.
+```
+
+The main goal of this lab is to introduce you to R and RStudio, which we will be using throughout the course both to learn the statistical concepts discussed in the course and to analyze real data and come to informed conclusions. 
+
+As the labs progress, you are encouraged to explore beyond what the labs dictate; a willingness to experiment will make you a much better programmer. Before we get to that stage, however, you need to build some basic fluency in R. Today we begin with the fundamental building blocks of R and RStudio: the interface, reading in data, and basic commands.
+
+# Getting started
+
+Each of your assignments will begin with the following steps. You saw these once in class, they're outlined in detail here again. Going forward each lab will start with a "Getting started" section but details will be a bit more sparse than this. You can always refer back to this lab for a detailed list of the steps involved for getting started with an assignment.
+
+- Go to today's module in Canvas - click "Download Lab .Rmd starter file"
+- Go to RStudio Pro. Create a **New Project** by clicking File > New Project > New Directory. Name the directory something sensible (for example `01-lab-hello-r`)
+- Upload the .Rmd starter file into this project and you're ready to go!
+
+
+# Packages
+
+In this lab we will work with one packages: `palmerpenguins`.
+
+Install this packages by running the following in the console.
+
+```{r eval = FALSE}
+install.packages("palmerpenguins")
+```
+
+Now that the necessary packages are installed, you should be able to Knit your document and see the results.
+
+If you'd like to run your code in the Console as well you'll also need to load the packages there. To do so, run the following in the console. 
+
+```{r}
+library(palmerpenguins) 
+```
+
+Note that the packages are also loaded with the same commands in your R Markdown document.
+
+
+```{marginfigure}
+The top portion of your R Markdown file (between the three dashed lines) is called YAML. It stands for "YAML Ain't Markup Language". It is a human friendly data serialization standard for all programming languages. All you need to know is that this area is called the YAML (we will refer to it as such) and that it contains meta information about your document.
+```
+
+## YAML: 
+
+Open the R Markdown (Rmd) file in your project, change the author name to your name, and knit the document.
+
+```{r yaml-raw-to-rendered, fig.fullwidth=TRUE, echo = FALSE}
+knitr::include_graphics("img/01/yaml-raw-to-rendered.png")
+```
+
+# Data
+
+The data frame we will be working with today is called `penguins` and it's in the `palmerpenguins` package. 
+
+To find out more about the dataset, type the following in your Console: `?penguins`. A question mark before the name of an object will always bring up its help file. This command must be ran in the Console.
+
+```{marginfigure}
+Remember: The Console is at the bottom of your RStudio workspace. Things you type in the Console will not be in your final report. This is a good place to peek at data (try typing `penguins` in the Console) and look at help files with the `?`. 
+```
+
+1. Based on the help function, how many rows (n) and how many columns (p) does the `penguins` file have? What are the variables included in the data frame? Add your responses to your lab report. 
+
+```{marginfigure}
+This dataset contains measurements for penguin species in Palmer Archipelago.
+```
+
+# Create a vector
+
+2. Create a new _vector_ called `x` that contains the information about the penguins' flipper length in millimeters.
+
+Below is the code you will need to complete this exercise. Basically, the answer is already given, but you need to include relevant bits in your Rmd document and successfully knit it and view the results.
+
+Start with the `penguins` dataset and pull out the variable of interest by using the `$`, for example `penguins$island` will extract a vector including the island in Palmer Archipelago, Antarctica each penguin is from. To save this vector as a new named object, `x`, use the assignment operator `<-`  
+
+```{r}
+x <- penguins$flipper_length_mm
+```
+
+There is a lot going on here, so let's slow down and unpack it a bit. 
+
+First, the dollar sign operator: `$`, extracts the vector of interest from the dataset at hand. So here, we're saying take the `penguins` data frame and extract `flipper_length_mm`.
+
+Second, the assignment operator: `<-`, assigns the name `x` to the extracted vector.
+
+```{marginfigure}
+Run this code in your Console and then run `x` to see the new vector.
+```
+
+3. Create a new vector called `y` that contains information about the penguins' bill length in millimeters. 
+
+You are going to use a very similar approach as Exercise 2, the code below should get you started. 
+
+```{marginfigure}
+Forgot the variable names in the `penguins` dataset? Try running `?penguins` in your Console
+```
+
+
+```{r, eval = FALSE}
+y <- _____
+```
+
+# Design Matrix
+
+Let's turn our vector `x` into a design matrix. A _design matrix_ is sometimes called a _model matrix_. In a design matrix, there is one row for each observation in the data and one column for each _explanatory variable_, and a row of all `1`s in the first column. In this case we just have one explanatory variable (`x`, our vector with information about the penguins' flipper length). Here is a sample design matrix for a data set with 4 observations and 2 explanatory variables:
+
+$$
+\begin{bmatrix}
+1 & x_{11} & x_{21}\\
+1 & x_{12} & x_{22}\\
+1 & x_{13} & x_{23} \\
+1 & x_{14} & x_{24}
+\end{bmatrix}
+$$
+
+I created this in _Math Mode_ by writing the following in my .Rmd file:
+
+```
+$$
+\begin{bmatrix}
+1 & x_{11} & x_{21}\\
+1 & x_{12} & x_{22}\\
+1 & x_{13} & x_{23} \\
+1 & x_{14} & x_{24}
+\end{bmatrix}
+$$
+```
+
+4. Write out a design matrix in _math mode_ with 3 observations and 1 explanatory variable. Use the example above as a template.
+
+5. Create a design matrix from `x` called `X`.
+
+Below is the code you will need to complete this exercise. Basically, the answer is already given, but you need to include relevant bits in your Rmd document and successfully knit it and view the results.
+
+```{marginfigure}
+Curious about the `rep` function? run `?rep` in the Console.
+```
+
+I've broken this into two parts, first we create the "ones column" that is the same length as our vector, `x`. To do this, I use the `rep` function to _repeat_ `1`. I want to repeat it the length of `x` times. Go back to Exercise 1 to remind yourself how many rows our dataset has. The `length` function is a way to count the number of elements in a vector. These two values should match.
+
+```{marginfigure}
+Run `length(x)` in the Console. Is this the same as the number of observations you reported in Exercise 1?
+```
+
+After creating the `ones_column` we can use the `matrix` function to create a matrix. We need to _concatenate_ our ones column to our vector `x`, we do that with `c`. Then we need to let the matrix function know that we would like this matrix to have 2 columns, by setting `ncol = 2`.
+
+```{r}
+ones_column <- rep(1, length(x))
+X <- matrix(c(ones_column, x),
+       ncol = 2)
+```
+
+# Matrix manipulation
+
+```{marginfigure}
+Remember, to multiply matrices, they need to be _conformable_!
+```
+
+We can multiply matrices in R using the `%*%` operator. 
+
+6. What happens if you run `X%*%X` in the Console? _Note: Describe what happens when you run this in the Console **do not** add this code to your .Rmd file_.
+
+7. Let's multiple our design matrix, `X` by it's transpose and save this as a new object, `XTX`.
+
+In R, you can take the _transpose_ of a matrix with the `t` function. Copy the code below into your Rmd file.
+
+```{r}
+XTX <- X %*% t(X)
+```
+
+8. Let's take the inverse of our object created in Exercise 7.
+
+In R, you take the inverse of a matrix using the `solve` function. Edit the code below to take the inverse of the object `XTX` that you created in Exercise 7.
+
+```{r, eval = FALSE}
+XTX_inv <- solve(----)
+```
+
+# Linear models
+
+One way to solve for the coefficients of a linear model is by calculating:
+
+$$
+\beta = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}
+$$
+We've already calculated the first part and it is saved in our object `XTX_inv`. 
+
+9. Multiply `XTX_inv` calculated in Exercise 8 by the transpose of `X` and `y`.
+
+Edit the code below to solve for the coefficients.  
+
+```{r, eval = FALSE}
+XTX_inv %*% t(---) %*% ---
+```
+
+10. Fit a linear model using the penguins data estimating bill length from flipper length. How does this compare to the result you got in Exercise 9?
+
+In R, the `lm` function can be used to fit a linear model. Below is the code you will need to complete this exercise. Basically, the answer is already given, but you need to include relevant bits in your Rmd document and successfully knit it and view the results.
+
+```{r}
+lm(bill_length_mm ~ flipper_length_mm, data = penguins)
+```
+
+The `lm` function takes two main arguments, the formula, in the format `y ~ x`, and the dataset in the `data = ` parameter.
+
+You're done with the exercises, but we'd like you to do one more thing:
+
+
+```{r theme-highlight, fig.margin = TRUE, echo = FALSE, fig.width=3}
+knitr::include_graphics("img/01/theme-highlight.png")
+```
+
+- **Change the look of your report:** 
+
+Click on the gear icon in on top of the R Markdown document, and select "Output Options..." in the dropdown menu. In the General tab of the pop up dialogue box try out different Syntax highlighting and theme options. Hit OK and knit your document to see how it looks. Play around with these until you're happy with the look.
+
+<br>
+
+
+
