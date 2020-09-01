@@ -581,16 +581,20 @@ color: #333333;
 $$</code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li><p>Write out a design matrix in <em>math mode</em> with 3 observations and 1 explanatory variable. Use the example above as a template.</p></li>
-<li><p>Create a design matrix from <code>x</code> called <code>X</code>.</p></li>
+<li><p>Removing missing values from <code>x</code> and <code>y</code>. Then create a design matrix from <code>x</code> called <code>X</code>.</p></li>
 </ol>
 <p>Below is the code you will need to complete this exercise. Basically, the answer is already given, but you need to include relevant bits in your Rmd document and successfully knit it and view the results.</p>
+<p>I’ve broken this into three parts. First we need to remove missing values from <code>x</code> and <code>y</code>. Then we create the “ones column” that is the same length as our vector, <code>x</code>. Finally we combine these in a matrix.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>x &lt;-<span class="st"> </span>x[<span class="op">!</span><span class="kw">is.na</span>(x)]</span>
+<span id="cb6-2"><a href="#cb6-2"></a>y &lt;-<span class="st"> </span>y[<span class="op">!</span><span class="kw">is.na</span>(y)]</span>
+<span id="cb6-3"><a href="#cb6-3"></a>ones_column &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(x))</span>
+<span id="cb6-4"><a href="#cb6-4"></a>X &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(ones_column, x),</span>
+<span id="cb6-5"><a href="#cb6-5"></a>       <span class="dt">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p>First we need to remove missing values from <code>x</code> and <code>y</code>. The <code>is.na</code> function checks if any values are <code>NA</code>, or missing. The <code>!</code> means “not” in R, so the code inside the brackets <code>[ ]</code> above tells R to tell us which values are NOT missing in the <code>x</code> and <code>y</code> vectors. To extract <em>only</em> these values, we use the brackets.</p>
 <p><label for="tufte-mn-7" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-7" class="margin-toggle"><span class="marginnote"><span style="display: block;">Curious about the <code>rep</code> function? run <code>?rep</code> in the Console.</span></span></p>
-<p>I’ve broken this into two parts, first we create the “ones column” that is the same length as our vector, <code>x</code>. To do this, I use the <code>rep</code> function to <em>repeat</em> <code>1</code>. I want to repeat it the length of <code>x</code> times. Go back to Exercise 1 to remind yourself how many rows our dataset has. The <code>length</code> function is a way to count the number of elements in a vector. These two values should match.</p>
+<p>We then create the “ones column” that is the same length as our vector, <code>x</code>. To do this, I use the <code>rep</code> function to <em>repeat</em> <code>1</code>. I want to repeat it the length of <code>x</code> times. Go back to Exercise 1 to remind yourself how many rows our dataset has. The <code>length</code> function is a way to count the number of elements in a vector. These two values should match.</p>
 <p><label for="tufte-mn-8" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-8" class="margin-toggle"><span class="marginnote"><span style="display: block;">Run <code>length(x)</code> in the Console. Is this the same as the number of observations you reported in Exercise 1?</span></span></p>
 <p>After creating the <code>ones_column</code> we can use the <code>matrix</code> function to create a matrix. We need to <em>concatenate</em> our ones column to our vector <code>x</code>, we do that with <code>c</code>. Then we need to let the matrix function know that we would like this matrix to have 2 columns, by setting <code>ncol = 2</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>ones_column &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(x))</span>
-<span id="cb6-2"><a href="#cb6-2"></a>X &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(ones_column, x),</span>
-<span id="cb6-3"><a href="#cb6-3"></a>       <span class="dt">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
 </div>
 <div id="matrix-manipulation" class="section level1">
 <h1>Matrix manipulation</h1>
@@ -601,7 +605,7 @@ $$</code></pre>
 <li><p>Let’s multiple our design matrix, <code>X</code> by it’s transpose and save this as a new object, <code>XTX</code>.</p></li>
 </ol>
 <p>In R, you can take the <em>transpose</em> of a matrix with the <code>t</code> function. Copy the code below into your Rmd file.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>XTX &lt;-<span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>XTX &lt;-<span class="st"> </span><span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>X</span></code></pre></div>
 <ol start="8" style="list-style-type: decimal">
 <li>Let’s take the inverse of our object created in Exercise 7.</li>
 </ol>

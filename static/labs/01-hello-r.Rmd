@@ -149,27 +149,38 @@ $$
 
 4. Write out a design matrix in _math mode_ with 3 observations and 1 explanatory variable. Use the example above as a template.
 
-5. Create a design matrix from `x` called `X`.
+5. Removing missing values from `x` and `y`. Then create a design matrix from `x` called `X`.
 
 Below is the code you will need to complete this exercise. Basically, the answer is already given, but you need to include relevant bits in your Rmd document and successfully knit it and view the results.
+
+
+
+I've broken this into three parts. First we need to remove missing values from `x` and `y`. Then we create the "ones column" that is the same length as our vector, `x`. Finally we combine these in a matrix.
+
+
+```{r}
+x <- x[!is.na(x)]
+y <- y[!is.na(y)]
+ones_column <- rep(1, length(x))
+X <- matrix(c(ones_column, x),
+       ncol = 2)
+```
+
+
+First we need to remove missing values from `x` and `y`. The `is.na` function checks if any values are `NA`, or missing. The `!` means "not" in R, so the code inside the brackets `[ ]` above tells R to tell us which values are NOT missing in the `x` and `y` vectors. To extract _only_ these values, we use the brackets. 
 
 ```{marginfigure}
 Curious about the `rep` function? run `?rep` in the Console.
 ```
 
-I've broken this into two parts, first we create the "ones column" that is the same length as our vector, `x`. To do this, I use the `rep` function to _repeat_ `1`. I want to repeat it the length of `x` times. Go back to Exercise 1 to remind yourself how many rows our dataset has. The `length` function is a way to count the number of elements in a vector. These two values should match.
+We then create the "ones column" that is the same length as our vector, `x`. To do this, I use the `rep` function to _repeat_ `1`. I want to repeat it the length of `x` times. Go back to Exercise 1 to remind yourself how many rows our dataset has. The `length` function is a way to count the number of elements in a vector. These two values should match.
+
 
 ```{marginfigure}
 Run `length(x)` in the Console. Is this the same as the number of observations you reported in Exercise 1?
 ```
 
 After creating the `ones_column` we can use the `matrix` function to create a matrix. We need to _concatenate_ our ones column to our vector `x`, we do that with `c`. Then we need to let the matrix function know that we would like this matrix to have 2 columns, by setting `ncol = 2`.
-
-```{r}
-ones_column <- rep(1, length(x))
-X <- matrix(c(ones_column, x),
-       ncol = 2)
-```
 
 # Matrix manipulation
 
