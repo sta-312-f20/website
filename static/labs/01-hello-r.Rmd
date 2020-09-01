@@ -186,7 +186,7 @@ We can multiply matrices in R using the `%*%` operator.
 In R, you can take the _transpose_ of a matrix with the `t` function. Copy the code below into your Rmd file.
 
 ```{r}
-XTX <- X %*% t(X)
+XTX <- t(X) %*% X
 ```
 
 8. Let's take the inverse of our object created in Exercise 7.
