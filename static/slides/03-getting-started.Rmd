@@ -1,0 +1,98 @@
+---
+title: "Before we fit a model"
+author: ""
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+  
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## Before you fit a model
+
+`r emo::ji("book")` **Understand the content matter** 
+--
+As a statistician I collaborate frequently with subject matter experts to ensure that I understand the the context of the problem at hand.
+
+--
+
+`r emo::ji("question_mark")` **Understand the objective** 
+--
+It is crucial to understand the what the objectives are. Ideally, these are set a priori, or if exploratory analyses are being done that is very explicit from beginning to end
+
+--
+
+`r emo::ji("ruler")` **Understand where the data came from** 
+--
+Was this observational or experimental data? Is any data missing? What are the units? Are there data entry issues?
+
+--
+
+`r emo::ji("broom")` **Get the data into a tidy, analyzable form**  
+--
+Often we get data in a form that is not easily analyzable. In this class, we will be focusing _mostly_ on statistical methodology once the data _is_ in an analyzable format, but just because it is analyzable doesn't mean the analysis choice is obvious.
+
+---
+
+## Before you fit a model
+
+`r emo::ji("dancer")` **Determine the appropriate model** 
+--
+In this class we are focusing on _Linear Models_. Linear models are not always appropriate. You must examine your data to determine whether a linear model is a good choice.
+
+---
+
+## Before you fit a model
+
+### `r emo::ji("book")` Understand the content matter  
+### `r emo::ji("question_mark")` Understand the objective
+### `r emo::ji("ruler")` Understand where the data came from  
+### `r emo::ji("broom")` Get the data into a tidy, analyzable form  
+### `r emo::ji("dancer")` Determine the appropriate model
+
+---
+
+## Is a Linear Model appropriate?
+
+* Outcome variable, $y$ is **continuous**
+--
+
+* Explanatory variable(s), $\mathbf{X} = \{X_1, \dots, X_p\}$ can take any form
+--
+
+* Observations are **independent**
+--
+
+* The residuals are **homoscedastic** (Equal variance)
+--
+
+* The residuals are **normally distributed**
+--
+
+* The relationship between the residuals & $y$ is linear
+
+---
+
+## What are Linear Models used for?
+
+`r emo::ji("point_up")` Prediction of future outcomes using specific predictors
+
+--
+
+`r emo::ji("v")` Assessing the relationship between explanatory variables and the response
