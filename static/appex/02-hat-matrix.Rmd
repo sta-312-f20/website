@@ -1,0 +1,38 @@
+---
+title: "Application Exercise Derive the Hat Matrix"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: lab.css
+link-citations: yes
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE     # for regression output
+)
+```
+
+In the [Derive the Hat Matrix](https://youtu.be/97aL2LkxE3c) video, I derive the hat matrix. I skip a few steps when taking the derivative of $(y-\mathbf{X}\beta)^T(y-\mathbf{X}\beta)$. Fill in these steps and derive the hat matrix here (using $\LaTeX$). Don't remember all of the $\LaTeX$ symbols? Here is a [cheat sheet](https://sites.lsa.umich.edu/wp-content/uploads/sites/244/2015/04/LaTeX-Syntax-Cheat-Sheet.pdf).
+
+Start with the sum of squared residuals:
+
+$$\sum\epsilon^2 = \epsilon^T\epsilon = (y-\mathbf{X}\beta)^T(y-\mathbf{X}\beta)$$
+
+1. Open Rstudio Server Pro
+2. Create a new project (call it something sensible, perhaps `02-appex-hat-matrix`)
+3. Click File > New File > R Markdown
+4. Delete everything except for 
+```
+---
+title: "Untitled"
+output: html_document
+---
+```
+5. Give your work a sensible title
+6. After adding your derivation to the file (remember you can incorporate $\LaTeX$ by wrapping in `$$`), knit it.
+6. When you've finished, upload the .html file to Canvas
+
