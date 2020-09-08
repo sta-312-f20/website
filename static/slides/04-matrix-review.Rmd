@@ -151,7 +151,7 @@ $$\frac{\partial\mathbf{a}^T\mathbf{b}}{\partial\mathbf{b}}=\frac{\partial\mathb
 
 * When $\mathbf{A}$ is a symmetric matrix
 
-$$\frac{\partial\mathbf{b}^T\mathbf{Ab}}{\partial\mathbf{b}}=2\mathbf{Ab}=2\mathbf{b}^T\mathbf{A}$$
+$$\frac{\partial\mathbf{b}^T\mathbf{Ab}}{\partial\mathbf{b}}=2\mathbf{Ab}$$
 
 --
 
