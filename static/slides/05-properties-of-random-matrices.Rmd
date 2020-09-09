@@ -1,0 +1,285 @@
+---
+title: "Properties of random matrices"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+  <span>
+  Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## Random matrices
+
+* $\mathbf{X}$ and $\mathbf{Y}$ are _random matrices_
+
+--
+
+.question[
+What do I mean by a _random matrix_?
+]
+-- 
+* A _random matrix_ is a matrix consisting of a _random variable_ (as opposed to a _constant_). 
+
+---
+
+## Random matrices
+
+* $\mathbf{X}$ and $\mathbf{Y}$ are _random matrices_
+--
+
+* $\mathbf{A}$ and $\mathbf{B}$ are _constant matrices_.
+
+---
+
+## Expectation
+
+* **Expectation** describes the _average value_
+--
+
+* In math-speak, we write it like this $E[X]$
+--
+
+* Recall from probability, 
+
+$$E[X] = \begin{cases}
+\sum_x xp_X(x) & X \textrm{ is a discrete random variable}\\
+\int_{-\infty}^{\infty}xf_X(x)dx & X \textrm{ is a continuous random variable}
+\end{cases}$$
+
+
+---
+
+## `r fa("pause-circle")` `Expectation facts`
+
+.definition[
+$\mathbf{X}$ and $\mathbf{Y}$ are _random matrices_
+
+$\mathbf{A}$ and $\mathbf{B}$ are _constant matrices_
+]
+
+* $E[\mathbf{X} + \mathbf{Y}] = E[\mathbf{X}] + E[\mathbf{Y}]$
+--
+
+* $E[\mathbf{AX}] = \mathbf{A}E[\mathbf{X}]$
+--
+
+* $E[\mathbf{A}\mathbf{X}\mathbf{B}] = \mathbf{A}E[\mathbf{X}]\mathbf{B}$
+
+---
+
+## `r fa("edit")` `Try it`
+
+.definition[
+a is a constant, $\mathbf{X}$ and $\mathbf{Y}$ are a random matrices
+]
+
+Solve the following:
+
+* $E[a\mathbf{X}]$
+* $E[\mathbf{X} + \mathbf{Y}]$
+* $E[\mathbf{X}\mathbf{Y}]$
+
+`r countdown(1.5)`
+
+---
+
+## `r fa("edit")` `Try it`
+
+.definition[
+a is a constant, $\mathbf{X}$ and $\mathbf{Y}$ are a random matrices
+]
+
+Solve the following:
+
+* $E[a\mathbf{X}] = aE[\mathbf{X}]$
+* $E[\mathbf{X} + \mathbf{Y}] = E[\mathbf{X}] + E[\mathbf{Y}]$
+* $E[\mathbf{X}\mathbf{Y}]= ?$
+
+---
+
+## Covariance
+
+* **Covariance** is a measure of _joint variability_ between two random variables
+--
+
+* In math-speak we write it like this: $cov(\mathbf{X},\mathbf{Y})$
+--
+
+* Recall from probability,
+
+$$cov(\mathbf{X},\mathbf{Y}) = E[(\mathbf{X} - E[\mathbf{X}])(\mathbf{Y} - E[\mathbf{Y}])]$$
+
+---
+
+## `r fa("pause-circle")` `Covariance facts`
+
+.definition[
+$\mathbf{X}$ and $\mathbf{Y}$ are _random matrices_  
+$\mathbf{A}$ and $\mathbf{B}$ are _constant matrices_  
+$c$ and $d$ are _constants_
+]
+
+* $cov(\mathbf{X},\mathbf{Y}) = cov(\mathbf{Y}^T, \mathbf{X})$
+--
+
+* $cov(\mathbf{X} + c, \mathbf{Y} + d) = cov(\mathbf{X}, \mathbf{Y}) + cov(\mathbf{X}, d) + cov(c, \mathbf{Y}) + cov(c, d)$
+--
+
+.question[
+What is the covariance between an random variable and a constant? 
+]
+
+--
+* $cov(\mathbf{X} + c, \mathbf{Y} + d) = cov(\mathbf{X}, \mathbf{Y}) + 0 + 0 + 0 = cov(\mathbf{X}, \mathbf{Y})$
+--
+
+* $cov(\mathbf{A}\mathbf{X}, \mathbf{B}\mathbf{Y}) = \mathbf{A}cov(\mathbf{X}, \mathbf{Y})\mathbf{B}^T$
+
+---
+
+## `r fa("edit")` `Try it`
+
+.definition[
+$\mathbf{X}$ and $\mathbf{Y}$ are _random matrices_  
+$\mathbf{A}$ and $\mathbf{B}$ are _constant matrices_  
+$c$ and $d$ are _constants_
+]
+
+Calculate the covariance of the following:
+
+* $cov(\mathbf{B}\mathbf{X}, \mathbf{Y})$
+* $cov(c, \mathbf{Y})$
+
+`r countdown(1.5)`
+
+---
+
+## `r fa("edit")` `Try it`
+
+.definition[
+$\mathbf{X}$ and $\mathbf{Y}$ are _random matrices_  
+$\mathbf{A}$ and $\mathbf{B}$ are _constant matrices_  
+$c$ and $d$ are _constants_
+]
+
+Calculate the covariance of the following:
+
+* $cov(\mathbf{B}\mathbf{X}, \mathbf{Y}) = \mathbf{B}cov(\mathbf{X}, \mathbf{Y})$
+* $cov(c, \mathbf{Y}) = 0$
+
+---
+
+## Variance
+
+* **Variance** measures the spread of a variable
+--
+
+* In math-speak, we write it like this: $var(\mathbf{X})$
+--
+
+* Recall from probability,
+
+$$var(\mathbf{X}) = cov(\mathbf{X}, \mathbf{X}) = E[\mathbf{X}^2] - E[\mathbf{X}]^2$$
+
+---
+
+## `r fa("pause-circle")` `Variance facts`
+
+.definition[
+$\mathbf{X}$ and $\mathbf{Y}$ are _random matrices_  
+$\mathbf{A}$ and $\mathbf{B}$ are _constant matrices_  
+$c$ and $d$ are _constants_
+]
+
+* $var(\mathbf{X} + c) = var(\mathbf{X})$
+--
+
+* $var(\mathbf{A}\mathbf{X}) = \mathbf{A}var(\mathbf{X})\mathbf{A}^T$
+--
+
+* If $X_i$s are independent, $var(\sum_{i=1}^n X_i) = \sum var(X_i)$
+
+---
+
+## `r fa("edit")` `Try it`
+
+Show that $cov(\mathbf{X}, \mathbf{X}) = var(\mathbf{X})$
+
+`r countdown(3)`
+
+---
+
+## `r fa("edit")` `Try it`
+
+Show that $cov(\mathbf{X}, \mathbf{X}) = var(\mathbf{X})$
+
+$$\begin{align}
+cov(\mathbf{X}, \mathbf{X}) & = E[(\mathbf{X} - E[\mathbf{X}])(\mathbf{X} - E[\mathbf{X}])]
+\end{align}$$
+
+---
+
+## `r fa("edit")` `Try it`
+
+Show that $cov(\mathbf{X}, \mathbf{X}) = var(\mathbf{X})$
+
+$$\begin{align}
+cov(\mathbf{X}, \mathbf{X}) & = E[(\mathbf{X} - E[\mathbf{X}])(\mathbf{X} - E[\mathbf{X}])]\\
+& = E[\mathbf{X}^2-2\mathbf{X}E[\mathbf{X}]+E[\mathbf{X}]^2]
+\end{align}$$
+
+---
+
+## `r fa("edit")` `Try it`
+
+Show that $cov(\mathbf{X}, \mathbf{X}) = var(\mathbf{X})$
+
+$$\begin{align}
+cov(\mathbf{X}, \mathbf{X}) & = E[(\mathbf{X} - E[\mathbf{X}])(\mathbf{X} - E[\mathbf{X}])]\\
+& = E[\mathbf{X}^2-2\mathbf{X}E[\mathbf{X}]+E[\mathbf{X}]^2]\\
+&= E[\mathbf{X}^2] - 2E[\mathbf{X}]E[\mathbf{X}]+E[\mathbf{X}]^2
+\end{align}$$
+
+---
+
+## `r fa("edit")` `Try it`
+
+Show that $cov(\mathbf{X}, \mathbf{X}) = var(\mathbf{X})$
+
+$$\begin{align}
+cov(\mathbf{X}, \mathbf{X}) & = E[(\mathbf{X} - E[\mathbf{X}])(\mathbf{X} - E[\mathbf{X}])]\\
+& = E[\mathbf{X}^2-2\mathbf{X}E[\mathbf{X}]+E[\mathbf{X}]^2]\\
+&= E[\mathbf{X}^2] - 2E[\mathbf{X}]E[\mathbf{X}]+E[\mathbf{X}]^2\\
+&=E[\mathbf{X}^2] - E[\mathbf{X}]^2
+\end{align}$$
+
+---
+
+## Unbiased
+
+.question[
+What does it mean to be unbiased?
+]
+
+--
+
+If $X$ is a statistic used to estimate a parameter $\theta$, it is _unbiased_ if 
+
+$$E[X] = \theta$$

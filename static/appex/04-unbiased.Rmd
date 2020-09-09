@@ -1,0 +1,36 @@
+---
+title: "Application Exercise"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: lab.css
+link-citations: yes
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE     # for regression output
+)
+```
+
+Show that $E[\hat\beta|\mathbf{X}] = \beta$. Start with the equation below.
+
+$$E[\hat{\beta}|\mathbf{X}] = E[\mathbf{I}\beta +(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\epsilon|\mathbf{X}]$$
+
+1. Open Rstudio Server Pro
+2. Create a new project (call it something sensible, perhaps `03-appex-expectation`)
+3. Click File > New File > R Markdown
+4. Delete everything except for 
+```
+---
+title: "Untitled"
+output: html_document
+---
+```
+5. Give your work a sensible title
+6. After adding your derivation to the file (remember you can incorporate $\LaTeX$ by wrapping in `$$`), knit it.
+6. When you've finished, upload the .html file to Canvas
+

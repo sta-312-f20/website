@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Properties of random matrices</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/countdown/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown/countdown.js"></script>
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Properties of random matrices
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+  &lt;span&gt;
+  Dr. Lucy D'Agostino McGowan
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+## Random matrices
+
+* `\(\mathbf{X}\)` and `\(\mathbf{Y}\)` are _random matrices_
+
+--
+
+.question[
+What do I mean by a _random matrix_?
+]
+-- 
+* A _random matrix_ is a matrix consisting of a _random variable_ (as opposed to a _constant_). 
+
+---
+
+## Random matrices
+
+* `\(\mathbf{X}\)` and `\(\mathbf{Y}\)` are _random matrices_
+--
+
+* `\(\mathbf{A}\)` and `\(\mathbf{B}\)` are _constant matrices_.
+
+---
+
+## Expectation
+
+* **Expectation** describes the _average value_
+--
+
+* In math-speak, we write it like this `\(E[X]\)`
+--
+
+* Recall from probability, 
+
+`$$E[X] = \begin{cases}
+\sum_x xp_X(x) &amp; X \textrm{ is a discrete random variable}\\
+\int_{-\infty}^{\infty}xf_X(x)dx &amp; X \textrm{ is a continuous random variable}
+\end{cases}$$`
+
+
+---
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 512 512"&gt;&lt;path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm-16 328c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v160zm112 0c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v160z"/&gt;&lt;/svg&gt; `Expectation facts`
+
+.definition[
+`\(\mathbf{X}\)` and `\(\mathbf{Y}\)` are _random matrices_
+
+`\(\mathbf{A}\)` and `\(\mathbf{B}\)` are _constant matrices_
+]
+
+* `\(E[\mathbf{X} + \mathbf{Y}] = E[\mathbf{X}] + E[\mathbf{Y}]\)`
+--
+
+* `\(E[\mathbf{AX}] = \mathbf{A}E[\mathbf{X}]\)`
+--
+
+* `\(E[\mathbf{A}\mathbf{X}\mathbf{B}] = \mathbf{A}E[\mathbf{X}]\mathbf{B}\)`
+
+---
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/&gt;&lt;/svg&gt; `Try it`
+
+.definition[
+a is a constant, `\(\mathbf{X}\)` and `\(\mathbf{Y}\)` are a random matrices
+]
+
+Solve the following:
+
+* `\(E[a\mathbf{X}]\)`
+* `\(E[\mathbf{X} + \mathbf{Y}]\)`
+* `\(E[\mathbf{X}\mathbf{Y}]\)`
+
+<div class="countdown" id="timer_5f596367" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
+</div>
+
+---
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/&gt;&lt;/svg&gt; `Try it`
+
+.definition[
+a is a constant, `\(\mathbf{X}\)` and `\(\mathbf{Y}\)` are a random matrices
+]
+
+Solve the following:
+
+* `\(E[a\mathbf{X}] = aE[\mathbf{X}]\)`
+* `\(E[\mathbf{X} + \mathbf{Y}] = E[\mathbf{X}] + E[\mathbf{Y}]\)`
+* `\(E[\mathbf{X}\mathbf{Y}]= ?\)`
+
+---
+
+## Covariance
+
+* **Covariance** is a measure of _joint variability_ between two random variables
+--
+
+* In math-speak we write it like this: `\(cov(\mathbf{X},\mathbf{Y})\)`
+--
+
+* Recall from probability,
+
+`$$cov(\mathbf{X},\mathbf{Y}) = E[(\mathbf{X} - E[\mathbf{X}])(\mathbf{Y} - E[\mathbf{Y}])]$$`
+
+---
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 512 512"&gt;&lt;path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm-16 328c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v160zm112 0c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v160z"/&gt;&lt;/svg&gt; `Covariance facts`
+
+.definition[
+`\(\mathbf{X}\)` and `\(\mathbf{Y}\)` are _random matrices_  
+`\(\mathbf{A}\)` and `\(\mathbf{B}\)` are _constant matrices_  
+`\(c\)` and `\(d\)` are _constants_
+]
+
+* `\(cov(\mathbf{X},\mathbf{Y}) = cov(\mathbf{Y}^T, \mathbf{X})\)`
+--
+
+* `\(cov(\mathbf{X} + c, \mathbf{Y} + d) = cov(\mathbf{X}, \mathbf{Y}) + cov(\mathbf{X}, d) + cov(c, \mathbf{Y}) + cov(c, d)\)`
+--
+
+.question[
+What is the covariance between an random variable and a constant? 
+]
+
+--
+* `\(cov(\mathbf{X} + c, \mathbf{Y} + d) = cov(\mathbf{X}, \mathbf{Y}) + 0 + 0 + 0 = cov(\mathbf{X}, \mathbf{Y})\)`
+--
+
+* `\(cov(\mathbf{A}\mathbf{X}, \mathbf{B}\mathbf{Y}) = \mathbf{A}cov(\mathbf{X}, \mathbf{Y})\mathbf{B}^T\)`
+
+---
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/&gt;&lt;/svg&gt; `Try it`
+
+.definition[
+`\(\mathbf{X}\)` and `\(\mathbf{Y}\)` are _random matrices_  
+`\(\mathbf{A}\)` and `\(\mathbf{B}\)` are _constant matrices_  
+`\(c\)` and `\(d\)` are _constants_
+]
+
+Calculate the covariance of the following:
+
+* `\(cov(\mathbf{B}\mathbf{X}, \mathbf{Y})\)`
+* `\(cov(c, \mathbf{Y})\)`
+
+<div class="countdown" id="timer_5f5961f2" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
+</div>
+
+---
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/&gt;&lt;/svg&gt; `Try it`
+
+.definition[
+`\(\mathbf{X}\)` and `\(\mathbf{Y}\)` are _random matrices_  
+`\(\mathbf{A}\)` and `\(\mathbf{B}\)` are _constant matrices_  
+`\(c\)` and `\(d\)` are _constants_
+]
+
+Calculate the covariance of the following:
+
+* `\(cov(\mathbf{B}\mathbf{X}, \mathbf{Y}) = \mathbf{B}cov(\mathbf{X}, \mathbf{Y})\)`
+* `\(cov(c, \mathbf{Y}) = 0\)`
+
+---
+
+## Variance
+
+* **Variance** measures the spread of a variable
+--
+
+* In math-speak, we write it like this: `\(var(\mathbf{X})\)`
+--
+
+* Recall from probability,
+
+`$$var(\mathbf{X}) = cov(\mathbf{X}, \mathbf{X}) = E[\mathbf{X}^2] - E[\mathbf{X}]^2$$`
+
+---
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 512 512"&gt;&lt;path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm-16 328c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v160zm112 0c0 8.8-7.2 16-16 16h-48c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v160z"/&gt;&lt;/svg&gt; `Variance facts`
+
+.definition[
+`\(\mathbf{X}\)` and `\(\mathbf{Y}\)` are _random matrices_  
+`\(\mathbf{A}\)` and `\(\mathbf{B}\)` are _constant matrices_  
+`\(c\)` and `\(d\)` are _constants_
+]
+
+* `\(var(\mathbf{X} + c) = var(\mathbf{X})\)`
+--
+
+* `\(var(\mathbf{A}\mathbf{X}) = \mathbf{A}var(\mathbf{X})\mathbf{A}^T\)`
+--
+
+* If `\(X_i\)`s are independent, `\(var(\sum_{i=1}^n X_i) = \sum var(X_i)\)`
+
+---
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/&gt;&lt;/svg&gt; `Try it`
+
+Show that `\(cov(\mathbf{X}, \mathbf{X}) = var(\mathbf{X})\)`
+
+<div class="countdown" id="timer_5f596315" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/&gt;&lt;/svg&gt; `Try it`
+
+Show that `\(cov(\mathbf{X}, \mathbf{X}) = var(\mathbf{X})\)`
+
+`$$\begin{align}
+cov(\mathbf{X}, \mathbf{X}) &amp; = E[(\mathbf{X} - E[\mathbf{X}])(\mathbf{X} - E[\mathbf{X}])]
+\end{align}$$`
+
+---
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/&gt;&lt;/svg&gt; `Try it`
+
+Show that `\(cov(\mathbf{X}, \mathbf{X}) = var(\mathbf{X})\)`
+
+`$$\begin{align}
+cov(\mathbf{X}, \mathbf{X}) &amp; = E[(\mathbf{X} - E[\mathbf{X}])(\mathbf{X} - E[\mathbf{X}])]\\
+&amp; = E[\mathbf{X}^2-2\mathbf{X}E[\mathbf{X}]+E[\mathbf{X}]^2]
+\end{align}$$`
+
+---
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/&gt;&lt;/svg&gt; `Try it`
+
+Show that `\(cov(\mathbf{X}, \mathbf{X}) = var(\mathbf{X})\)`
+
+`$$\begin{align}
+cov(\mathbf{X}, \mathbf{X}) &amp; = E[(\mathbf{X} - E[\mathbf{X}])(\mathbf{X} - E[\mathbf{X}])]\\
+&amp; = E[\mathbf{X}^2-2\mathbf{X}E[\mathbf{X}]+E[\mathbf{X}]^2]\\
+&amp;= E[\mathbf{X}^2] - 2E[\mathbf{X}]E[\mathbf{X}]+E[\mathbf{X}]^2
+\end{align}$$`
+
+---
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/&gt;&lt;/svg&gt; `Try it`
+
+Show that `\(cov(\mathbf{X}, \mathbf{X}) = var(\mathbf{X})\)`
+
+`$$\begin{align}
+cov(\mathbf{X}, \mathbf{X}) &amp; = E[(\mathbf{X} - E[\mathbf{X}])(\mathbf{X} - E[\mathbf{X}])]\\
+&amp; = E[\mathbf{X}^2-2\mathbf{X}E[\mathbf{X}]+E[\mathbf{X}]^2]\\
+&amp;= E[\mathbf{X}^2] - 2E[\mathbf{X}]E[\mathbf{X}]+E[\mathbf{X}]^2\\
+&amp;=E[\mathbf{X}^2] - E[\mathbf{X}]^2
+\end{align}$$`
+
+---
+
+## Unbiased
+
+.question[
+What does it mean to be unbiased?
+]
+
+--
+
+If `\(X\)` is a statistic used to estimate a parameter `\(\theta\)`, it is _unbiased_ if 
+
+`$$E[X] = \theta$$`
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

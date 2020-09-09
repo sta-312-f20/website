@@ -1,0 +1,209 @@
+---
+title: "Gauss Markov Theorem"
+subtitle: "Part 1"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+  <span>
+  Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## Gauss Markov Theorem
+
+* Least Squares is the **Best Linear Unbiased Estimator** (BLUE)
+
+--
+
+.question[
+What does this mean?
+]
+
+--
+
+* `r emo::ji("white_large_square")` **Best**: has the smallest variance 
+--
+
+* `r emo::ji("check")` **Linear**: it is linear in the observed output variables 
+--
+
+* `r emo::ji("white_large_square")` **Unbiased**: it is unbiased
+--
+
+* `r emo::ji("check")` **Estimator**
+
+--
+
+.definition[
+Let's prove _unbiasedness_ first.
+]
+
+---
+
+## Bias
+
+.question[
+What do we want to show?
+]
+
+--
+$$E[\hat{\beta}]=\beta$$
+
+--
+* What is $\hat\beta$
+
+--
+$$\hat\beta = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^Ty$$
+--
+
+* What is $y$?
+
+--
+
+$$y = \mathbf{X}\beta + \epsilon$$
+---
+
+## Bias
+
+$$\begin{align}\hat\beta &= (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^Ty\\
+&=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T(\mathbf{X}\beta + \epsilon)
+\end{align}$$
+
+--
+
+## `r fa("edit")` `Try it!`
+
+Simplify this expression
+
+`r countdown(1.5)`
+
+---
+
+## Bias
+
+$$\begin{align}\hat\beta &= (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^Ty\\
+&=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T(\mathbf{X}\beta + \epsilon)\\
+\end{align}$$
+
+---
+
+## Bias
+
+$$\begin{align}\hat\beta &= (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^Ty\\
+&=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T(\mathbf{X}\beta + \epsilon)\\
+&=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta + (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\epsilon\\
+\end{align}$$
+
+---
+
+## Bias
+
+$$\begin{align}\hat\beta &= (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^Ty\\
+&=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T(\mathbf{X}\beta + \epsilon)\\
+&=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta + (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\epsilon\\
+& = \mathbf{I}\beta +(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\epsilon
+\end{align}$$
+
+---
+
+## Bias
+
+Let's first calculate $E[\hat{\beta}|\mathbf{X}]$
+
+--
+.definition[
+**Note**: The $E[\epsilon|\mathbf{X}] = 0$, this is an _assumptiopn_ of least squares
+]
+
+--
+
+$$E[\hat{\beta}|\mathbf{X}] = E[\mathbf{I}\beta +(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\epsilon|\mathbf{X}]$$
+
+--
+
+## `r fa("edit")` `Try it`
+
+Using the information from the previous lecture, solve this expectation. Type up your answer in an .Rmd file and submit the .html file on Canvas.
+
+---
+
+## Bias
+
+**Spoiler alert**
+
+$$E[\hat{\beta}|\mathbf{X}] = \beta$$
+--
+
+.question[
+We want to know: $E[\hat\beta] = \beta$
+]
+
+--
+
+Let's use the Law of iterated expectation!
+
+$$E_X[E[\hat\beta|\mathbf{X}]]=E[\hat\beta]$$
+
+---
+
+## Bias
+
+**Spoiler alert**
+
+$$E[\hat{\beta}|\mathbf{X}] = \beta$$
+
+.question[
+We want to know: $E[\hat\beta] = \beta$
+]
+
+
+Let's use the Law of iterated expectation!
+
+$$\begin{align}
+E_X[E[\hat\beta|\mathbf{X}]]&\\
+&=E_X[\beta]\\
+&=\beta\\
+E[\hat\beta] &= \beta
+\end{align}$$
+
+---
+
+## Gauss Markov Theorem
+
+* Least Squares is the **Best Linear Unbiased Estimator** (BLUE)
+
+--
+
+.question[
+What does this mean?
+]
+
+--
+
+* `r emo::ji("white_large_square")` **Best**: has the smallest variance 
+--
+
+* `r emo::ji("check")` **Linear**: it is linear in the observed output variables 
+--
+
+* `r emo::ji("check")` **Unbiased**: it is unbiased
+--
+
+* `r emo::ji("check")` **Estimator**
