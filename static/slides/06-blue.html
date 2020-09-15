@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Gauss Markov Theorem</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/countdown/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown/countdown.js"></script>
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Gauss Markov Theorem
+## Part 2
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+  &lt;span&gt;
+  Dr. Lucy D'Agostino McGowan
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+## Gauss Markov Theorem
+
+* Least Squares is the **Best Linear Unbiased Estimator** (BLUE)
+
+--
+
+.question[
+What does this mean?
+]
+
+--
+
+* ⬜ **Best**: has the smallest variance 
+--
+
+* ✅ **Linear**: it is linear in the observed output variables 
+--
+
+* ✅ **Unbiased**: it is unbiased
+--
+
+* ✅ **Estimator**
+
+--
+
+.definition[
+Let's prove _best_ now.
+]
+
+---
+
+## What do we need to do?
+
+☝️ Come up with another linear unbiased estimator of `\(\beta\)`, let's call it `\(\tilde\beta\)`
+✌️ Show that this estimator has a variance that is no smaller than `\(\textrm{var}(\hat\beta|\mathbf{X})\)`
+
+.question[
+What is the `\(\textrm{var}(\hat\beta|\mathbf{X})\)`?
+]
+
+---
+
+## ☝️ A linear, unbiased estimator of `\(\beta\)`
+
+* `\(\tilde\beta = \mathbf{C}y\)`
+
+--
+
+.question[
+Why `\(\mathbf{C}y\)`? This is _linear_.
+]
+
+--
+
+* `\(\mathbf{C} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T + \mathbf{D}\)`
+
+---
+
+## ☝️ A linear, unbiased estimator of `\(\beta\)`
+
+.question[
+When is `\(\tilde\beta\)` unbiased?
+]
+
+--
+
+Show that `\(E[\mathbf{C}y|\mathbf{X}] = \beta\)`
+--
+
+`$$E[\mathbf{C}y|\mathbf{X}] = E[((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T + \mathbf{D})(\mathbf{X}\beta+\epsilon)|\mathbf{X}]$$`
+
+--
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/&gt;&lt;/svg&gt; `Try It`
+
+Solve for `\(E[Cy|\mathbf{X}]\)`.
+
+<div class="countdown" id="timer_5f60141d" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+## ☝️ A linear, unbiased estimator of `\(\beta\)`
+
+.question[
+When is `\(\tilde\beta\)` unbiased?
+]
+
+`$$\begin{align}E[\tilde\beta|\mathbf{X}] &amp;= E[((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T + \mathbf{D})(\mathbf{X}\beta+\epsilon)|\mathbf{X}]\\
+&amp;=\mathbf{D}\mathbf{X}\beta + \beta\end{align}$$`
+
+--
+.definition[
+We need `\(E[\mathbf{C}y|\mathbf{X}] = \beta\)`
+]
+
+* For `\(\tilde\beta\)` to be _unbiased_ `\(\mathbf{DX}\)` must be 0.
+
+---
+
+## Now let's calculate the variance
+
+.question[
+For our estimate `\(\hat\beta\)` to be _best_ what needs to be true?
+]
+
+--
+
+`$$\textrm{var}(\hat\beta|\mathbf{X}) &lt; \textrm{var}(\tilde\beta|\mathbf{X})$$`
+--
+
+`$$\textrm{var}(\tilde\beta|\mathbf{X}) = \textrm{var}(\mathbf{C}y|\mathbf{X})$$`
+
+--
+.question[
+What is constant?
+]
+
+---
+
+
+## Now let's calculate the variance
+
+.question[
+For our estimate `\(\hat\beta\)` to be _best_ what needs to be true?
+]
+
+
+`$$\textrm{var}(\hat\beta|\mathbf{X}) &lt; \textrm{var}(\tilde\beta|\mathbf{X})$$`
+
+
+`$$\begin{align}\textrm{var}(\tilde\beta|\mathbf{X}) &amp;= \textrm{var}(\mathbf{C}y|\mathbf{X})\\
+&amp;= \mathbf{C}\textrm{var}(y|\mathbf{X})\mathbf{C}^T
+\end{align}$$`
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/&gt;&lt;/svg&gt; `Try It`
+
+Finish solving for `\(var[Cy|\mathbf{X}]\)`. _Remember `\(\mathbf{DX}=0\)` for this to be unbiased_.
+
+<div class="countdown" id="timer_5f6012a5" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+## Now let's calculate the variance
+
+.question[
+For our estimate `\(\hat\beta\)` to be _best_ what needs to be true?
+]
+
+
+`$$\textrm{var}(\hat\beta|\mathbf{X}) &lt; \textrm{var}(\tilde\beta|\mathbf{X})$$`
+
+
+`$$\begin{align}\textrm{var}(\tilde\beta|\mathbf{X}) &amp;= \textrm{var}(\mathbf{C}y|\mathbf{X})\\
+&amp;= \mathbf{C}\textrm{var}(y|\mathbf{X})\mathbf{C}^T\\
+&amp;=\textrm{var}(\hat\beta)+\sigma^2\mathbf{D}\mathbf{D}^T
+\end{align}$$`
+
+--
+
+* `\(\mathbf{DD}^T\)` is a *positive semidefinite* matrix, therefore
+
+`\(\textrm{var}(\hat\beta)\)` is **always** `\(&lt;\textrm{var}(\tilde\beta)\)`
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,190 @@
+---
+title: "Gauss Markov Theorem"
+subtitle: "Part 2"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+  <span>
+  Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## Gauss Markov Theorem
+
+* Least Squares is the **Best Linear Unbiased Estimator** (BLUE)
+
+--
+
+.question[
+What does this mean?
+]
+
+--
+
+* `r emo::ji("white_large_square")` **Best**: has the smallest variance 
+--
+
+* `r emo::ji("check")` **Linear**: it is linear in the observed output variables 
+--
+
+* `r emo::ji("check")` **Unbiased**: it is unbiased
+--
+
+* `r emo::ji("check")` **Estimator**
+
+--
+
+.definition[
+Let's prove _best_ now.
+]
+
+---
+
+## What do we need to do?
+
+`r emo::ji("point_up")` Come up with another linear unbiased estimator of $\beta$, let's call it $\tilde\beta$
+`r emo::ji("v")` Show that this estimator has a variance that is no smaller than $\textrm{var}(\hat\beta|\mathbf{X})$
+
+.question[
+What is the $\textrm{var}(\hat\beta|\mathbf{X})$?
+]
+
+---
+
+## `r emo::ji("point_up")` A linear, unbiased estimator of $\beta$
+
+* $\tilde\beta = \mathbf{C}y$
+
+--
+
+.question[
+Why $\mathbf{C}y$? This is _linear_.
+]
+
+--
+
+* $\mathbf{C} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T + \mathbf{D}$
+
+---
+
+## `r emo::ji("point_up")` A linear, unbiased estimator of $\beta$
+
+.question[
+When is $\tilde\beta$ unbiased?
+]
+
+--
+
+Show that $E[\mathbf{C}y|\mathbf{X}] = \beta$
+--
+
+$$E[\mathbf{C}y|\mathbf{X}] = E[((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T + \mathbf{D})(\mathbf{X}\beta+\epsilon)|\mathbf{X}]$$
+
+--
+
+## `r fa("edit")` `Try It`
+
+Solve for $E[Cy|\mathbf{X}]$.
+
+`r countdown(2)`
+
+---
+
+## `r emo::ji("point_up")` A linear, unbiased estimator of $\beta$
+
+.question[
+When is $\tilde\beta$ unbiased?
+]
+
+$$\begin{align}E[\tilde\beta|\mathbf{X}] &= E[((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T + \mathbf{D})(\mathbf{X}\beta+\epsilon)|\mathbf{X}]\\
+&=\mathbf{D}\mathbf{X}\beta + \beta\end{align}$$
+
+--
+.definition[
+We need $E[\mathbf{C}y|\mathbf{X}] = \beta$
+]
+
+* For $\tilde\beta$ to be _unbiased_ $\mathbf{DX}$ must be 0.
+
+---
+
+## Now let's calculate the variance
+
+.question[
+For our estimate $\hat\beta$ to be _best_ what needs to be true?
+]
+
+--
+
+$$\textrm{var}(\hat\beta|\mathbf{X}) < \textrm{var}(\tilde\beta|\mathbf{X})$$
+--
+
+$$\textrm{var}(\tilde\beta|\mathbf{X}) = \textrm{var}(\mathbf{C}y|\mathbf{X})$$
+
+--
+.question[
+What is constant?
+]
+
+---
+
+
+## Now let's calculate the variance
+
+.question[
+For our estimate $\hat\beta$ to be _best_ what needs to be true?
+]
+
+
+$$\textrm{var}(\hat\beta|\mathbf{X}) < \textrm{var}(\tilde\beta|\mathbf{X})$$
+
+
+$$\begin{align}\textrm{var}(\tilde\beta|\mathbf{X}) &= \textrm{var}(\mathbf{C}y|\mathbf{X})\\
+&= \mathbf{C}\textrm{var}(y|\mathbf{X})\mathbf{C}^T
+\end{align}$$
+
+## `r fa("edit")` `Try It`
+
+Finish solving for $var[Cy|\mathbf{X}]$. _Remember $\mathbf{DX}=0$ for this to be unbiased_.
+
+`r countdown(3)`
+
+---
+
+## Now let's calculate the variance
+
+.question[
+For our estimate $\hat\beta$ to be _best_ what needs to be true?
+]
+
+
+$$\textrm{var}(\hat\beta|\mathbf{X}) < \textrm{var}(\tilde\beta|\mathbf{X})$$
+
+
+$$\begin{align}\textrm{var}(\tilde\beta|\mathbf{X}) &= \textrm{var}(\mathbf{C}y|\mathbf{X})\\
+&= \mathbf{C}\textrm{var}(y|\mathbf{X})\mathbf{C}^T\\
+&=\textrm{var}(\hat\beta)+\sigma^2\mathbf{D}\mathbf{D}^T
+\end{align}$$
+
+--
+
+* $\mathbf{DD}^T$ is a *positive semidefinite* matrix, therefore
+
+$\textrm{var}(\hat\beta)$ is **always** $<\textrm{var}(\tilde\beta)$

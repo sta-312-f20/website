@@ -1,0 +1,168 @@
+---
+title: "Variance of $\\hat\\beta$"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+  <span>
+  Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## Law of Total Variance
+
+.definition[
+Like the Law of Iterated Expectation (Law of Total Expectation), we have a similar proof for variances!
+]
+
+--
+
+$$\textrm{var}(X) = E[\textrm{var}(X|Y)] + \textrm{var}(E[X|Y])$$
+---
+
+## Let's apply the Law of Total Variance to our problem
+
+$$\textrm{var}(\hat\beta) = E[\textrm{var}(\hat\beta|\mathbf{X})] + \textrm{var}(E[\hat\beta|\mathbf{X}])$$
+
+--
+.question[
+What is $E[\hat\beta|\mathbf{X}]$?
+]
+
+--
+
+* $E[\hat\beta|\mathbf{X}] = \beta$
+
+.question[
+Is this a constant or random?
+]
+
+--
+
+* **constant!** 
+
+---
+
+## Let's apply the Law of Total Variance to our problem
+
+.question[
+What is the variance of a constant?
+]
+--
+
+$$\textrm{var}(\hat\beta) = E[\textrm{var}(\hat\beta|\mathbf{X})] + 0$$
+---
+
+## Let's apply the Law of Total Variance to our problem
+
+$$\textrm{var}(\hat\beta) = E[\textrm{var}(\hat\beta|\mathbf{X})]$$
+
+
+--
+
+* Let's focus on the inside first:
+
+$$\textrm{var}(\hat\beta|\mathbf{X}) = \textrm{var}((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^Ty|\mathbf{X})$$
+--
+
+.question[
+What is constant? What is random?
+]
+
+---
+
+## Let's apply the Law of Total Variance to our problem
+
+$$\textrm{var}(\hat\beta) = E[\textrm{var}(\hat\beta|\mathbf{X})]$$
+
+
+* Let's focus on the inside first:
+
+$$\begin{align}\textrm{var}(\hat\beta|\mathbf{X}) &= \textrm{var}((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^Ty|\mathbf{X})\end{align}$$
+
+---
+
+
+## Let's apply the Law of Total Variance to our problem
+
+$$\textrm{var}(\hat\beta) = E[\textrm{var}(\hat\beta|\mathbf{X})]$$
+
+
+* Let's focus on the inside first:
+
+$$\begin{align}\textrm{var}(\hat\beta|\mathbf{X}) &= \textrm{var}((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^Ty|\mathbf{X})\\
+&=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\underbrace{\textrm{var}(y|\mathbf{X})}_{\sigma^2}\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\end{align}$$
+---
+
+## Let's apply the Law of Total Variance to our problem
+
+$$\textrm{var}(\hat\beta) = E[\textrm{var}(\hat\beta|\mathbf{X})]$$
+
+
+* Let's focus on the inside first:
+
+$$\begin{align}\textrm{var}(\hat\beta|\mathbf{X}) &= \textrm{var}((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^Ty|\mathbf{X})\\
+&=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\underbrace{\textrm{var}(y|\mathbf{X})}_{\sigma^2}\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\\
+&=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\sigma^2\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\end{align}$$
+
+---
+
+## Let's apply the Law of Total Variance to our problem
+
+$$\textrm{var}(\hat\beta) = E[\textrm{var}(\hat\beta|\mathbf{X})]$$
+
+
+* Let's focus on the inside first:
+
+$$\begin{align}\textrm{var}(\hat\beta|\mathbf{X}) &= \textrm{var}((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^Ty|\mathbf{X})\\
+&=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\underbrace{\textrm{var}(y|\mathbf{X})}_{\sigma^2}\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\\
+&=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\sigma^2\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\\
+&=\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\end{align}$$
+
+---
+
+## Let's apply the Law of Total Variance to our problem
+
+$$\textrm{var}(\hat\beta) = E[\textrm{var}(\hat\beta|\mathbf{X})]$$
+
+
+* Let's focus on the inside first:
+
+$$\begin{align}\textrm{var}(\hat\beta|\mathbf{X}) &= \textrm{var}((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^Ty|\mathbf{X})\\
+&=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\underbrace{\textrm{var}(y|\mathbf{X})}_{\sigma^2}\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\\
+&=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\sigma^2\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\\
+&=\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\\
+&=\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\end{align}$$
+
+---
+
+## Let's apply the Law of Total Variance to our problem
+
+$$\textrm{var}(\hat\beta) = E[\textrm{var}(\hat\beta|\mathbf{X})] = E[\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}]$$
+
+--
+
+.question[
+What is constant?
+]
+
+--
+
+$$\textrm{var}(\hat\beta) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$$
+
