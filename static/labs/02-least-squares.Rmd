@@ -92,7 +92,7 @@ hitters_cc <- Hitters[complete.cases(Hitters), ]
 
 5. Calculate the variance of $\hat\beta$ and save as `v_beta`. Hint: You can estimate $\sigma^2$ with the following formula:
 
-$$\sigma^2 = \frac{1}{n-3}\sum_{i=1}^n\epsilon_i^2$$
+$$\hat\sigma^2 = \frac{1}{n-3}\sum_{i=1}^n e_i^2$$
 Use this to calculate the standard error of your coefficients by running the following formula:
 
 ```{r, eval = FALSE}

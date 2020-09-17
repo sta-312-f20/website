@@ -542,7 +542,7 @@ color: #333333;
 <li><p>Using the objects created in Exercise 2 (<code>X</code> and <code>y</code>), calculate <span class="math inline">\(\hat\beta\)</span>, <span class="math inline">\(\hat{y}\)</span>, the residuals: <span class="math inline">\(e = (y - \hat{y})\)</span>. Interpret what these values mean.</p></li>
 <li><p>Calculate the variance of <span class="math inline">\(\hat\beta\)</span> and save as <code>v_beta</code>. Hint: You can estimate <span class="math inline">\(\sigma^2\)</span> with the following formula:</p></li>
 </ol>
-<p><span class="math display">\[\sigma^2 = \frac{1}{n-3}\sum_{i=1}^n\epsilon_i^2\]</span> Use this to calculate the standard error of your coefficients by running the following formula:</p>
+<p><span class="math display">\[\hat\sigma^2 = \frac{1}{n-3}\sum_{i=1}^n e_i^2\]</span> Use this to calculate the standard error of your coefficients by running the following formula:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>se_beta &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">diag</span>(v_beta))</span>
 <span id="cb4-2"><a href="#cb4-2"></a>se_beta</span></code></pre></div>
 <p>Interpret these results.</p>
