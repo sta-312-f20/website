@@ -539,7 +539,7 @@ color: #333333;
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>hitters_cc &lt;-<span class="st"> </span>Hitters[<span class="kw">complete.cases</span>(Hitters), ]</span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li><p>We are interested in predicting baseball players’ salary using the number of times they were at bat and the number of hits they had. Create a design matrix, <code>X</code>, that contains two predictor variables from the <code>hitters_cc</code> data frame. Create a variable <code>y</code> that contains the outcome data for the players’ salary.</p></li>
-<li><p>Using the objects created in Exercise 2 (<code>X</code> and <code>y</code>), calculate <span class="math inline">\(\hat\beta\)</span>, <span class="math inline">\(\hat{y}\)</span>, <span class="math inline">\(\epsilon\)</span>. Interpret what these values mean.</p></li>
+<li><p>Using the objects created in Exercise 2 (<code>X</code> and <code>y</code>), calculate <span class="math inline">\(\hat\beta\)</span>, <span class="math inline">\(\hat{y}\)</span>, the residuals: <span class="math inline">\(e = (y - \hat{y})\)</span>. Interpret what these values mean.</p></li>
 <li><p>Calculate the variance of <span class="math inline">\(\hat\beta\)</span> and save as <code>v_beta</code>. Hint: You can estimate <span class="math inline">\(\sigma^2\)</span> with the following formula:</p></li>
 </ol>
 <p><span class="math display">\[\sigma^2 = \frac{1}{n-3}\sum_{i=1}^n\epsilon_i^2\]</span> Use this to calculate the standard error of your coefficients by running the following formula:</p>
