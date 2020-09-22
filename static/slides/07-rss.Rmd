@@ -1,0 +1,123 @@
+---
+title: "RSS"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## RSS
+
+* Residual sum of squares
+
+--
+* $\mathbf{e}^T\mathbf{e}=\mathbf{y}^T(\mathbf{I-H})\mathbf{y}$
+
+--
+
+.question[
+What is $\mathbf{H}$?
+]
+
+--
+
+## `r fa("edit")` `Try it!`
+
+Show that 
+
+$\mathbf{e}^T\mathbf{e}=\mathbf{y}^T(\mathbf{I-H})\mathbf{y}$
+
+`r countdown(2)`
+---
+
+## Estimating $\hat\sigma^2$
+
+* In the Lab, I told you that you can estimate
+
+$$\hat\sigma^2 = \frac{\mathbf{e}^T\mathbf{e}}{n-(p+1)}$$
+
+.question[
+Why is this so?
+]
+
+---
+
+## `r fa("pause")` `Matrix fact`
+
+* The **trace** of a square matrix, written as $\textrm{tr}(\mathbf{A})$, is the sum of the diagonal elements
+
+--
+* $\textrm{tr}(\mathbf{A}+\mathbf{B}) = \textrm{tr}(\mathbf{A})+\textrm{tr}(\mathbf{B})$
+* $\textrm{tr}(c\mathbf{A}) = c\textrm{tr}(\mathbf{A})$
+* $\textrm{tr}(\mathbf{ABC})=\textrm{tr}(\mathbf{BCA})=\textrm{tr}(\mathbf{CAB})$
+
+---
+
+## `r fa("pause")` `Expectation fact`
+
+.definition[
+$\mathbf{C}$ is constant, $\mathbf{X}$ is random.
+]
+
+$$E[\mathbf{X}^T\mathbf{CX}]=E[\mathbf{X}]^T\mathbf{C}E[\mathbf{X}] +\textrm{tr}(\mathbf{C}\textrm{var}(\mathbf{X}))$$
+---
+
+## `r fontawesome::fa("edit")` `Try it!`
+
+Calculate $E[\mathbf{e}^T\mathbf{e}]=E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]$
+
+`r countdown(3)`
+
+---
+
+## Estimating $\hat\sigma^2$
+
+$$\begin{align}E[\mathbf{e}^T\mathbf{e}] &= \sigma^2(n-(p+1))\\
+\end{align}$$
+
+---
+
+## Estimating $\hat\sigma^2$
+
+$$\begin{align}E[\mathbf{e}^T\mathbf{e}] &= \sigma^2(n-(p+1))\\
+\hat\sigma^2&=\frac{\mathbf{e}^T\mathbf{e}}{n-(p+1)}\\
+&=\frac{\mathbf{RSS}}{n-(p+1)}\end{align}$$
+
+--
+
+.question[
+What is $n-(p+1)$?
+]
+
+--
+
+* Degrees of freedom of the model!
+
+---
+
+## Estimating the standard error of a $\beta$ coefficient
+
+$$se(\hat\beta_{i-1})=\sqrt{(\mathbf{X}^T\mathbf{X})^{-1}_{ii}}\hat\sigma$$
+
+
