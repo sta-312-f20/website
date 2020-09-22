@@ -1,0 +1,47 @@
+---
+title: "Application Exercise"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: lab.css
+link-citations: yes
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE     # for regression output
+)
+```
+
+
+1. Open Rstudio Server Pro
+2. Create a new project 
+3. Click File > New File > R Markdown
+4. Delete everything except for 
+```
+---
+title: "Untitled"
+output: html_document
+---
+```
+5. Give your work a sensible title
+6. After adding your derivation to the file (remember you can incorporate $\LaTeX$ by wrapping in `$$`), knit it.
+6. When you've finished, upload the .html file to Canvas
+
+1. Show that $\mathbf{e}^T\mathbf{e}=\mathbf{y}^T(\mathbf{I-H})\mathbf{y}$.
+2. Calculate $E[\mathbf{e}^T\mathbf{e}]=E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]$.
+3. Find the F-statistic for the model fit in Lab 02:
+
+$$Salary = \beta_0 + \beta_1ATBat+\beta_2Hits +\epsilon$$
+
+Use the code below to get started.
+
+```{r}
+library(ISLR) 
+hitters_cc <- Hitters[complete.cases(Hitters), ]
+```
+
+
