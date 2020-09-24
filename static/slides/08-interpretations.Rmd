@@ -1,0 +1,78 @@
+---
+title: "Interpretations"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+
+class: middle
+
+## $\hat\beta$ interpretation in multiple linear regression
+
+--
+The coefficient for $x$ is $\hat\beta$ (95% CI: $LB_\hat\beta, UB_\hat\beta$). A one-unit increase in $x$ yields an expected increase in y of $\hat\beta$, **holding all other variables constant**.
+
+---
+
+## Hitters data
+
+```{r, echo = FALSE}
+library(ISLR)
+summary(lm(Salary ~ AtBat + Hits, data = Hitters))
+```
+
+---
+class: middle
+
+# standard error
+
+How much we expect the sample slope to vary from one random sample to another.
+
+---
+
+## Hitters data
+
+```{r, echo = FALSE}
+library(ISLR)
+summary(lm(Salary ~ AtBat + Hits, data = Hitters))
+```
+
+---
+class: middle
+
+# p-value
+
+The probability of getting a statistic as extreme or more extreme than the observed test statistic **given the null hypothesis is true**
+
+---
+
+## Hitters data
+
+```{r, echo = FALSE}
+library(ISLR)
+summary(lm(Salary ~ AtBat + Hits, data = Hitters))
+```
+
+
+

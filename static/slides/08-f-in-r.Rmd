@@ -1,0 +1,211 @@
+---
+title: "F-tests in R"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## Hitters data
+
+```{r}
+library(ISLR)
+hitters_cc <- Hitters[complete.cases(Hitters), ]
+```
+
+--
+
+* We want to predict `Salary` from `AtBat` and `Hits`
+--
+
+* Is this model better than an intercept only model?
+
+---
+
+## Hypothesis testing
+
+* $H_0:\beta_1=\beta_2=0$
+
+--
+
+$$F = \frac{RSS_{small} - RSS_{larger} / (df_{small}- df_{larger})}{RSS_{larger}/df_{larger}}\sim F_{df_{small}- df_{larger}, df_{larger}}$$
+
+---
+
+## Let's do it in R!
+
+```{r}
+small <- lm(Salary ~ 1, data = hitters_cc)
+larger <- lm(Salary ~ AtBat + Hits, data = hitters_cc)
+```
+
+.question[
+How do we get the RSS from this model?
+]
+
+--
+
+.small[
+```{r}
+rss_small <- summary(small)$sigma^2 * (nrow(hitters_cc) - 1)
+rss_larger <- summary(larger)$sigma^2 * (nrow(hitters_cc) - 3)
+```
+]
+
+--
+
+* There is an easier way!
+
+```{r}
+rss_small <- deviance(small)
+rss_larger <- deviance(larger)
+```
+
+---
+
+## Hypothesis testing
+
+* $H_0:\beta_1=\beta_2=0$
+
+$$F = \frac{RSS_{small} - RSS_{larger} / (df_{small}- df_{larger})}{RSS_{larger}/df_{larger}}\sim F_{df_{small}- df_{larger}, df_{larger}}$$
+
+--
+
+```{r}
+f <- ((rss_small - rss_larger) / 2) / 
+  (rss_larger / (nrow(hitters_cc) - 3))
+f
+```
+
+--
+
+```{r}
+1 - pf(f, 2, nrow(hitters_cc) - 3)
+```
+
+---
+
+## F-tests in R
+
+.pull-left[
+.small[
+```{r}
+f <- ((rss_small - rss_larger) / 2) / 
+  (rss_larger / (nrow(hitters_cc) - 3))
+f
+```
+]
+]
+
+.pull-right[
+.small[
+```{r}
+1 - pf(f, 2, nrow(hitters_cc) - 3)
+```
+]]
+--
+
+* There is an easier way!
+
+```{r}
+anova(small, larger)
+```
+
+---
+
+## Testing one variable
+
+.question[
+What if we wanted to know if the `Hits` variable is an important contribution?
+]
+
+--
+
+* $H_0: \beta_2 = 0$
+* $H_A: \beta_2 \neq 0$
+
+--
+
+.small[
+```{r}
+small <- lm(Salary ~ AtBat, data = hitters_cc)
+larger <- lm(Salary ~ AtBat + Hits, data = hitters_cc)
+anova(small, larger)
+```
+]
+
+---
+
+## Testing one variable
+
+.question[
+What if we wanted to know if the `Hits` variable is an important contribution?
+]
+
+* $H_0: \beta_2 = 0$
+* $H_A: \beta_2 \neq 0$
+
+.small[
+```{r}
+small <- lm(Salary ~ AtBat, data = hitters_cc)
+larger <- lm(Salary ~ AtBat + Hits, data = hitters_cc)
+anova(small, larger)
+```
+]
+
+* There is an easier way!
+
+---
+
+
+## Testing one variable
+
+.small[
+```{r, highlight.output = 7, echo = FALSE}
+small <- lm(Salary ~ AtBat, data = hitters_cc)
+larger <- lm(Salary ~ AtBat + Hits, data = hitters_cc)
+anova(small, larger)
+```
+]
+
+
+.small[
+```{r, highlight.output = 13}
+summary(larger)
+```
+]
+
+---
+
+class: inverse
+
+## `r fa("laptop")` `Application Exercise`
+
+Using the Hitters data:
+
+* Fit a model predicting `Salary` from `AtBat` and `HmRun`
+* Perform an F-test for the null hypothesis that the coefficient associated with `HmRun` is 0
+* Compare this to the t-test obtained from the `summary` statement.
+
+
+
+

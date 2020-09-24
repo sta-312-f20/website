@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>More on the Hat Matrix</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# More on the Hat Matrix
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Lucy D'Agostino McGowan
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 448 512"&gt;&lt;path d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"/&gt;&lt;/svg&gt; `Matrix fact`
+
+* If a matrix is **symmetric**, then `\(\mathbf{A}=\mathbf{A}^T\)`
+--
+
+* If a matrix is **idempotent**, then `\(\mathbf{A}^T\mathbf{A}=\mathbf{A}\)`
+--
+
+* The **hat matrix**, `\(\mathbf{H}\)`, is both symmetric **and** idempotent
+
+---
+
+## The hat matrix is symmetric
+
+`$$\begin{align}\mathbf{H}&amp; = \mathbf{H}^T\\
+\end{align}$$`
+
+---
+
+## The hat matrix is symmetric
+
+`$$\begin{align}\mathbf{H}&amp; = \mathbf{H}^T\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&amp;=(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)^T\\
+\end{align}$$`
+
+---
+
+## The hat matrix is symmetric
+
+`$$\begin{align}\mathbf{H}&amp; = \mathbf{H}^T\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&amp;=(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)^T\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&amp;=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T
+\end{align}$$`
+
+---
+
+## The hat matrix is idempotent
+
+`$$\begin{align}\mathbf{H}^T\mathbf{H}&amp;=\mathbf{H}\\
+\end{align}$$`
+---
+
+## The hat matrix is idempotent
+
+`$$\begin{align}\mathbf{H}^T\mathbf{H}&amp;=\mathbf{H}\\
+\mathbf{H}\mathbf{H}&amp;=\mathbf{H}\\
+\end{align}$$`
+
+---
+
+## The hat matrix is idempotent
+
+`$$\begin{align}\mathbf{H}^T\mathbf{H}&amp;=\mathbf{H}\\
+\mathbf{H}\mathbf{H}&amp;=\mathbf{H}\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&amp;=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\\
+\end{align}$$`
+
+---
+
+## The hat matrix is idempotent
+
+`$$\begin{align}\mathbf{H}^T\mathbf{H}&amp;=\mathbf{H}\\
+\mathbf{H}\mathbf{H}&amp;=\mathbf{H}\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&amp;=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\underbrace{\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}}_{\mathbf{I}}\mathbf{X}^T&amp;=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\\
+\end{align}$$`
+---
+
+## The hat matrix is idempotent
+
+`$$\begin{align}\mathbf{H}^T\mathbf{H}&amp;=\mathbf{H}\\
+\mathbf{H}\mathbf{H}&amp;=\mathbf{H}\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&amp;=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\underbrace{\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}}_{\mathbf{I}}\mathbf{X}^T&amp;=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&amp;=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\\
+\end{align}$$`
+
+--
+
+* `\(\mathbf{I-H}\)` is also **idempotent**
+
+---
+
+## The trace of the hat matrix is p+1
+
+`$$\textrm{tr}(\mathbf{H})$$`
+--
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 448 512"&gt;&lt;path d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"/&gt;&lt;/svg&gt; `Matrix fact`
+
+* The **trace** of a square matrix, written as `\(\textrm{tr}(\mathbf{A})\)`, is the sum of the diagonal elements
+* `\(\textrm{tr}(\mathbf{A}+\mathbf{B}) = \textrm{tr}(\mathbf{A})+\textrm{tr}(\mathbf{B})\)`
+* `\(\textrm{tr}(c\mathbf{A}) = c\textrm{tr}(\mathbf{A})\)`
+* `\(\textrm{tr}(\mathbf{ABC})=\textrm{tr}(\mathbf{BCA})=\textrm{tr}(\mathbf{CAB})\)`
+
+---
+
+## The trace of the hat matrix is p+1
+
+`$$\begin{align}\textrm{tr}(\mathbf{H})=&amp;\textrm{tr}(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)\end{align}$$`
+
+---
+
+## The trace of the hat matrix is p+1
+
+`$$\begin{align}\textrm{tr}(\mathbf{H})=&amp;\textrm{tr}(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)\\
+=&amp;\textrm{tr}(\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1})\end{align}$$`
+
+---
+
+## The trace of the hat matrix is p+1
+
+`$$\begin{align}\textrm{tr}(\mathbf{H})=&amp;\textrm{tr}(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)\\
+=&amp;\textrm{tr}(\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1})\\
+=&amp;\textrm{tr}(\mathbf{I})\end{align}$$`
+
+--
+
+.question[
+What are the dimensions of this `\(\mathbf{I}\)`?
+]
+
+--
+
+* `\(\mathbf{X}_{n\times (p+1)}\)`
+--
+
+* `\(\mathbf{I}_{(p+1)\times(p+1)}\)`
+--
+
+* `\(\textrm{tr}(\mathbf{I}_{(p+1)\times(p+1)})=p+1\)`
+---
+
+## RSS
+
+`$$\begin{align}\mathbf{e}^T\mathbf{e}=&amp;(\mathbf{y}-\hat{\mathbf{y}})^T(\mathbf{y}-\hat{\mathbf{y}})\\
+\end{align}$$`
+
+---
+
+## RSS
+
+`$$\begin{align}\mathbf{e}^T\mathbf{e}=&amp;(\mathbf{y}-\hat{\mathbf{y}})^T(\mathbf{y}-\hat{\mathbf{y}})\\
+=&amp;(\mathbf{y} - \mathbf{H}\mathbf{y})^T(\mathbf{y}-\mathbf{H}\mathbf{y})\\
+\end{align}$$`
+
+---
+
+## RSS
+
+`$$\begin{align}\mathbf{e}^T\mathbf{e}=&amp;(\mathbf{y}-\hat{\mathbf{y}})^T(\mathbf{y}-\hat{\mathbf{y}})\\
+=&amp;(\mathbf{y} - \mathbf{H}\mathbf{y})^T(\mathbf{y}-\mathbf{H}\mathbf{y})\\
+=&amp;((\mathbf{I}-\mathbf{H})\mathbf{y})^T(\mathbf{I}-\mathbf{H})\mathbf{y}\\
+\end{align}$$`
+
+---
+
+## RSS
+
+`$$\begin{align}\mathbf{e}^T\mathbf{e}=&amp;(\mathbf{y}-\hat{\mathbf{y}})^T(\mathbf{y}-\hat{\mathbf{y}})\\
+=&amp;(\mathbf{y} - \mathbf{H}\mathbf{y})^T(\mathbf{y}-\mathbf{H}\mathbf{y})\\
+=&amp;((\mathbf{I}-\mathbf{H})\mathbf{y})^T(\mathbf{I}-\mathbf{H})\mathbf{y}\\
+=&amp;\mathbf{y}^T(\mathbf{I-H})^T(\mathbf{I}-\mathbf{H})\mathbf{y}
+\end{align}$$`
+
+---
+
+
+## RSS
+
+`$$\begin{align}\mathbf{e}^T\mathbf{e}=&amp;(\mathbf{y}-\hat{\mathbf{y}})^T(\mathbf{y}-\hat{\mathbf{y}})\\
+=&amp;(\mathbf{y} - \mathbf{H}\mathbf{y})^T(\mathbf{y}-\mathbf{H}\mathbf{y})\\
+=&amp;((\mathbf{I}-\mathbf{H})\mathbf{y})^T(\mathbf{I}-\mathbf{H})\mathbf{y}\\
+=&amp;\mathbf{y}^T(\mathbf{I-H})^T(\mathbf{I}-\mathbf{H})\mathbf{y}\\
+=&amp;\mathbf{y}^T(\mathbf{I-H})\mathbf{y}
+\end{align}$$`
+
+---
+
+## RSS
+
+`$$E[\mathbf{e}^T\mathbf{e}]=E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]$$`
+
+--
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 448 512"&gt;&lt;path d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"/&gt;&lt;/svg&gt; `Matrix fact`
+
+`$$E[\mathbf{X}^T\mathbf{CX}]=E[\mathbf{X}]^T\mathbf{C}E[\mathbf{X}] +\textrm{tr}(\mathbf{C}\textrm{var}(\mathbf{X}))$$`
+
+---
+
+## RSS
+
+`$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&amp;E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+\end{align}$$`
+
+---
+
+## RSS
+
+`$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&amp;E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&amp;E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+\end{align}$$`
+---
+
+## RSS
+
+`$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&amp;E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&amp;E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+\end{align}$$`
+---
+
+## RSS
+
+`$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&amp;E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&amp;E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+\end{align}$$`
+---
+
+## RSS
+
+`$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&amp;E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&amp;E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+\end{align}$$`
+---
+
+## RSS
+
+`$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&amp;E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&amp;E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+\end{align}$$`
+---
+
+## RSS
+
+`$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&amp;E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&amp;E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+\end{align}$$`
+---
+
+## RSS
+
+`$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&amp;E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&amp;E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(0)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+\end{align}$$`
+
+---
+
+## RSS
+
+`$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&amp;E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&amp;E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(0)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\sigma^2\textrm{tr}(\mathbf{I-H})\\
+\end{align}$$`
+---
+
+## RSS
+
+`$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&amp;E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&amp;E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(0)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\sigma^2(\textrm{tr}(\mathbf{I}_{n\times n})-\textrm{tr}(\mathbf{H}))\\
+\end{align}$$`
+---
+
+## RSS
+
+`$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&amp;E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&amp;E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(0)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\sigma^2(\textrm{tr}(\mathbf{I}_{n\times n})-\textrm{tr}(\mathbf{H}))\\
+=&amp;\sigma^2(n-\textrm{tr}(\mathbf{H}))\\
+\end{align}$$`
+---
+
+## RSS
+
+`$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&amp;E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&amp;E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\beta^T\mathbf{X}^T(0)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&amp;\sigma^2(\textrm{tr}(\mathbf{I}_{n\times n})-\textrm{tr}(\mathbf{H}))\\
+=&amp;\sigma^2(n-\textrm{tr}(\mathbf{H}))\\
+=&amp;\sigma^2(n-(p+1))
+\end{align}$$`
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

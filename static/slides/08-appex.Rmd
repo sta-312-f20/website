@@ -1,0 +1,360 @@
+---
+title: "More on the Hat Matrix"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## `r fa("pause")` `Matrix fact`
+
+* If a matrix is **symmetric**, then $\mathbf{A}=\mathbf{A}^T$
+--
+
+* If a matrix is **idempotent**, then $\mathbf{A}^T\mathbf{A}=\mathbf{A}$
+--
+
+* The **hat matrix**, $\mathbf{H}$, is both symmetric **and** idempotent
+
+---
+
+## The hat matrix is symmetric
+
+$$\begin{align}\mathbf{H}& = \mathbf{H}^T\\
+\end{align}$$
+
+---
+
+## The hat matrix is symmetric
+
+$$\begin{align}\mathbf{H}& = \mathbf{H}^T\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&=(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)^T\\
+\end{align}$$
+
+---
+
+## The hat matrix is symmetric
+
+$$\begin{align}\mathbf{H}& = \mathbf{H}^T\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&=(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)^T\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T
+\end{align}$$
+
+---
+
+## The hat matrix is idempotent
+
+$$\begin{align}\mathbf{H}^T\mathbf{H}&=\mathbf{H}\\
+\end{align}$$
+---
+
+## The hat matrix is idempotent
+
+$$\begin{align}\mathbf{H}^T\mathbf{H}&=\mathbf{H}\\
+\mathbf{H}\mathbf{H}&=\mathbf{H}\\
+\end{align}$$
+
+---
+
+## The hat matrix is idempotent
+
+$$\begin{align}\mathbf{H}^T\mathbf{H}&=\mathbf{H}\\
+\mathbf{H}\mathbf{H}&=\mathbf{H}\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\\
+\end{align}$$
+
+---
+
+## The hat matrix is idempotent
+
+$$\begin{align}\mathbf{H}^T\mathbf{H}&=\mathbf{H}\\
+\mathbf{H}\mathbf{H}&=\mathbf{H}\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\underbrace{\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}}_{\mathbf{I}}\mathbf{X}^T&=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\\
+\end{align}$$
+---
+
+## The hat matrix is idempotent
+
+$$\begin{align}\mathbf{H}^T\mathbf{H}&=\mathbf{H}\\
+\mathbf{H}\mathbf{H}&=\mathbf{H}\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\underbrace{\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}}_{\mathbf{I}}\mathbf{X}^T&=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\\
+\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T&=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\\
+\end{align}$$
+
+--
+
+* $\mathbf{I-H}$ is also **idempotent**
+
+---
+
+## The trace of the hat matrix is p+1
+
+$$\textrm{tr}(\mathbf{H})$$
+--
+
+## `r fa("pause")` `Matrix fact`
+
+* The **trace** of a square matrix, written as $\textrm{tr}(\mathbf{A})$, is the sum of the diagonal elements
+* $\textrm{tr}(\mathbf{A}+\mathbf{B}) = \textrm{tr}(\mathbf{A})+\textrm{tr}(\mathbf{B})$
+* $\textrm{tr}(c\mathbf{A}) = c\textrm{tr}(\mathbf{A})$
+* $\textrm{tr}(\mathbf{ABC})=\textrm{tr}(\mathbf{BCA})=\textrm{tr}(\mathbf{CAB})$
+
+---
+
+## The trace of the hat matrix is p+1
+
+$$\begin{align}\textrm{tr}(\mathbf{H})=&\textrm{tr}(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)\end{align}$$
+
+---
+
+## The trace of the hat matrix is p+1
+
+$$\begin{align}\textrm{tr}(\mathbf{H})=&\textrm{tr}(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)\\
+=&\textrm{tr}(\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1})\end{align}$$
+
+---
+
+## The trace of the hat matrix is p+1
+
+$$\begin{align}\textrm{tr}(\mathbf{H})=&\textrm{tr}(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)\\
+=&\textrm{tr}(\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1})\\
+=&\textrm{tr}(\mathbf{I})\end{align}$$
+
+--
+
+.question[
+What are the dimensions of this $\mathbf{I}$?
+]
+
+--
+
+* $\mathbf{X}_{n\times (p+1)}$
+--
+
+* $\mathbf{I}_{(p+1)\times(p+1)}$
+--
+
+* $\textrm{tr}(\mathbf{I}_{(p+1)\times(p+1)})=p+1$
+---
+
+## RSS
+
+$$\begin{align}\mathbf{e}^T\mathbf{e}=&(\mathbf{y}-\hat{\mathbf{y}})^T(\mathbf{y}-\hat{\mathbf{y}})\\
+\end{align}$$
+
+---
+
+## RSS
+
+$$\begin{align}\mathbf{e}^T\mathbf{e}=&(\mathbf{y}-\hat{\mathbf{y}})^T(\mathbf{y}-\hat{\mathbf{y}})\\
+=&(\mathbf{y} - \mathbf{H}\mathbf{y})^T(\mathbf{y}-\mathbf{H}\mathbf{y})\\
+\end{align}$$
+
+---
+
+## RSS
+
+$$\begin{align}\mathbf{e}^T\mathbf{e}=&(\mathbf{y}-\hat{\mathbf{y}})^T(\mathbf{y}-\hat{\mathbf{y}})\\
+=&(\mathbf{y} - \mathbf{H}\mathbf{y})^T(\mathbf{y}-\mathbf{H}\mathbf{y})\\
+=&((\mathbf{I}-\mathbf{H})\mathbf{y})^T(\mathbf{I}-\mathbf{H})\mathbf{y}\\
+\end{align}$$
+
+---
+
+## RSS
+
+$$\begin{align}\mathbf{e}^T\mathbf{e}=&(\mathbf{y}-\hat{\mathbf{y}})^T(\mathbf{y}-\hat{\mathbf{y}})\\
+=&(\mathbf{y} - \mathbf{H}\mathbf{y})^T(\mathbf{y}-\mathbf{H}\mathbf{y})\\
+=&((\mathbf{I}-\mathbf{H})\mathbf{y})^T(\mathbf{I}-\mathbf{H})\mathbf{y}\\
+=&\mathbf{y}^T(\mathbf{I-H})^T(\mathbf{I}-\mathbf{H})\mathbf{y}
+\end{align}$$
+
+---
+
+
+## RSS
+
+$$\begin{align}\mathbf{e}^T\mathbf{e}=&(\mathbf{y}-\hat{\mathbf{y}})^T(\mathbf{y}-\hat{\mathbf{y}})\\
+=&(\mathbf{y} - \mathbf{H}\mathbf{y})^T(\mathbf{y}-\mathbf{H}\mathbf{y})\\
+=&((\mathbf{I}-\mathbf{H})\mathbf{y})^T(\mathbf{I}-\mathbf{H})\mathbf{y}\\
+=&\mathbf{y}^T(\mathbf{I-H})^T(\mathbf{I}-\mathbf{H})\mathbf{y}\\
+=&\mathbf{y}^T(\mathbf{I-H})\mathbf{y}
+\end{align}$$
+
+---
+
+## RSS
+
+$$E[\mathbf{e}^T\mathbf{e}]=E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]$$
+
+--
+
+## `r fa("pause")` `Matrix fact`
+
+$$E[\mathbf{X}^T\mathbf{CX}]=E[\mathbf{X}]^T\mathbf{C}E[\mathbf{X}] +\textrm{tr}(\mathbf{C}\textrm{var}(\mathbf{X}))$$
+
+---
+
+## RSS
+
+$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+\end{align}$$
+
+---
+
+## RSS
+
+$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+\end{align}$$
+---
+
+## RSS
+
+$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+\end{align}$$
+---
+
+## RSS
+
+$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+\end{align}$$
+---
+
+## RSS
+
+$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+\end{align}$$
+---
+
+## RSS
+
+$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+\end{align}$$
+---
+
+## RSS
+
+$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+\end{align}$$
+---
+
+## RSS
+
+$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(0)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+\end{align}$$
+
+---
+
+## RSS
+
+$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(0)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\sigma^2\textrm{tr}(\mathbf{I-H})\\
+\end{align}$$
+---
+
+## RSS
+
+$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(0)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\sigma^2(\textrm{tr}(\mathbf{I}_{n\times n})-\textrm{tr}(\mathbf{H}))\\
+\end{align}$$
+---
+
+## RSS
+
+$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(0)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\sigma^2(\textrm{tr}(\mathbf{I}_{n\times n})-\textrm{tr}(\mathbf{H}))\\
+=&\sigma^2(n-\textrm{tr}(\mathbf{H}))\\
+\end{align}$$
+---
+
+## RSS
+
+$$\begin{align}E[\mathbf{e}^T\mathbf{e}]=&E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]\\
+=&E[\mathbf{y}]^T(\mathbf{I-H})E[\mathbf{y}]+\textrm{tr}((\mathbf{I-H})\textrm{var}(\mathbf{y}))\\
+=&\beta^T\mathbf{X}^T(\mathbf{I-H})\mathbf{X}\beta+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{H}\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(\mathbf{X}\beta-\mathbf{X}\beta)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\beta^T\mathbf{X}^T(0)+\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\sigma^2\textrm{tr}(\mathbf{I-H})\\
+=&\sigma^2(\textrm{tr}(\mathbf{I}_{n\times n})-\textrm{tr}(\mathbf{H}))\\
+=&\sigma^2(n-\textrm{tr}(\mathbf{H}))\\
+=&\sigma^2(n-(p+1))
+\end{align}$$
+
+
+
+
