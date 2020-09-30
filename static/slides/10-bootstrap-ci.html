@@ -1,0 +1,5100 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Bootstrap Confidence Intervals</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/countdown/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown/countdown.js"></script>
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Bootstrap Confidence Intervals
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Lucy D'Agostino McGowan
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+## Simulation
+
+* Generate `\(\epsilon\)` from the known error distribution
+--
+
+* Calculate `\(\mathbf{y}=\mathbf{X}\beta+\epsilon\)` from the known `\(\beta\)` and the observed data, `\(\mathbf{X}\)`
+--
+
+* Use this to compute `\(\hat\beta\)`
+--
+
+* Do this _many times_ to get a distribution of `\(\hat\beta\)` and estimate the uncertainty from that
+
+---
+
+## Simulation
+
+* This sounds **great!** 
+--
+
+* but...we don't know the true error distribution and we don't know the true `\(\beta\)` (womp womp!)
+
+---
+
+## Bootstrap
+
+* That is where the bootstrap comes in!
+--
+
+* The bootstrap tries to estimate the same procedure as the simulation method except instead of sampling from the **true** distribution, we sample from the **observed data**
+
+---
+
+## Bootstrap
+
+.question[
+Where does the term come from?
+]
+
+--
+
+_"To pull oneself up by one's bootstraps"_
+
+--
+
+The phrase likely came from an 18th century writing "The Surprising Adventures of Baron Munchausen" by Rudolph Erich Raspe
+
+_"The Baron had fallen to the bottom of a deep lake. Just
+when it looked like all was lost, he thought to **pick himself
+up by his own bootstraps**."_
+---
+
+## Bootstrap
+
+![](img/10/boot.png)
+
+.small[
+_adapted from slides by Hastie &amp; Tibshirani_
+]
+---
+
+## Bootstrap
+
+* Used to estimate _uncertainty_.
+--
+
+* For example, the standard error of the estimate or an approximate confidence interval
+
+---
+
+## Bootstrap
+
+* Generate `\(\epsilon^*\)` from sampling with replacement from `\(e_1,\dots,e_n\)` (the residuals)
+--
+
+* Calculate `\(\mathbf{y}^* =\mathbf{X}\hat\beta+\epsilon^*\)`
+--
+
+* Compute `\(\hat\beta^*\)` from `\((\mathbf{X}, \mathbf{y}^*)\)`
+
+---
+
+## Generate `\(\epsilon^*\)` from sampling with replacement from the residuals
+
+
+|     e|
+|-----:|
+|  0.02|
+|  0.02|
+| -0.23|
+|  0.42|
+| -0.23|
+
+--
+
+.question[
+How would I sample with replacement?
+]
+
+---
+
+## Generate `\(\epsilon^*\)` from sampling with replacement from the residuals
+
+.question[
+How would I sample with replacement?
+]
+
+
+|     e|  e* 1|  e* 2| e* 3|  e* 4|  e* 5|
+|-----:|-----:|-----:|----:|-----:|-----:|
+|  0.02|  0.02| -0.23| 0.02| -0.23| -0.23|
+|  0.02|  0.02| -0.23| 0.02|  0.42|  0.02|
+| -0.23| -0.23|  0.42| 0.42| -0.23|  0.42|
+|  0.42| -0.23|  0.42| 0.02|  0.02|  0.02|
+| -0.23|  0.02|  0.02| 0.42|  0.42|  0.02|
+
+
+---
+
+## Let's do this in R!
+
+* The `sample()` function allows you to resample with replacement.
+
+--
+
+
+```r
+sample(c(1, 2, 3), replace = TRUE)
+```
+
+```
+## [1] 2 1 2
+```
+
+--
+
+
+```r
+sample(c(1, 2, 3), replace = TRUE)
+```
+
+```
+## [1] 3 2 2
+```
+
+--
+
+
+```r
+sample(c(1, 2, 3), replace = TRUE)
+```
+
+```
+## [1] 2 2 1
+```
+
+---
+
+## Let's do this in R!
+
+* The `sample()` function allows you to resample with replacement.
+
+
+```r
+set.seed(1)
+sample(c(1, 2, 3), replace = TRUE)
+```
+
+```
+## [1] 1 2 2
+```
+
+
+```r
+set.seed(1)
+sample(c(1, 2, 3), replace = TRUE)
+```
+
+```
+## [1] 1 2 2
+```
+
+---
+
+## Let's do this in R!
+
+* The `sample()` function allows you to resample with replacement.
+
+.pull-left[
+.small[
+
+```r
+set.seed(1)
+sample(c(1, 2, 3), replace = TRUE)
+```
+
+```
+## [1] 1 2 2
+```
+
+```r
+sample(c(1, 2, 3), replace = TRUE)
+```
+
+```
+## [1] 3 1 3
+```
+
+```r
+sample(c(1, 2, 3), replace = TRUE)
+```
+
+```
+## [1] 3 2 2
+```
+
+]
+]
+
+--
+
+.pull-right[
+.small[
+
+```r
+set.seed(1)
+sample(c(1, 2, 3), replace = TRUE)
+```
+
+```
+## [1] 1 2 2
+```
+
+```r
+sample(c(1, 2, 3), replace = TRUE)
+```
+
+```
+## [1] 3 1 3
+```
+
+```r
+sample(c(1, 2, 3), replace = TRUE)
+```
+
+```
+## [1] 3 2 2
+```
+]
+]
+
+--
+
+* **Always set a seed when generating random processes so you can replicate your results**
+
+---
+
+class: inverse
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 640 512"&gt;&lt;path d="M512 64v256H128V64h384m16-64H112C85.5 0 64 21.5 64 48v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm100 416H389.5c-3 0-5.5 2.1-5.9 5.1C381.2 436.3 368 448 352 448h-64c-16 0-29.2-11.7-31.6-26.9-.5-2.9-3-5.1-5.9-5.1H12c-6.6 0-12 5.4-12 12v36c0 26.5 21.5 48 48 48h544c26.5 0 48-21.5 48-48v-36c0-6.6-5.4-12-12-12z"/&gt;&lt;/svg&gt; `Application Exercise`
+
+* Set a seed
+* Use the `sample()` function to sample from the following vector with replacement: `c(1, 2, 3, 4, 5)`
+
+<div class="countdown" id="timer_5f74aec0" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+## Let's do this in R
+
+
+* Generate `\(\epsilon^*\)` from sampling with replacement from `\(e_1,\dots,e_n\)` (the residuals)
+
+
+```r
+e_star &lt;- sample(e, replace = TRUE) 
+```
+--
+
+* Calculate `\(\mathbf{y}^* =\mathbf{X}\hat\beta+\epsilon^*\)`
+
+
+```r
+y_star &lt;- y_hat + e_star
+```
+
+--
+
+* Compute `\(\hat\beta^*\)` from `\((\mathbf{X}, \mathbf{y}^*)\)`
+
+
+```r
+new_mod &lt;- update(model, y_star ~ ., data = data)
+coef(new_mod)
+```
+
+---
+
+## Let's do this in R
+
+Let's build a function to do this **once**
+
+
+.small[
+
+```r
+*bootstrap_residual &lt;- function(e, y_hat, model, data) {
+  e_star &lt;- sample(e, replace = TRUE) 
+  data$y_star &lt;- y_hat + e_star
+  new_mod &lt;- update(model, y_star ~ ., data = data)
+  return(coef(new_mod))
+}
+```
+]
+
+---
+
+## Let's do this in R
+
+Let's build a function to do this **once**
+
+
+```r
+bootstrap_residual &lt;- function(e, y_hat, model, data) { 
+* e_star &lt;- sample(e, replace = TRUE)
+  data$y_star &lt;- y_hat + e_star
+  new_mod &lt;- update(model, y_star ~ ., data = data)
+  return(coef(new_mod))
+}
+```
+
+---
+
+## Let's do this in R
+
+Let's build a function to do this **once**
+
+
+```r
+bootstrap_residual &lt;- function(e, y_hat, model, data) { 
+  e_star &lt;- sample(e, replace = TRUE) 
+* data$y_star &lt;- y_hat + e_star
+  new_mod &lt;- update(model, y_star ~ ., data = data)
+  return(coef(new_mod))
+}
+```
+
+---
+
+## Let's do this in R
+
+Let's build a function to do this **once**
+
+
+```r
+bootstrap_residual &lt;- function(e, y_hat, model, data) { 
+  e_star &lt;- sample(e, replace = TRUE) 
+  data$y_star &lt;- y_hat + e_star
+* new_mod &lt;- update(model, y_star ~ ., data = data)
+  return(coef(new_mod))
+}
+```
+
+--
+
+* The `update()` function will update a model with a new formula. Here we are swapping out `y` from our original `model` with `y_star`
+
+---
+## Let's do this in R
+
+Let's build a function to do this **once**
+
+
+```r
+bootstrap_residual &lt;- function(e, y_hat, model, data) { 
+  e_star &lt;- sample(e, replace = TRUE) 
+  data$y_star &lt;- y_hat + e_star
+  new_mod &lt;- update(model, y_star ~ ., data = data)
+* return(coef(new_mod))
+}
+```
+
+---
+
+class: inverse
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 640 512"&gt;&lt;path d="M512 64v256H128V64h384m16-64H112C85.5 0 64 21.5 64 48v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm100 416H389.5c-3 0-5.5 2.1-5.9 5.1C381.2 436.3 368 448 352 448h-64c-16 0-29.2-11.7-31.6-26.9-.5-2.9-3-5.1-5.9-5.1H12c-6.6 0-12 5.4-12 12v36c0 26.5 21.5 48 48 48h544c26.5 0 48-21.5 48-48v-36c0-6.6-5.4-12-12-12z"/&gt;&lt;/svg&gt; `Application Exercise`
+
+* Write a function like the one on the previous slide to perform a bootstrap.
+
+<div class="countdown" id="timer_5f74ae70" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+---
+
+## Let's do this in R
+
+
+
+
+
+```r
+model &lt;- lm(mpg ~ horsepower, data = Auto)
+y_hat &lt;- fitted(model)
+e &lt;- residuals(model)
+```
+
+--
+
+.pull-left[
+.small[
+
+```r
+set.seed(1)
+e_star &lt;- sample(e, replace = TRUE) 
+Auto$y_star &lt;- y_hat + e_star
+new_mod &lt;- update(model, y_star ~ ., data = Auto)
+coef(new_mod)
+```
+
+```
+## (Intercept)  horsepower 
+##  38.9999721  -0.1506159
+```
+]
+]
+
+--
+
+.pull-right[
+.small[
+
+```r
+set.seed(1)
+bootstrap_residual(e, y_hat, model, Auto)
+```
+
+```
+## (Intercept)  horsepower 
+##  38.9999721  -0.1506159
+```
+
+]]
+
+---
+
+## Let's do this in R
+
+
+
+```r
+model &lt;- lm(mpg ~ horsepower, data = Auto)
+y_hat &lt;- fitted(model)
+e &lt;- residuals(model)
+```
+
+
+.pull-left[
+.small[
+
+```r
+set.seed(1)
+e_star &lt;- sample(e, replace = TRUE) 
+Auto$y_star &lt;- y_hat + e_star
+new_mod &lt;- update(model, y_star ~ ., data = Auto)
+coef(new_mod)
+```
+
+```
+## (Intercept)  horsepower 
+##  38.9999721  -0.1506159
+```
+]
+]
+
+.pull-right[
+.small[
+
+```r
+set.seed(1)
+bootstrap_residual(e, y_hat, model, Auto)
+```
+
+```
+## (Intercept)  horsepower 
+##  38.9999721  -0.1506159
+```
+
+
+
+```r
+bootstrap_residual(e, y_hat, model, Auto)
+```
+
+```
+## (Intercept)  horsepower 
+##  40.0583859  -0.1597723
+```
+
+]]
+
+---
+
+
+## Let's do this in R
+
+
+
+```r
+model &lt;- lm(mpg ~ horsepower, data = Auto)
+y_hat &lt;- fitted(model)
+e &lt;- residuals(model)
+```
+
+
+.pull-left[
+.small[
+
+```r
+set.seed(1)
+e_star &lt;- sample(e, replace = TRUE) 
+Auto$y_star &lt;- y_hat + e_star
+new_mod &lt;- update(model, y_star ~ ., data = Auto)
+coef(new_mod)
+```
+
+```
+## (Intercept)  horsepower 
+##  38.9999721  -0.1506159
+```
+]
+]
+
+
+.pull-right[
+.small[
+
+```r
+set.seed(1)
+bootstrap_residual(e, y_hat, model, Auto)
+```
+
+```
+## (Intercept)  horsepower 
+##  38.9999721  -0.1506159
+```
+
+
+
+```r
+bootstrap_residual(e, y_hat, model, Auto)
+```
+
+```
+## (Intercept)  horsepower 
+##  40.0583859  -0.1597723
+```
+
+
+```r
+bootstrap_residual(e, y_hat, model, Auto)
+```
+
+```
+## (Intercept)  horsepower 
+##  39.0514849  -0.1513228
+```
+
+]]
+
+---
+
+## purrr 
+
+
+- **purrr** is a package for _iterating_ in R
+- The functions we will use are all `map_xxx()` functions 
+
+---
+
+## `map(.x, .f, ...)`
+
+--
+
+### for every element of `.x` do `.f`
+
+---
+
+## Example
+
+.small[
+
+```r
+library(purrr)
+map(1:5, ~ .x * 2)
+```
+
+```
+## [[1]]
+## [1] 2
+## 
+## [[2]]
+## [1] 4
+## 
+## [[3]]
+## [1] 6
+## 
+## [[4]]
+## [1] 8
+## 
+## [[5]]
+## [1] 10
+```
+]
+
+--
+
+* By default, the output will be a **list**
+--
+
+* You can dictate your desired output type by specifying `map_xxx()` for example to output a numeric (double) vector, use `map_dbl()`
+
+---
+
+## Example
+
+.small[
+
+```r
+map_dbl(1:5, ~ .x * 2)
+```
+
+```
+## [1]  2  4  6  8 10
+```
+]
+
+---
+
+## `map_xxx(.x, .f)`
+
+* `map()`: list
+* `map_dbl()`: double
+* `map_int()`
+* `map_lgl()`
+* `map_chr()`
+* `map_df()`
+
+--
+
+.question[
+What do you think the rest of these output?
+]
+
+---
+
+## `map_xxx(.x, .f)`
+
+* `map()`: list
+* `map_dbl()`: double
+* `map_int()`: integer
+* `map_lgl()`: logical
+* `map_chr()`: character
+* `map_df()`: data frame
+
+.question[
+What do you think the rest of these output?
+]
+
+---
+
+## Back to our example!
+
+.pull-left[
+.small[
+
+```r
+B &lt;- 1000
+map(1:B, ~ bootstrap_residual(e, y_hat, model, Auto))
+```
+
+```
+## [[1]]
+## (Intercept)  horsepower 
+##  39.5577878  -0.1537403 
+## 
+## [[2]]
+## (Intercept)  horsepower 
+##  38.7517839  -0.1445242 
+## 
+## [[3]]
+## (Intercept)  horsepower 
+##   40.299449   -0.159421 
+## 
+## [[4]]
+## (Intercept)  horsepower 
+##  39.5579743  -0.1562991 
+## 
+## [[5]]
+## (Intercept)  horsepower 
+##  39.9851338  -0.1570814 
+## 
+## [[6]]
+## (Intercept)  horsepower 
+##  41.3035838  -0.1641114 
+## 
+## [[7]]
+## (Intercept)  horsepower 
+##  41.2766538  -0.1702292 
+## 
+## [[8]]
+## (Intercept)  horsepower 
+##  41.0797054  -0.1730696 
+## 
+## [[9]]
+## (Intercept)  horsepower 
+##  40.8505331  -0.1643151 
+## 
+## [[10]]
+## (Intercept)  horsepower 
+##  40.0168081  -0.1580494 
+## 
+## [[11]]
+## (Intercept)  horsepower 
+##  40.2916142  -0.1598027 
+## 
+## [[12]]
+## (Intercept)  horsepower 
+##  40.1242482  -0.1581572 
+## 
+## [[13]]
+## (Intercept)  horsepower 
+##  39.9658178  -0.1568639 
+## 
+## [[14]]
+## (Intercept)  horsepower 
+##  39.7701365  -0.1558859 
+## 
+## [[15]]
+## (Intercept)  horsepower 
+##  40.5372073  -0.1627034 
+## 
+## [[16]]
+## (Intercept)  horsepower 
+##  39.5850590  -0.1565891 
+## 
+## [[17]]
+## (Intercept)  horsepower 
+##  40.2910406  -0.1609778 
+## 
+## [[18]]
+## (Intercept)  horsepower 
+##  40.2798489  -0.1609537 
+## 
+## [[19]]
+## (Intercept)  horsepower 
+##  41.2150687  -0.1711352 
+## 
+## [[20]]
+## (Intercept)  horsepower 
+##  39.2629638  -0.1544094 
+## 
+## [[21]]
+## (Intercept)  horsepower 
+##  39.5349343  -0.1537218 
+## 
+## [[22]]
+## (Intercept)  horsepower 
+##  39.0080677  -0.1493604 
+## 
+## [[23]]
+## (Intercept)  horsepower 
+##  40.2583847  -0.1610556 
+## 
+## [[24]]
+## (Intercept)  horsepower 
+##  38.8722471  -0.1433313 
+## 
+## [[25]]
+## (Intercept)  horsepower 
+##  40.1509600  -0.1604275 
+## 
+## [[26]]
+## (Intercept)  horsepower 
+##  39.1729288  -0.1566467 
+## 
+## [[27]]
+## (Intercept)  horsepower 
+##  39.7792045  -0.1582528 
+## 
+## [[28]]
+## (Intercept)  horsepower 
+##   40.078146   -0.159936 
+## 
+## [[29]]
+## (Intercept)  horsepower 
+##  39.7678203  -0.1555682 
+## 
+## [[30]]
+## (Intercept)  horsepower 
+##  41.4134066  -0.1683716 
+## 
+## [[31]]
+## (Intercept)  horsepower 
+##  38.6201544  -0.1490515 
+## 
+## [[32]]
+## (Intercept)  horsepower 
+##  39.7114520  -0.1561636 
+## 
+## [[33]]
+## (Intercept)  horsepower 
+##  39.0898140  -0.1536236 
+## 
+## [[34]]
+## (Intercept)  horsepower 
+##  39.8639302  -0.1599347 
+## 
+## [[35]]
+## (Intercept)  horsepower 
+##  40.8588984  -0.1677346 
+## 
+## [[36]]
+## (Intercept)  horsepower 
+##  41.0818814  -0.1674714 
+## 
+## [[37]]
+## (Intercept)  horsepower 
+##  40.1840424  -0.1592952 
+## 
+## [[38]]
+## (Intercept)  horsepower 
+##   40.367334   -0.164715 
+## 
+## [[39]]
+## (Intercept)  horsepower 
+##  40.0898365  -0.1622775 
+## 
+## [[40]]
+## (Intercept)  horsepower 
+##  37.6499657  -0.1369237 
+## 
+## [[41]]
+## (Intercept)  horsepower 
+##   39.823175   -0.158254 
+## 
+## [[42]]
+## (Intercept)  horsepower 
+##  39.6551554  -0.1554174 
+## 
+## [[43]]
+## (Intercept)  horsepower 
+##  40.4102540  -0.1594586 
+## 
+## [[44]]
+## (Intercept)  horsepower 
+##  41.0654751  -0.1677579 
+## 
+## [[45]]
+## (Intercept)  horsepower 
+##  39.6167314  -0.1524366 
+## 
+## [[46]]
+## (Intercept)  horsepower 
+##  39.8079910  -0.1569379 
+## 
+## [[47]]
+## (Intercept)  horsepower 
+##  40.1026108  -0.1581709 
+## 
+## [[48]]
+## (Intercept)  horsepower 
+##  39.6178025  -0.1530939 
+## 
+## [[49]]
+## (Intercept)  horsepower 
+##  40.2222307  -0.1599964 
+## 
+## [[50]]
+## (Intercept)  horsepower 
+##  40.7234411  -0.1626942 
+## 
+## [[51]]
+## (Intercept)  horsepower 
+##  38.8285126  -0.1519009 
+## 
+## [[52]]
+## (Intercept)  horsepower 
+##   39.323665   -0.152499 
+## 
+## [[53]]
+## (Intercept)  horsepower 
+##  39.7705791  -0.1539415 
+## 
+## [[54]]
+## (Intercept)  horsepower 
+##  40.6498290  -0.1631471 
+## 
+## [[55]]
+## (Intercept)  horsepower 
+##  40.6031043  -0.1641427 
+## 
+## [[56]]
+## (Intercept)  horsepower 
+##  39.4958141  -0.1553134 
+## 
+## [[57]]
+## (Intercept)  horsepower 
+##  41.4847308  -0.1686765 
+## 
+## [[58]]
+## (Intercept)  horsepower 
+##  40.3336274  -0.1572135 
+## 
+## [[59]]
+## (Intercept)  horsepower 
+##  41.2418036  -0.1720063 
+## 
+## [[60]]
+## (Intercept)  horsepower 
+##  40.1031117  -0.1630496 
+## 
+## [[61]]
+## (Intercept)  horsepower 
+##  39.3444628  -0.1522149 
+## 
+## [[62]]
+## (Intercept)  horsepower 
+##  40.5606501  -0.1639916 
+## 
+## [[63]]
+## (Intercept)  horsepower 
+##  40.0301164  -0.1587286 
+## 
+## [[64]]
+## (Intercept)  horsepower 
+##  40.3977062  -0.1610259 
+## 
+## [[65]]
+## (Intercept)  horsepower 
+##  39.8567555  -0.1571448 
+## 
+## [[66]]
+## (Intercept)  horsepower 
+##  40.0225487  -0.1590777 
+## 
+## [[67]]
+## (Intercept)  horsepower 
+##  39.5250737  -0.1549172 
+## 
+## [[68]]
+## (Intercept)  horsepower 
+##  39.7936246  -0.1589207 
+## 
+## [[69]]
+## (Intercept)  horsepower 
+##  39.7257813  -0.1580421 
+## 
+## [[70]]
+## (Intercept)  horsepower 
+##   39.623322   -0.153161 
+## 
+## [[71]]
+## (Intercept)  horsepower 
+##  39.9780714  -0.1620281 
+## 
+## [[72]]
+## (Intercept)  horsepower 
+##  40.2904159  -0.1638038 
+## 
+## [[73]]
+## (Intercept)  horsepower 
+##  39.9442227  -0.1643489 
+## 
+## [[74]]
+## (Intercept)  horsepower 
+##  40.7109727  -0.1656063 
+## 
+## [[75]]
+## (Intercept)  horsepower 
+##  40.1146796  -0.1592135 
+## 
+## [[76]]
+## (Intercept)  horsepower 
+##  40.7509373  -0.1649399 
+## 
+## [[77]]
+## (Intercept)  horsepower 
+##  40.2625021  -0.1560143 
+## 
+## [[78]]
+## (Intercept)  horsepower 
+##  40.1475082  -0.1583246 
+## 
+## [[79]]
+## (Intercept)  horsepower 
+##  39.8926351  -0.1585041 
+## 
+## [[80]]
+## (Intercept)  horsepower 
+##  38.6615396  -0.1469887 
+## 
+## [[81]]
+## (Intercept)  horsepower 
+##  39.6107093  -0.1556742 
+## 
+## [[82]]
+## (Intercept)  horsepower 
+##  39.4734357  -0.1541891 
+## 
+## [[83]]
+## (Intercept)  horsepower 
+##   40.801377   -0.165111 
+## 
+## [[84]]
+## (Intercept)  horsepower 
+##  41.0306958  -0.1666446 
+## 
+## [[85]]
+## (Intercept)  horsepower 
+##  39.6439258  -0.1526369 
+## 
+## [[86]]
+## (Intercept)  horsepower 
+##  40.9855636  -0.1646064 
+## 
+## [[87]]
+## (Intercept)  horsepower 
+##  39.9900474  -0.1559717 
+## 
+## [[88]]
+## (Intercept)  horsepower 
+##  40.9847786  -0.1644254 
+## 
+## [[89]]
+## (Intercept)  horsepower 
+##  40.0109059  -0.1569243 
+## 
+## [[90]]
+## (Intercept)  horsepower 
+##  39.1407418  -0.1520801 
+## 
+## [[91]]
+## (Intercept)  horsepower 
+##  40.6240903  -0.1676859 
+## 
+## [[92]]
+## (Intercept)  horsepower 
+##   39.020788   -0.153221 
+## 
+## [[93]]
+## (Intercept)  horsepower 
+##  40.5863430  -0.1606872 
+## 
+## [[94]]
+## (Intercept)  horsepower 
+##  39.6809119  -0.1566499 
+## 
+## [[95]]
+## (Intercept)  horsepower 
+##  40.0267718  -0.1592652 
+## 
+## [[96]]
+## (Intercept)  horsepower 
+##  39.8662546  -0.1592607 
+## 
+## [[97]]
+## (Intercept)  horsepower 
+##  39.6652009  -0.1557058 
+## 
+## [[98]]
+## (Intercept)  horsepower 
+##  38.5325581  -0.1447881 
+## 
+## [[99]]
+## (Intercept)  horsepower 
+##  40.0227756  -0.1567542 
+## 
+## [[100]]
+## (Intercept)  horsepower 
+##  40.2906138  -0.1611927 
+## 
+## [[101]]
+## (Intercept)  horsepower 
+##  40.2475817  -0.1610279 
+## 
+## [[102]]
+## (Intercept)  horsepower 
+##  41.4177392  -0.1684197 
+## 
+## [[103]]
+## (Intercept)  horsepower 
+##  40.1412265  -0.1587343 
+## 
+## [[104]]
+## (Intercept)  horsepower 
+##   38.815354   -0.144407 
+## 
+## [[105]]
+## (Intercept)  horsepower 
+##  39.8134453  -0.1546786 
+## 
+## [[106]]
+## (Intercept)  horsepower 
+##  40.0463617  -0.1552516 
+## 
+## [[107]]
+## (Intercept)  horsepower 
+##  39.5956595  -0.1547384 
+## 
+## [[108]]
+## (Intercept)  horsepower 
+##  39.9132199  -0.1548267 
+## 
+## [[109]]
+## (Intercept)  horsepower 
+##  40.7247670  -0.1647174 
+## 
+## [[110]]
+## (Intercept)  horsepower 
+##  40.3719495  -0.1587214 
+## 
+## [[111]]
+## (Intercept)  horsepower 
+##  39.8990600  -0.1585696 
+## 
+## [[112]]
+## (Intercept)  horsepower 
+##  39.2929986  -0.1535196 
+## 
+## [[113]]
+## (Intercept)  horsepower 
+##  38.9802463  -0.1484273 
+## 
+## [[114]]
+## (Intercept)  horsepower 
+##  41.0569632  -0.1655651 
+## 
+## [[115]]
+## (Intercept)  horsepower 
+##  38.5552634  -0.1427499 
+## 
+## [[116]]
+## (Intercept)  horsepower 
+##  39.3985976  -0.1559174 
+## 
+## [[117]]
+## (Intercept)  horsepower 
+##  40.4101332  -0.1598915 
+## 
+## [[118]]
+## (Intercept)  horsepower 
+##  40.1662186  -0.1595035 
+## 
+## [[119]]
+## (Intercept)  horsepower 
+##  40.7177105  -0.1638234 
+## 
+## [[120]]
+## (Intercept)  horsepower 
+##  39.7728086  -0.1553169 
+## 
+## [[121]]
+## (Intercept)  horsepower 
+##  39.6586517  -0.1560789 
+## 
+## [[122]]
+## (Intercept)  horsepower 
+##  39.5885825  -0.1561307 
+## 
+## [[123]]
+## (Intercept)  horsepower 
+##  39.9160212  -0.1561487 
+## 
+## [[124]]
+## (Intercept)  horsepower 
+##  38.4465917  -0.1428275 
+## 
+## [[125]]
+## (Intercept)  horsepower 
+##  40.1240914  -0.1547107 
+## 
+## [[126]]
+## (Intercept)  horsepower 
+##  39.6140738  -0.1545388 
+## 
+## [[127]]
+## (Intercept)  horsepower 
+##  39.9712938  -0.1596372 
+## 
+## [[128]]
+## (Intercept)  horsepower 
+##  40.3195464  -0.1590721 
+## 
+## [[129]]
+## (Intercept)  horsepower 
+##   39.901186   -0.156521 
+## 
+## [[130]]
+## (Intercept)  horsepower 
+##  39.4230191  -0.1556922 
+## 
+## [[131]]
+## (Intercept)  horsepower 
+##  39.9264473  -0.1568666 
+## 
+## [[132]]
+## (Intercept)  horsepower 
+##  38.0322795  -0.1409999 
+## 
+## [[133]]
+## (Intercept)  horsepower 
+##  40.0816979  -0.1604364 
+## 
+## [[134]]
+## (Intercept)  horsepower 
+##  40.1682611  -0.1578539 
+## 
+## [[135]]
+## (Intercept)  horsepower 
+##  39.8866341  -0.1549549 
+## 
+## [[136]]
+## (Intercept)  horsepower 
+##  40.0468934  -0.1585265 
+## 
+## [[137]]
+## (Intercept)  horsepower 
+##  40.4841208  -0.1626122 
+## 
+## [[138]]
+## (Intercept)  horsepower 
+##  39.6378145  -0.1569324 
+## 
+## [[139]]
+## (Intercept)  horsepower 
+##  39.0138071  -0.1546422 
+## 
+## [[140]]
+## (Intercept)  horsepower 
+##  39.3476906  -0.1527952 
+## 
+## [[141]]
+## (Intercept)  horsepower 
+##  39.4129595  -0.1521393 
+## 
+## [[142]]
+## (Intercept)  horsepower 
+##  40.1191330  -0.1570846 
+## 
+## [[143]]
+## (Intercept)  horsepower 
+##  38.5258403  -0.1464344 
+## 
+## [[144]]
+## (Intercept)  horsepower 
+##  39.1634227  -0.1503954 
+## 
+## [[145]]
+## (Intercept)  horsepower 
+##  39.7680243  -0.1604402 
+## 
+## [[146]]
+## (Intercept)  horsepower 
+##   39.856213   -0.156941 
+## 
+## [[147]]
+## (Intercept)  horsepower 
+##  39.4204529  -0.1518573 
+## 
+## [[148]]
+## (Intercept)  horsepower 
+##  40.3928408  -0.1616029 
+## 
+## [[149]]
+## (Intercept)  horsepower 
+##  39.9920911  -0.1612724 
+## 
+## [[150]]
+## (Intercept)  horsepower 
+##  40.0171063  -0.1589683 
+## 
+## [[151]]
+## (Intercept)  horsepower 
+##  40.2939492  -0.1614357 
+## 
+## [[152]]
+## (Intercept)  horsepower 
+##  39.6245164  -0.1565251 
+## 
+## [[153]]
+## (Intercept)  horsepower 
+##  39.9683953  -0.1549735 
+## 
+## [[154]]
+## (Intercept)  horsepower 
+##   39.957175   -0.161045 
+## 
+## [[155]]
+## (Intercept)  horsepower 
+##  38.8168195  -0.1485428 
+## 
+## [[156]]
+## (Intercept)  horsepower 
+##  38.5804107  -0.1461278 
+## 
+## [[157]]
+## (Intercept)  horsepower 
+##  39.1666176  -0.1499678 
+## 
+## [[158]]
+## (Intercept)  horsepower 
+##  40.5548087  -0.1658835 
+## 
+## [[159]]
+## (Intercept)  horsepower 
+##  39.9717756  -0.1557378 
+## 
+## [[160]]
+## (Intercept)  horsepower 
+##    40.20376    -0.15582 
+## 
+## [[161]]
+## (Intercept)  horsepower 
+##  39.7301595  -0.1570907 
+## 
+## [[162]]
+## (Intercept)  horsepower 
+##   40.800812   -0.161197 
+## 
+## [[163]]
+## (Intercept)  horsepower 
+##  40.3685947  -0.1598287 
+## 
+## [[164]]
+## (Intercept)  horsepower 
+##  39.8560062  -0.1561122 
+## 
+## [[165]]
+## (Intercept)  horsepower 
+##  40.4972441  -0.1610457 
+## 
+## [[166]]
+## (Intercept)  horsepower 
+##  39.2861684  -0.1517748 
+## 
+## [[167]]
+## (Intercept)  horsepower 
+##  38.1374342  -0.1392198 
+## 
+## [[168]]
+## (Intercept)  horsepower 
+##  41.2968107  -0.1687656 
+## 
+## [[169]]
+## (Intercept)  horsepower 
+##  40.0382420  -0.1574508 
+## 
+## [[170]]
+## (Intercept)  horsepower 
+##   39.282391   -0.150511 
+## 
+## [[171]]
+## (Intercept)  horsepower 
+##  39.0140907  -0.1486126 
+## 
+## [[172]]
+## (Intercept)  horsepower 
+##  40.0118273  -0.1583916 
+## 
+## [[173]]
+## (Intercept)  horsepower 
+##  39.9819850  -0.1578889 
+## 
+## [[174]]
+## (Intercept)  horsepower 
+##  40.2692788  -0.1621365 
+## 
+## [[175]]
+## (Intercept)  horsepower 
+##  40.2956267  -0.1613693 
+## 
+## [[176]]
+## (Intercept)  horsepower 
+##   40.222295   -0.161916 
+## 
+## [[177]]
+## (Intercept)  horsepower 
+##  39.7125686  -0.1564625 
+## 
+## [[178]]
+## (Intercept)  horsepower 
+##  39.1909529  -0.1530966 
+## 
+## [[179]]
+## (Intercept)  horsepower 
+##  39.9948819  -0.1571467 
+## 
+## [[180]]
+## (Intercept)  horsepower 
+##  40.2594275  -0.1566548 
+## 
+## [[181]]
+## (Intercept)  horsepower 
+##  41.4033626  -0.1691632 
+## 
+## [[182]]
+## (Intercept)  horsepower 
+##  39.7116941  -0.1600213 
+## 
+## [[183]]
+## (Intercept)  horsepower 
+##  39.2697721  -0.1506277 
+## 
+## [[184]]
+## (Intercept)  horsepower 
+##  39.7929836  -0.1530391 
+## 
+## [[185]]
+## (Intercept)  horsepower 
+##  40.0272419  -0.1585193 
+## 
+## [[186]]
+## (Intercept)  horsepower 
+##  39.9166312  -0.1578868 
+## 
+## [[187]]
+## (Intercept)  horsepower 
+##  39.9940765  -0.1582141 
+## 
+## [[188]]
+## (Intercept)  horsepower 
+##  39.4694270  -0.1530106 
+## 
+## [[189]]
+## (Intercept)  horsepower 
+##  39.0811962  -0.1500058 
+## 
+## [[190]]
+## (Intercept)  horsepower 
+##  40.6603387  -0.1635358 
+## 
+## [[191]]
+## (Intercept)  horsepower 
+##  39.5015094  -0.1518336 
+## 
+## [[192]]
+## (Intercept)  horsepower 
+##   39.555778   -0.154044 
+## 
+## [[193]]
+## (Intercept)  horsepower 
+##  39.3394734  -0.1493658 
+## 
+## [[194]]
+## (Intercept)  horsepower 
+##  40.3286129  -0.1629313 
+## 
+## [[195]]
+## (Intercept)  horsepower 
+##  40.1181736  -0.1601363 
+## 
+## [[196]]
+## (Intercept)  horsepower 
+##  40.8233125  -0.1649126 
+## 
+## [[197]]
+## (Intercept)  horsepower 
+##  39.8529650  -0.1538486 
+## 
+## [[198]]
+## (Intercept)  horsepower 
+##   40.459132   -0.162561 
+## 
+## [[199]]
+## (Intercept)  horsepower 
+##   39.899788   -0.157855 
+## 
+## [[200]]
+## (Intercept)  horsepower 
+##  40.0162902  -0.1586686 
+## 
+## [[201]]
+## (Intercept)  horsepower 
+##  39.4879510  -0.1544806 
+## 
+## [[202]]
+## (Intercept)  horsepower 
+##  39.4511281  -0.1559479 
+## 
+## [[203]]
+## (Intercept)  horsepower 
+##  40.2835975  -0.1592294 
+## 
+## [[204]]
+## (Intercept)  horsepower 
+##  41.1302946  -0.1709792 
+## 
+## [[205]]
+## (Intercept)  horsepower 
+##  40.4446349  -0.1616706 
+## 
+## [[206]]
+## (Intercept)  horsepower 
+##  39.2105699  -0.1530098 
+## 
+## [[207]]
+## (Intercept)  horsepower 
+##  40.2458072  -0.1619645 
+## 
+## [[208]]
+## (Intercept)  horsepower 
+##  40.6514973  -0.1615416 
+## 
+## [[209]]
+## (Intercept)  horsepower 
+##  39.5078496  -0.1559353 
+## 
+## [[210]]
+## (Intercept)  horsepower 
+##  40.4664366  -0.1609294 
+## 
+## [[211]]
+## (Intercept)  horsepower 
+##  39.7846833  -0.1578007 
+## 
+## [[212]]
+## (Intercept)  horsepower 
+##  40.4964149  -0.1600872 
+## 
+## [[213]]
+## (Intercept)  horsepower 
+##  39.9607121  -0.1581466 
+## 
+## [[214]]
+## (Intercept)  horsepower 
+##  39.6717108  -0.1576533 
+## 
+## [[215]]
+## (Intercept)  horsepower 
+##  39.8800073  -0.1563737 
+## 
+## [[216]]
+## (Intercept)  horsepower 
+##  39.4424871  -0.1548021 
+## 
+## [[217]]
+## (Intercept)  horsepower 
+##  40.5876842  -0.1615059 
+## 
+## [[218]]
+## (Intercept)  horsepower 
+##  40.3765225  -0.1594951 
+## 
+## [[219]]
+## (Intercept)  horsepower 
+##  40.1391501  -0.1624808 
+## 
+## [[220]]
+## (Intercept)  horsepower 
+##  39.7784549  -0.1524544 
+## 
+## [[221]]
+## (Intercept)  horsepower 
+##  40.4255650  -0.1608484 
+## 
+## [[222]]
+## (Intercept)  horsepower 
+##  40.4077757  -0.1630849 
+## 
+## [[223]]
+## (Intercept)  horsepower 
+##  39.8612794  -0.1561576 
+## 
+## [[224]]
+## (Intercept)  horsepower 
+##  40.2109059  -0.1599154 
+## 
+## [[225]]
+## (Intercept)  horsepower 
+##  40.6517419  -0.1664162 
+## 
+## [[226]]
+## (Intercept)  horsepower 
+##  39.8209109  -0.1523954 
+## 
+## [[227]]
+## (Intercept)  horsepower 
+##   40.168097   -0.158653 
+## 
+## [[228]]
+## (Intercept)  horsepower 
+##  40.1091633  -0.1599843 
+## 
+## [[229]]
+## (Intercept)  horsepower 
+##  40.4203693  -0.1614832 
+## 
+## [[230]]
+## (Intercept)  horsepower 
+##  40.6419019  -0.1640115 
+## 
+## [[231]]
+## (Intercept)  horsepower 
+##   40.461417   -0.166624 
+## 
+## [[232]]
+## (Intercept)  horsepower 
+##  40.8428846  -0.1673585 
+## 
+## [[233]]
+## (Intercept)  horsepower 
+##  41.1733794  -0.1676389 
+## 
+## [[234]]
+## (Intercept)  horsepower 
+##  39.8147443  -0.1592996 
+## 
+## [[235]]
+## (Intercept)  horsepower 
+##  38.3324869  -0.1459928 
+## 
+## [[236]]
+## (Intercept)  horsepower 
+##  39.4344732  -0.1482055 
+## 
+## [[237]]
+## (Intercept)  horsepower 
+##  40.1620593  -0.1634579 
+## 
+## [[238]]
+## (Intercept)  horsepower 
+##  40.6987728  -0.1682507 
+## 
+## [[239]]
+## (Intercept)  horsepower 
+##  39.9320587  -0.1541673 
+## 
+## [[240]]
+## (Intercept)  horsepower 
+##  40.2928563  -0.1587927 
+## 
+## [[241]]
+## (Intercept)  horsepower 
+##  39.7964432  -0.1562564 
+## 
+## [[242]]
+## (Intercept)  horsepower 
+##  39.5877839  -0.1515388 
+## 
+## [[243]]
+## (Intercept)  horsepower 
+##  41.0133456  -0.1684477 
+## 
+## [[244]]
+## (Intercept)  horsepower 
+##  38.4670408  -0.1435487 
+## 
+## [[245]]
+## (Intercept)  horsepower 
+##  39.6448732  -0.1536761 
+## 
+## [[246]]
+## (Intercept)  horsepower 
+##  40.2961465  -0.1577012 
+## 
+## [[247]]
+## (Intercept)  horsepower 
+##  38.9241788  -0.1500273 
+## 
+## [[248]]
+## (Intercept)  horsepower 
+##  39.6662426  -0.1552813 
+## 
+## [[249]]
+## (Intercept)  horsepower 
+##  40.1999929  -0.1592097 
+## 
+## [[250]]
+## (Intercept)  horsepower 
+##  39.6806136  -0.1579312 
+## 
+## [[251]]
+## (Intercept)  horsepower 
+##  39.1592808  -0.1486503 
+## 
+## [[252]]
+## (Intercept)  horsepower 
+##  39.9035144  -0.1594045 
+## 
+## [[253]]
+## (Intercept)  horsepower 
+##  40.2657449  -0.1641603 
+## 
+## [[254]]
+## (Intercept)  horsepower 
+##  41.2097426  -0.1672076 
+## 
+## [[255]]
+## (Intercept)  horsepower 
+##  40.5898598  -0.1655649 
+## 
+## [[256]]
+## (Intercept)  horsepower 
+##  40.6046295  -0.1625045 
+## 
+## [[257]]
+## (Intercept)  horsepower 
+##  40.1008916  -0.1594477 
+## 
+## [[258]]
+## (Intercept)  horsepower 
+##  39.6953643  -0.1546206 
+## 
+## [[259]]
+## (Intercept)  horsepower 
+##  39.6815117  -0.1561893 
+## 
+## [[260]]
+## (Intercept)  horsepower 
+##  39.9177702  -0.1600755 
+## 
+## [[261]]
+## (Intercept)  horsepower 
+##  38.4476994  -0.1464581 
+## 
+## [[262]]
+## (Intercept)  horsepower 
+##  40.1182621  -0.1623966 
+## 
+## [[263]]
+## (Intercept)  horsepower 
+##  40.4703830  -0.1597423 
+## 
+## [[264]]
+## (Intercept)  horsepower 
+##  39.6037258  -0.1542858 
+## 
+## [[265]]
+## (Intercept)  horsepower 
+##  40.7972087  -0.1616097 
+## 
+## [[266]]
+## (Intercept)  horsepower 
+##  39.7036193  -0.1570717 
+## 
+## [[267]]
+## (Intercept)  horsepower 
+##  39.8112362  -0.1588886 
+## 
+## [[268]]
+## (Intercept)  horsepower 
+##  40.3142438  -0.1593424 
+## 
+## [[269]]
+## (Intercept)  horsepower 
+##  40.2679857  -0.1635607 
+## 
+## [[270]]
+## (Intercept)  horsepower 
+##  38.8144207  -0.1499055 
+## 
+## [[271]]
+## (Intercept)  horsepower 
+##   39.625981   -0.158869 
+## 
+## [[272]]
+## (Intercept)  horsepower 
+##  39.3377067  -0.1528544 
+## 
+## [[273]]
+## (Intercept)  horsepower 
+##  40.4658923  -0.1632218 
+## 
+## [[274]]
+## (Intercept)  horsepower 
+##  38.8249592  -0.1496547 
+## 
+## [[275]]
+## (Intercept)  horsepower 
+##  39.5449871  -0.1552884 
+## 
+## [[276]]
+## (Intercept)  horsepower 
+##  40.7178963  -0.1658854 
+## 
+## [[277]]
+## (Intercept)  horsepower 
+##  40.2155507  -0.1619124 
+## 
+## [[278]]
+## (Intercept)  horsepower 
+##  40.4269068  -0.1587149 
+## 
+## [[279]]
+## (Intercept)  horsepower 
+##  39.3902549  -0.1546066 
+## 
+## [[280]]
+## (Intercept)  horsepower 
+##  40.5912199  -0.1594372 
+## 
+## [[281]]
+## (Intercept)  horsepower 
+##  40.8658734  -0.1634148 
+## 
+## [[282]]
+## (Intercept)  horsepower 
+##  39.2393508  -0.1580814 
+## 
+## [[283]]
+## (Intercept)  horsepower 
+##  39.9642420  -0.1608252 
+## 
+## [[284]]
+## (Intercept)  horsepower 
+##  40.0134384  -0.1592761 
+## 
+## [[285]]
+## (Intercept)  horsepower 
+##  39.5959998  -0.1589214 
+## 
+## [[286]]
+## (Intercept)  horsepower 
+##   39.277760   -0.146825 
+## 
+## [[287]]
+## (Intercept)  horsepower 
+##  40.2997616  -0.1629941 
+## 
+## [[288]]
+## (Intercept)  horsepower 
+##  39.2262379  -0.1572731 
+## 
+## [[289]]
+## (Intercept)  horsepower 
+##  39.3429327  -0.1528354 
+## 
+## [[290]]
+## (Intercept)  horsepower 
+##   40.851752   -0.165416 
+## 
+## [[291]]
+## (Intercept)  horsepower 
+##  40.7122947  -0.1653607 
+## 
+## [[292]]
+## (Intercept)  horsepower 
+##   39.065661   -0.152855 
+## 
+## [[293]]
+## (Intercept)  horsepower 
+##  40.1784796  -0.1596886 
+## 
+## [[294]]
+## (Intercept)  horsepower 
+##  39.5413224  -0.1551749 
+## 
+## [[295]]
+## (Intercept)  horsepower 
+##  40.4732842  -0.1635839 
+## 
+## [[296]]
+## (Intercept)  horsepower 
+##  40.4759639  -0.1610031 
+## 
+## [[297]]
+## (Intercept)  horsepower 
+##  39.0483785  -0.1507009 
+## 
+## [[298]]
+## (Intercept)  horsepower 
+##  40.4369582  -0.1631173 
+## 
+## [[299]]
+## (Intercept)  horsepower 
+##  39.8034051  -0.1581408 
+## 
+## [[300]]
+## (Intercept)  horsepower 
+##  40.7614807  -0.1623193 
+## 
+## [[301]]
+## (Intercept)  horsepower 
+##  40.7333057  -0.1629407 
+## 
+## [[302]]
+## (Intercept)  horsepower 
+##  40.1778347  -0.1567021 
+## 
+## [[303]]
+## (Intercept)  horsepower 
+##  39.0191993  -0.1499138 
+## 
+## [[304]]
+## (Intercept)  horsepower 
+##  39.9439231  -0.1588053 
+## 
+## [[305]]
+## (Intercept)  horsepower 
+##  40.3645106  -0.1583911 
+## 
+## [[306]]
+## (Intercept)  horsepower 
+##  40.2175256  -0.1613337 
+## 
+## [[307]]
+## (Intercept)  horsepower 
+##  40.9179553  -0.1644825 
+## 
+## [[308]]
+## (Intercept)  horsepower 
+##  40.7513967  -0.1654191 
+## 
+## [[309]]
+## (Intercept)  horsepower 
+##  39.9841967  -0.1569968 
+## 
+## [[310]]
+## (Intercept)  horsepower 
+##  40.1864554  -0.1606856 
+## 
+## [[311]]
+## (Intercept)  horsepower 
+##  39.4261031  -0.1547128 
+## 
+## [[312]]
+## (Intercept)  horsepower 
+##  40.4954862  -0.1609291 
+## 
+## [[313]]
+## (Intercept)  horsepower 
+##  40.9011751  -0.1641956 
+## 
+## [[314]]
+## (Intercept)  horsepower 
+##  41.2500490  -0.1658857 
+## 
+## [[315]]
+## (Intercept)  horsepower 
+##  40.2821876  -0.1553631 
+## 
+## [[316]]
+## (Intercept)  horsepower 
+##  40.6472049  -0.1669836 
+## 
+## [[317]]
+## (Intercept)  horsepower 
+##  39.0392954  -0.1530349 
+## 
+## [[318]]
+## (Intercept)  horsepower 
+##  40.9019017  -0.1639226 
+## 
+## [[319]]
+## (Intercept)  horsepower 
+##  40.4394858  -0.1603582 
+## 
+## [[320]]
+## (Intercept)  horsepower 
+##  40.0668001  -0.1597768 
+## 
+## [[321]]
+## (Intercept)  horsepower 
+##  40.5863184  -0.1691857 
+## 
+## [[322]]
+## (Intercept)  horsepower 
+##  39.3159557  -0.1538885 
+## 
+## [[323]]
+## (Intercept)  horsepower 
+##  39.8071889  -0.1562785 
+## 
+## [[324]]
+## (Intercept)  horsepower 
+##  38.5736717  -0.1476716 
+## 
+## [[325]]
+## (Intercept)  horsepower 
+##  40.3648368  -0.1648582 
+## 
+## [[326]]
+## (Intercept)  horsepower 
+##  41.1573450  -0.1708721 
+## 
+## [[327]]
+## (Intercept)  horsepower 
+##  39.8395986  -0.1602975 
+## 
+## [[328]]
+## (Intercept)  horsepower 
+##  40.5241158  -0.1619947 
+## 
+## [[329]]
+## (Intercept)  horsepower 
+##   38.618966   -0.145058 
+## 
+## [[330]]
+## (Intercept)  horsepower 
+##  39.8575447  -0.1589572 
+## 
+## [[331]]
+## (Intercept)  horsepower 
+##  38.7212873  -0.1485246 
+## 
+## [[332]]
+## (Intercept)  horsepower 
+##  39.4761628  -0.1546596 
+## 
+## [[333]]
+## (Intercept)  horsepower 
+##   39.209428   -0.149629 
+## 
+## [[334]]
+## (Intercept)  horsepower 
+##  40.4307098  -0.1631787 
+## 
+## [[335]]
+## (Intercept)  horsepower 
+##  38.7921291  -0.1479386 
+## 
+## [[336]]
+## (Intercept)  horsepower 
+##  40.2212393  -0.1617141 
+## 
+## [[337]]
+## (Intercept)  horsepower 
+##  39.7907396  -0.1561678 
+## 
+## [[338]]
+## (Intercept)  horsepower 
+##  39.9380218  -0.1563748 
+## 
+## [[339]]
+## (Intercept)  horsepower 
+##  38.7495370  -0.1460435 
+## 
+## [[340]]
+## (Intercept)  horsepower 
+##  40.2399496  -0.1597614 
+## 
+## [[341]]
+## (Intercept)  horsepower 
+##   38.659155   -0.146087 
+## 
+## [[342]]
+## (Intercept)  horsepower 
+##  39.4188640  -0.1560884 
+## 
+## [[343]]
+## (Intercept)  horsepower 
+##  41.1234200  -0.1637755 
+## 
+## [[344]]
+## (Intercept)  horsepower 
+##  40.5022327  -0.1619407 
+## 
+## [[345]]
+## (Intercept)  horsepower 
+##   40.124288   -0.160951 
+## 
+## [[346]]
+## (Intercept)  horsepower 
+##  40.2092160  -0.1597689 
+## 
+## [[347]]
+## (Intercept)  horsepower 
+##  40.2522980  -0.1656125 
+## 
+## [[348]]
+## (Intercept)  horsepower 
+##  40.2566344  -0.1623977 
+## 
+## [[349]]
+## (Intercept)  horsepower 
+##  39.0547232  -0.1509923 
+## 
+## [[350]]
+## (Intercept)  horsepower 
+##  40.2817395  -0.1573629 
+## 
+## [[351]]
+## (Intercept)  horsepower 
+##  39.2225408  -0.1523362 
+## 
+## [[352]]
+## (Intercept)  horsepower 
+##  38.8812017  -0.1473514 
+## 
+## [[353]]
+## (Intercept)  horsepower 
+##  39.2895414  -0.1553987 
+## 
+## [[354]]
+## (Intercept)  horsepower 
+##  39.1508959  -0.1561652 
+## 
+## [[355]]
+## (Intercept)  horsepower 
+##  38.9043026  -0.1503319 
+## 
+## [[356]]
+## (Intercept)  horsepower 
+##  39.9573807  -0.1559856 
+## 
+## [[357]]
+## (Intercept)  horsepower 
+##  39.0565386  -0.1530348 
+## 
+## [[358]]
+## (Intercept)  horsepower 
+##  40.0529488  -0.1580459 
+## 
+## [[359]]
+## (Intercept)  horsepower 
+##  39.5140141  -0.1522319 
+## 
+## [[360]]
+## (Intercept)  horsepower 
+##  40.0633813  -0.1575627 
+## 
+## [[361]]
+## (Intercept)  horsepower 
+##  40.6832298  -0.1646684 
+## 
+## [[362]]
+## (Intercept)  horsepower 
+##   40.152265   -0.158418 
+## 
+## [[363]]
+## (Intercept)  horsepower 
+##  39.6127980  -0.1538573 
+## 
+## [[364]]
+## (Intercept)  horsepower 
+##  39.5803618  -0.1571874 
+## 
+## [[365]]
+## (Intercept)  horsepower 
+##  39.9885708  -0.1594987 
+## 
+## [[366]]
+## (Intercept)  horsepower 
+##   39.527775   -0.153141 
+## 
+## [[367]]
+## (Intercept)  horsepower 
+##  38.3314120  -0.1438591 
+## 
+## [[368]]
+## (Intercept)  horsepower 
+##  40.1791567  -0.1579976 
+## 
+## [[369]]
+## (Intercept)  horsepower 
+##  40.6982060  -0.1624296 
+## 
+## [[370]]
+## (Intercept)  horsepower 
+##  40.0788009  -0.1552969 
+## 
+## [[371]]
+## (Intercept)  horsepower 
+##   40.078422   -0.158084 
+## 
+## [[372]]
+## (Intercept)  horsepower 
+##  40.5136799  -0.1607406 
+## 
+## [[373]]
+## (Intercept)  horsepower 
+##  41.9753012  -0.1724211 
+## 
+## [[374]]
+## (Intercept)  horsepower 
+##  39.8462583  -0.1588751 
+## 
+## [[375]]
+## (Intercept)  horsepower 
+##  40.1484987  -0.1599361 
+## 
+## [[376]]
+## (Intercept)  horsepower 
+##    39.43583    -0.15252 
+## 
+## [[377]]
+## (Intercept)  horsepower 
+##  40.6217585  -0.1611799 
+## 
+## [[378]]
+## (Intercept)  horsepower 
+##  40.5456328  -0.1592959 
+## 
+## [[379]]
+## (Intercept)  horsepower 
+##   39.839332   -0.161099 
+## 
+## [[380]]
+## (Intercept)  horsepower 
+##  39.3740761  -0.1521359 
+## 
+## [[381]]
+## (Intercept)  horsepower 
+##  41.1339903  -0.1664997 
+## 
+## [[382]]
+## (Intercept)  horsepower 
+##  39.6406149  -0.1555431 
+## 
+## [[383]]
+## (Intercept)  horsepower 
+##  38.5095807  -0.1406016 
+## 
+## [[384]]
+## (Intercept)  horsepower 
+##  38.6008447  -0.1449705 
+## 
+## [[385]]
+## (Intercept)  horsepower 
+##  39.9956862  -0.1596845 
+## 
+## [[386]]
+## (Intercept)  horsepower 
+##  40.6166304  -0.1665497 
+## 
+## [[387]]
+## (Intercept)  horsepower 
+##  39.8433212  -0.1540829 
+## 
+## [[388]]
+## (Intercept)  horsepower 
+##  39.4838036  -0.1528724 
+## 
+## [[389]]
+## (Intercept)  horsepower 
+##  39.3294480  -0.1577144 
+## 
+## [[390]]
+## (Intercept)  horsepower 
+##  40.0509981  -0.1599646 
+## 
+## [[391]]
+## (Intercept)  horsepower 
+##  38.4983375  -0.1465617 
+## 
+## [[392]]
+## (Intercept)  horsepower 
+##  39.8158260  -0.1570099 
+## 
+## [[393]]
+## (Intercept)  horsepower 
+##   39.999699   -0.158794 
+## 
+## [[394]]
+## (Intercept)  horsepower 
+##  39.7151070  -0.1584512 
+## 
+## [[395]]
+## (Intercept)  horsepower 
+##  38.7944138  -0.1444585 
+## 
+## [[396]]
+## (Intercept)  horsepower 
+##  39.8050270  -0.1567939 
+## 
+## [[397]]
+## (Intercept)  horsepower 
+##  40.5048898  -0.1627473 
+## 
+## [[398]]
+## (Intercept)  horsepower 
+##   40.729173   -0.166872 
+## 
+## [[399]]
+## (Intercept)  horsepower 
+##  40.3389763  -0.1593664 
+## 
+## [[400]]
+## (Intercept)  horsepower 
+##  39.7988635  -0.1554058 
+## 
+## [[401]]
+## (Intercept)  horsepower 
+##  40.6485468  -0.1630465 
+## 
+## [[402]]
+## (Intercept)  horsepower 
+##  40.9876926  -0.1697028 
+## 
+## [[403]]
+## (Intercept)  horsepower 
+##  41.1043356  -0.1664504 
+## 
+## [[404]]
+## (Intercept)  horsepower 
+##  40.2414514  -0.1604076 
+## 
+## [[405]]
+## (Intercept)  horsepower 
+##  40.2363414  -0.1602369 
+## 
+## [[406]]
+## (Intercept)  horsepower 
+##  40.0209781  -0.1584389 
+## 
+## [[407]]
+## (Intercept)  horsepower 
+##  40.3568014  -0.1604385 
+## 
+## [[408]]
+## (Intercept)  horsepower 
+##  40.7671487  -0.1673075 
+## 
+## [[409]]
+## (Intercept)  horsepower 
+##  39.7248775  -0.1580958 
+## 
+## [[410]]
+## (Intercept)  horsepower 
+##  40.7216396  -0.1633091 
+## 
+## [[411]]
+## (Intercept)  horsepower 
+##   40.289488   -0.161392 
+## 
+## [[412]]
+## (Intercept)  horsepower 
+##   39.710108   -0.155566 
+## 
+## [[413]]
+## (Intercept)  horsepower 
+##  40.6035078  -0.1646498 
+## 
+## [[414]]
+## (Intercept)  horsepower 
+##  40.9006532  -0.1650823 
+## 
+## [[415]]
+## (Intercept)  horsepower 
+##  39.2535924  -0.1537305 
+## 
+## [[416]]
+## (Intercept)  horsepower 
+##  40.4444264  -0.1646347 
+## 
+## [[417]]
+## (Intercept)  horsepower 
+##  40.0230056  -0.1565775 
+## 
+## [[418]]
+## (Intercept)  horsepower 
+##  38.5071067  -0.1468336 
+## 
+## [[419]]
+## (Intercept)  horsepower 
+##  39.3431030  -0.1556959 
+## 
+## [[420]]
+## (Intercept)  horsepower 
+##  39.5275000  -0.1523975 
+## 
+## [[421]]
+## (Intercept)  horsepower 
+##  39.1404635  -0.1500839 
+## 
+## [[422]]
+## (Intercept)  horsepower 
+##  39.7237941  -0.1594188 
+## 
+## [[423]]
+## (Intercept)  horsepower 
+##  38.7544744  -0.1485145 
+## 
+## [[424]]
+## (Intercept)  horsepower 
+##  40.4579966  -0.1655856 
+## 
+## [[425]]
+## (Intercept)  horsepower 
+##  40.3834575  -0.1604648 
+## 
+## [[426]]
+## (Intercept)  horsepower 
+##  39.4618690  -0.1548008 
+## 
+## [[427]]
+## (Intercept)  horsepower 
+##  40.1781806  -0.1602581 
+## 
+## [[428]]
+## (Intercept)  horsepower 
+##  39.2566059  -0.1498033 
+## 
+## [[429]]
+## (Intercept)  horsepower 
+##  40.9953442  -0.1677284 
+## 
+## [[430]]
+## (Intercept)  horsepower 
+##  40.1875026  -0.1642867 
+## 
+## [[431]]
+## (Intercept)  horsepower 
+##  40.5015902  -0.1616089 
+## 
+## [[432]]
+## (Intercept)  horsepower 
+##  39.3401240  -0.1561274 
+## 
+## [[433]]
+## (Intercept)  horsepower 
+##  39.6175217  -0.1558288 
+## 
+## [[434]]
+## (Intercept)  horsepower 
+##  39.3862158  -0.1514911 
+## 
+## [[435]]
+## (Intercept)  horsepower 
+##  39.3917986  -0.1540008 
+## 
+## [[436]]
+## (Intercept)  horsepower 
+##  40.4384853  -0.1638708 
+## 
+## [[437]]
+## (Intercept)  horsepower 
+##   40.995787   -0.161213 
+## 
+## [[438]]
+## (Intercept)  horsepower 
+##  40.0931090  -0.1609604 
+## 
+## [[439]]
+## (Intercept)  horsepower 
+##  40.5446793  -0.1632421 
+## 
+## [[440]]
+## (Intercept)  horsepower 
+##  40.8353111  -0.1621646 
+## 
+## [[441]]
+## (Intercept)  horsepower 
+##   40.206930   -0.160275 
+## 
+## [[442]]
+## (Intercept)  horsepower 
+##  40.6196012  -0.1626401 
+## 
+## [[443]]
+## (Intercept)  horsepower 
+##  38.8613802  -0.1508929 
+## 
+## [[444]]
+## (Intercept)  horsepower 
+##  40.5389925  -0.1625426 
+## 
+## [[445]]
+## (Intercept)  horsepower 
+##  39.7345640  -0.1517645 
+## 
+## [[446]]
+## (Intercept)  horsepower 
+##  40.5290269  -0.1581845 
+## 
+## [[447]]
+## (Intercept)  horsepower 
+##  39.0021996  -0.1510481 
+## 
+## [[448]]
+## (Intercept)  horsepower 
+##  39.3289244  -0.1546749 
+## 
+## [[449]]
+## (Intercept)  horsepower 
+##  40.0083027  -0.1564927 
+## 
+## [[450]]
+## (Intercept)  horsepower 
+##  38.3596638  -0.1474509 
+## 
+## [[451]]
+## (Intercept)  horsepower 
+##  40.0678810  -0.1598904 
+## 
+## [[452]]
+## (Intercept)  horsepower 
+##  40.0422399  -0.1532508 
+## 
+## [[453]]
+## (Intercept)  horsepower 
+##  38.5801155  -0.1485287 
+## 
+## [[454]]
+## (Intercept)  horsepower 
+##   40.565930   -0.162945 
+## 
+## [[455]]
+## (Intercept)  horsepower 
+##  40.0300259  -0.1559248 
+## 
+## [[456]]
+## (Intercept)  horsepower 
+##  41.1038363  -0.1679941 
+## 
+## [[457]]
+## (Intercept)  horsepower 
+##  40.2321517  -0.1575773 
+## 
+## [[458]]
+## (Intercept)  horsepower 
+##   39.308274   -0.151693 
+## 
+## [[459]]
+## (Intercept)  horsepower 
+##  39.7531293  -0.1564785 
+## 
+## [[460]]
+## (Intercept)  horsepower 
+##  39.6602465  -0.1546627 
+## 
+## [[461]]
+## (Intercept)  horsepower 
+##  39.5230020  -0.1543047 
+## 
+## [[462]]
+## (Intercept)  horsepower 
+##  40.6943027  -0.1653052 
+## 
+## [[463]]
+## (Intercept)  horsepower 
+##  40.5703504  -0.1642423 
+## 
+## [[464]]
+## (Intercept)  horsepower 
+##  40.7636267  -0.1671534 
+## 
+## [[465]]
+## (Intercept)  horsepower 
+##  39.2318847  -0.1535314 
+## 
+## [[466]]
+## (Intercept)  horsepower 
+##  40.7801103  -0.1679675 
+## 
+## [[467]]
+## (Intercept)  horsepower 
+##  41.2310681  -0.1681589 
+## 
+## [[468]]
+## (Intercept)  horsepower 
+##  40.5830710  -0.1614814 
+## 
+## [[469]]
+## (Intercept)  horsepower 
+##  40.4695617  -0.1625534 
+## 
+## [[470]]
+## (Intercept)  horsepower 
+##  39.8017395  -0.1545204 
+## 
+## [[471]]
+## (Intercept)  horsepower 
+##  39.6205234  -0.1550161 
+## 
+## [[472]]
+## (Intercept)  horsepower 
+##   41.676235   -0.171531 
+## 
+## [[473]]
+## (Intercept)  horsepower 
+##  41.1624567  -0.1676173 
+## 
+## [[474]]
+## (Intercept)  horsepower 
+##  39.4340836  -0.1561039 
+## 
+## [[475]]
+## (Intercept)  horsepower 
+##  40.3841099  -0.1609796 
+## 
+## [[476]]
+## (Intercept)  horsepower 
+##  38.9067758  -0.1504542 
+## 
+## [[477]]
+## (Intercept)  horsepower 
+##  39.3254598  -0.1486944 
+## 
+## [[478]]
+## (Intercept)  horsepower 
+##   39.222180   -0.155732 
+## 
+## [[479]]
+## (Intercept)  horsepower 
+##  40.2213072  -0.1566181 
+## 
+## [[480]]
+## (Intercept)  horsepower 
+##   39.111162   -0.149629 
+## 
+## [[481]]
+## (Intercept)  horsepower 
+##  40.7470227  -0.1613242 
+## 
+## [[482]]
+## (Intercept)  horsepower 
+##   41.456798   -0.166259 
+## 
+## [[483]]
+## (Intercept)  horsepower 
+##  40.0599638  -0.1612283 
+## 
+## [[484]]
+## (Intercept)  horsepower 
+##  40.1674595  -0.1588987 
+## 
+## [[485]]
+## (Intercept)  horsepower 
+##  39.9352787  -0.1559962 
+## 
+## [[486]]
+## (Intercept)  horsepower 
+##  39.1896358  -0.1497964 
+## 
+## [[487]]
+## (Intercept)  horsepower 
+##    39.09294    -0.15054 
+## 
+## [[488]]
+## (Intercept)  horsepower 
+##   40.251364   -0.158359 
+## 
+## [[489]]
+## (Intercept)  horsepower 
+##  40.0212058  -0.1574163 
+## 
+## [[490]]
+## (Intercept)  horsepower 
+##  39.7747285  -0.1570269 
+## 
+## [[491]]
+## (Intercept)  horsepower 
+##  39.5060373  -0.1513271 
+## 
+## [[492]]
+## (Intercept)  horsepower 
+##  38.6063744  -0.1517835 
+## 
+## [[493]]
+## (Intercept)  horsepower 
+##  39.6438705  -0.1566795 
+## 
+## [[494]]
+## (Intercept)  horsepower 
+##  40.4183886  -0.1621796 
+## 
+## [[495]]
+## (Intercept)  horsepower 
+##  40.7924655  -0.1643206 
+## 
+## [[496]]
+## (Intercept)  horsepower 
+##  40.2057880  -0.1597458 
+## 
+## [[497]]
+## (Intercept)  horsepower 
+##  40.5338037  -0.1610172 
+## 
+## [[498]]
+## (Intercept)  horsepower 
+##  39.8220955  -0.1579923 
+## 
+## [[499]]
+## (Intercept)  horsepower 
+##   40.047367   -0.158881 
+## 
+## [[500]]
+## (Intercept)  horsepower 
+##  39.4322820  -0.1529236 
+## 
+## [[501]]
+## (Intercept)  horsepower 
+##  39.1529885  -0.1499946 
+## 
+## [[502]]
+## (Intercept)  horsepower 
+##  40.4835850  -0.1642377 
+## 
+## [[503]]
+## (Intercept)  horsepower 
+##  40.3750444  -0.1639183 
+## 
+## [[504]]
+## (Intercept)  horsepower 
+##  40.7393378  -0.1663121 
+## 
+## [[505]]
+## (Intercept)  horsepower 
+##   39.928641   -0.154793 
+## 
+## [[506]]
+## (Intercept)  horsepower 
+##  40.5193552  -0.1634097 
+## 
+## [[507]]
+## (Intercept)  horsepower 
+##  38.4021760  -0.1430555 
+## 
+## [[508]]
+## (Intercept)  horsepower 
+##  40.2968729  -0.1611079 
+## 
+## [[509]]
+## (Intercept)  horsepower 
+##  39.7348091  -0.1558469 
+## 
+## [[510]]
+## (Intercept)  horsepower 
+##  40.1020799  -0.1621585 
+## 
+## [[511]]
+## (Intercept)  horsepower 
+##  39.6830366  -0.1534915 
+## 
+## [[512]]
+## (Intercept)  horsepower 
+##   39.153409   -0.149536 
+## 
+## [[513]]
+## (Intercept)  horsepower 
+##  39.5144849  -0.1515491 
+## 
+## [[514]]
+## (Intercept)  horsepower 
+##   39.214815   -0.149915 
+## 
+## [[515]]
+## (Intercept)  horsepower 
+##  39.4423943  -0.1542428 
+## 
+## [[516]]
+## (Intercept)  horsepower 
+##  41.6538350  -0.1732621 
+## 
+## [[517]]
+## (Intercept)  horsepower 
+##  40.8737511  -0.1641844 
+## 
+## [[518]]
+## (Intercept)  horsepower 
+##  39.0344209  -0.1496812 
+## 
+## [[519]]
+## (Intercept)  horsepower 
+##  41.8417252  -0.1720011 
+## 
+## [[520]]
+## (Intercept)  horsepower 
+##  40.4091583  -0.1643495 
+## 
+## [[521]]
+## (Intercept)  horsepower 
+##  38.4560572  -0.1500213 
+## 
+## [[522]]
+## (Intercept)  horsepower 
+##  40.9646644  -0.1673814 
+## 
+## [[523]]
+## (Intercept)  horsepower 
+##  38.4782584  -0.1457848 
+## 
+## [[524]]
+## (Intercept)  horsepower 
+##  39.9185808  -0.1596752 
+## 
+## [[525]]
+## (Intercept)  horsepower 
+##   40.048592   -0.155564 
+## 
+## [[526]]
+## (Intercept)  horsepower 
+##  39.3597550  -0.1518115 
+## 
+## [[527]]
+## (Intercept)  horsepower 
+##  38.5997853  -0.1488758 
+## 
+## [[528]]
+## (Intercept)  horsepower 
+##   39.704400   -0.154105 
+## 
+## [[529]]
+## (Intercept)  horsepower 
+##  39.7008114  -0.1558516 
+## 
+## [[530]]
+## (Intercept)  horsepower 
+##  40.5746367  -0.1620682 
+## 
+## [[531]]
+## (Intercept)  horsepower 
+##  40.2570602  -0.1601004 
+## 
+## [[532]]
+## (Intercept)  horsepower 
+##  38.9726106  -0.1474752 
+## 
+## [[533]]
+## (Intercept)  horsepower 
+##  39.4605887  -0.1538225 
+## 
+## [[534]]
+## (Intercept)  horsepower 
+##  39.7406449  -0.1607405 
+## 
+## [[535]]
+## (Intercept)  horsepower 
+##  39.4332191  -0.1531718 
+## 
+## [[536]]
+## (Intercept)  horsepower 
+##  40.3932200  -0.1598134 
+## 
+## [[537]]
+## (Intercept)  horsepower 
+##  40.2424092  -0.1593162 
+## 
+## [[538]]
+## (Intercept)  horsepower 
+##  40.7701421  -0.1649995 
+## 
+## [[539]]
+## (Intercept)  horsepower 
+##  40.2562884  -0.1608433 
+## 
+## [[540]]
+## (Intercept)  horsepower 
+##   40.344150   -0.158089 
+## 
+## [[541]]
+## (Intercept)  horsepower 
+##  40.2632489  -0.1617439 
+## 
+## [[542]]
+## (Intercept)  horsepower 
+##  40.1093018  -0.1587718 
+## 
+## [[543]]
+## (Intercept)  horsepower 
+##  39.6031398  -0.1556706 
+## 
+## [[544]]
+## (Intercept)  horsepower 
+##  40.7337296  -0.1631994 
+## 
+## [[545]]
+## (Intercept)  horsepower 
+##  40.6441728  -0.1638637 
+## 
+## [[546]]
+## (Intercept)  horsepower 
+##  40.4971313  -0.1641358 
+## 
+## [[547]]
+## (Intercept)  horsepower 
+##  39.0554805  -0.1529449 
+## 
+## [[548]]
+## (Intercept)  horsepower 
+##   42.001073   -0.175139 
+## 
+## [[549]]
+## (Intercept)  horsepower 
+##  39.7411012  -0.1583503 
+## 
+## [[550]]
+## (Intercept)  horsepower 
+##  39.6714825  -0.1553155 
+## 
+## [[551]]
+## (Intercept)  horsepower 
+##  40.2662464  -0.1615198 
+## 
+## [[552]]
+## (Intercept)  horsepower 
+##  40.1371113  -0.1593717 
+## 
+## [[553]]
+## (Intercept)  horsepower 
+##  41.4756128  -0.1649968 
+## 
+## [[554]]
+## (Intercept)  horsepower 
+##  40.0402123  -0.1567509 
+## 
+## [[555]]
+## (Intercept)  horsepower 
+##  40.1256138  -0.1587034 
+## 
+## [[556]]
+## (Intercept)  horsepower 
+##  39.7858366  -0.1542717 
+## 
+## [[557]]
+## (Intercept)  horsepower 
+##  41.3492668  -0.1681212 
+## 
+## [[558]]
+## (Intercept)  horsepower 
+##  40.6045921  -0.1643566 
+## 
+## [[559]]
+## (Intercept)  horsepower 
+##  39.6605676  -0.1561594 
+## 
+## [[560]]
+## (Intercept)  horsepower 
+##  39.8770834  -0.1585456 
+## 
+## [[561]]
+## (Intercept)  horsepower 
+##  40.1469735  -0.1606302 
+## 
+## [[562]]
+## (Intercept)  horsepower 
+##  39.1076441  -0.1513863 
+## 
+## [[563]]
+## (Intercept)  horsepower 
+##  39.4478137  -0.1516591 
+## 
+## [[564]]
+## (Intercept)  horsepower 
+##  40.1205175  -0.1616382 
+## 
+## [[565]]
+## (Intercept)  horsepower 
+##   40.094236   -0.159752 
+## 
+## [[566]]
+## (Intercept)  horsepower 
+##  40.0323987  -0.1596351 
+## 
+## [[567]]
+## (Intercept)  horsepower 
+##   39.665161   -0.154662 
+## 
+## [[568]]
+## (Intercept)  horsepower 
+##  39.7552163  -0.1573041 
+## 
+## [[569]]
+## (Intercept)  horsepower 
+##  39.7208457  -0.1549519 
+## 
+## [[570]]
+## (Intercept)  horsepower 
+##  40.9832671  -0.1619374 
+## 
+## [[571]]
+## (Intercept)  horsepower 
+##  39.2720582  -0.1509828 
+## 
+## [[572]]
+## (Intercept)  horsepower 
+##   40.221868   -0.156679 
+## 
+## [[573]]
+## (Intercept)  horsepower 
+##  39.9544646  -0.1610433 
+## 
+## [[574]]
+## (Intercept)  horsepower 
+##  39.7991935  -0.1575792 
+## 
+## [[575]]
+## (Intercept)  horsepower 
+##  38.6096268  -0.1461953 
+## 
+## [[576]]
+## (Intercept)  horsepower 
+##  39.7575267  -0.1585636 
+## 
+## [[577]]
+## (Intercept)  horsepower 
+##  40.3487914  -0.1634762 
+## 
+## [[578]]
+## (Intercept)  horsepower 
+##  40.7855959  -0.1631431 
+## 
+## [[579]]
+## (Intercept)  horsepower 
+##   40.581509   -0.163907 
+## 
+## [[580]]
+## (Intercept)  horsepower 
+##    39.89581    -0.15762 
+## 
+## [[581]]
+## (Intercept)  horsepower 
+##  39.2530681  -0.1514731 
+## 
+## [[582]]
+## (Intercept)  horsepower 
+##  40.4014919  -0.1658717 
+## 
+## [[583]]
+## (Intercept)  horsepower 
+##  40.0919807  -0.1579035 
+## 
+## [[584]]
+## (Intercept)  horsepower 
+##  40.4467773  -0.1649548 
+## 
+## [[585]]
+## (Intercept)  horsepower 
+##  39.4502349  -0.1567692 
+## 
+## [[586]]
+## (Intercept)  horsepower 
+##  40.4650770  -0.1620334 
+## 
+## [[587]]
+## (Intercept)  horsepower 
+##  40.7507451  -0.1631718 
+## 
+## [[588]]
+## (Intercept)  horsepower 
+##  40.6169782  -0.1646216 
+## 
+## [[589]]
+## (Intercept)  horsepower 
+##  39.2542383  -0.1508061 
+## 
+## [[590]]
+## (Intercept)  horsepower 
+##  39.8990663  -0.1590944 
+## 
+## [[591]]
+## (Intercept)  horsepower 
+##  38.0542507  -0.1427611 
+## 
+## [[592]]
+## (Intercept)  horsepower 
+##  39.8762463  -0.1632463 
+## 
+## [[593]]
+## (Intercept)  horsepower 
+##  40.0949765  -0.1582445 
+## 
+## [[594]]
+## (Intercept)  horsepower 
+##  40.7298925  -0.1662694 
+## 
+## [[595]]
+## (Intercept)  horsepower 
+##  40.2900107  -0.1582569 
+## 
+## [[596]]
+## (Intercept)  horsepower 
+##  40.1509773  -0.1604719 
+## 
+## [[597]]
+## (Intercept)  horsepower 
+##  39.3021924  -0.1520147 
+## 
+## [[598]]
+## (Intercept)  horsepower 
+##  39.5703829  -0.1541734 
+## 
+## [[599]]
+## (Intercept)  horsepower 
+##  39.0628873  -0.1541193 
+## 
+## [[600]]
+## (Intercept)  horsepower 
+##  40.5849694  -0.1631941 
+## 
+## [[601]]
+## (Intercept)  horsepower 
+##  40.7649105  -0.1659171 
+## 
+## [[602]]
+## (Intercept)  horsepower 
+##  39.7185534  -0.1552388 
+## 
+## [[603]]
+## (Intercept)  horsepower 
+##  40.4020344  -0.1591291 
+## 
+## [[604]]
+## (Intercept)  horsepower 
+##  40.0484398  -0.1634479 
+## 
+## [[605]]
+## (Intercept)  horsepower 
+##  39.4735681  -0.1543187 
+## 
+## [[606]]
+## (Intercept)  horsepower 
+##  39.8800037  -0.1594482 
+## 
+## [[607]]
+## (Intercept)  horsepower 
+##  38.9101975  -0.1505913 
+## 
+## [[608]]
+## (Intercept)  horsepower 
+##  41.4109821  -0.1698069 
+## 
+## [[609]]
+## (Intercept)  horsepower 
+##  39.4482452  -0.1545169 
+## 
+## [[610]]
+## (Intercept)  horsepower 
+##  40.0477521  -0.1577811 
+## 
+## [[611]]
+## (Intercept)  horsepower 
+##  40.5455526  -0.1634926 
+## 
+## [[612]]
+## (Intercept)  horsepower 
+##  39.4797889  -0.1541429 
+## 
+## [[613]]
+## (Intercept)  horsepower 
+##  39.4700854  -0.1517123 
+## 
+## [[614]]
+## (Intercept)  horsepower 
+##   40.116041   -0.158222 
+## 
+## [[615]]
+## (Intercept)  horsepower 
+##  40.7553012  -0.1659552 
+## 
+## [[616]]
+## (Intercept)  horsepower 
+##  40.5245900  -0.1636879 
+## 
+## [[617]]
+## (Intercept)  horsepower 
+##  39.2064976  -0.1504752 
+## 
+## [[618]]
+## (Intercept)  horsepower 
+##  39.3692157  -0.1506768 
+## 
+## [[619]]
+## (Intercept)  horsepower 
+##  39.9896288  -0.1580535 
+## 
+## [[620]]
+## (Intercept)  horsepower 
+##  41.0919255  -0.1737077 
+## 
+## [[621]]
+## (Intercept)  horsepower 
+##  39.8759935  -0.1560409 
+## 
+## [[622]]
+## (Intercept)  horsepower 
+##  39.6169058  -0.1571665 
+## 
+## [[623]]
+## (Intercept)  horsepower 
+##  39.5699207  -0.1560829 
+## 
+## [[624]]
+## (Intercept)  horsepower 
+##  40.7808528  -0.1681741 
+## 
+## [[625]]
+## (Intercept)  horsepower 
+##  40.4376065  -0.1595634 
+## 
+## [[626]]
+## (Intercept)  horsepower 
+##  40.3375669  -0.1605076 
+## 
+## [[627]]
+## (Intercept)  horsepower 
+##  38.3606573  -0.1456088 
+## 
+## [[628]]
+## (Intercept)  horsepower 
+##  39.4014236  -0.1504253 
+## 
+## [[629]]
+## (Intercept)  horsepower 
+##  39.4418851  -0.1513381 
+## 
+## [[630]]
+## (Intercept)  horsepower 
+##  40.3583890  -0.1573352 
+## 
+## [[631]]
+## (Intercept)  horsepower 
+##  38.8522101  -0.1478423 
+## 
+## [[632]]
+## (Intercept)  horsepower 
+##   39.515428   -0.154342 
+## 
+## [[633]]
+## (Intercept)  horsepower 
+##  41.5675397  -0.1705947 
+## 
+## [[634]]
+## (Intercept)  horsepower 
+##  41.1925110  -0.1696662 
+## 
+## [[635]]
+## (Intercept)  horsepower 
+##  39.4896803  -0.1536021 
+## 
+## [[636]]
+## (Intercept)  horsepower 
+##  38.9057928  -0.1512409 
+## 
+## [[637]]
+## (Intercept)  horsepower 
+##  39.2316545  -0.1529463 
+## 
+## [[638]]
+## (Intercept)  horsepower 
+##  38.6634266  -0.1480577 
+## 
+## [[639]]
+## (Intercept)  horsepower 
+##  39.5004652  -0.1506364 
+## 
+## [[640]]
+## (Intercept)  horsepower 
+##  39.9505407  -0.1585811 
+## 
+## [[641]]
+## (Intercept)  horsepower 
+##  41.5065777  -0.1680044 
+## 
+## [[642]]
+## (Intercept)  horsepower 
+##  39.7962446  -0.1574001 
+## 
+## [[643]]
+## (Intercept)  horsepower 
+##  37.9509193  -0.1393932 
+## 
+## [[644]]
+## (Intercept)  horsepower 
+##   40.992061   -0.165511 
+## 
+## [[645]]
+## (Intercept)  horsepower 
+##  40.6495886  -0.1582291 
+## 
+## [[646]]
+## (Intercept)  horsepower 
+##  41.4362041  -0.1679657 
+## 
+## [[647]]
+## (Intercept)  horsepower 
+##  40.5806294  -0.1637381 
+## 
+## [[648]]
+## (Intercept)  horsepower 
+##  40.1210178  -0.1596002 
+## 
+## [[649]]
+## (Intercept)  horsepower 
+##   39.207280   -0.149852 
+## 
+## [[650]]
+## (Intercept)  horsepower 
+##  39.0362940  -0.1539814 
+## 
+## [[651]]
+## (Intercept)  horsepower 
+##  39.5953962  -0.1536034 
+## 
+## [[652]]
+## (Intercept)  horsepower 
+##  40.3969226  -0.1639981 
+## 
+## [[653]]
+## (Intercept)  horsepower 
+##  40.1472508  -0.1584752 
+## 
+## [[654]]
+## (Intercept)  horsepower 
+##  38.7004077  -0.1478609 
+## 
+## [[655]]
+## (Intercept)  horsepower 
+##  39.6758124  -0.1559301 
+## 
+## [[656]]
+## (Intercept)  horsepower 
+##  39.7145519  -0.1544774 
+## 
+## [[657]]
+## (Intercept)  horsepower 
+##  41.1741107  -0.1690669 
+## 
+## [[658]]
+## (Intercept)  horsepower 
+##  38.9703311  -0.1514371 
+## 
+## [[659]]
+## (Intercept)  horsepower 
+##  40.0595354  -0.1585895 
+## 
+## [[660]]
+## (Intercept)  horsepower 
+##  40.6637406  -0.1657276 
+## 
+## [[661]]
+## (Intercept)  horsepower 
+##  40.0551221  -0.1602631 
+## 
+## [[662]]
+## (Intercept)  horsepower 
+##  40.3292491  -0.1602232 
+## 
+## [[663]]
+## (Intercept)  horsepower 
+##  40.0827791  -0.1577191 
+## 
+## [[664]]
+## (Intercept)  horsepower 
+##  40.0525344  -0.1569769 
+## 
+## [[665]]
+## (Intercept)  horsepower 
+##  40.5253901  -0.1627807 
+## 
+## [[666]]
+## (Intercept)  horsepower 
+##  40.4030832  -0.1621635 
+## 
+## [[667]]
+## (Intercept)  horsepower 
+##  40.3701256  -0.1621848 
+## 
+## [[668]]
+## (Intercept)  horsepower 
+##  40.2826110  -0.1642124 
+## 
+## [[669]]
+## (Intercept)  horsepower 
+##  40.0064965  -0.1577826 
+## 
+## [[670]]
+## (Intercept)  horsepower 
+##   41.626308   -0.172089 
+## 
+## [[671]]
+## (Intercept)  horsepower 
+##  40.0362346  -0.1615927 
+## 
+## [[672]]
+## (Intercept)  horsepower 
+##  39.7043558  -0.1569223 
+## 
+## [[673]]
+## (Intercept)  horsepower 
+##  39.6287629  -0.1567703 
+## 
+## [[674]]
+## (Intercept)  horsepower 
+##  40.6881545  -0.1630171 
+## 
+## [[675]]
+## (Intercept)  horsepower 
+##  40.3623409  -0.1659631 
+## 
+## [[676]]
+## (Intercept)  horsepower 
+##  40.4971094  -0.1605315 
+## 
+## [[677]]
+## (Intercept)  horsepower 
+##   40.555013   -0.160247 
+## 
+## [[678]]
+## (Intercept)  horsepower 
+##  39.3368857  -0.1497903 
+## 
+## [[679]]
+## (Intercept)  horsepower 
+##   39.069354   -0.148666 
+## 
+## [[680]]
+## (Intercept)  horsepower 
+##  40.4207113  -0.1568231 
+## 
+## [[681]]
+## (Intercept)  horsepower 
+##   40.480115   -0.163506 
+## 
+## [[682]]
+## (Intercept)  horsepower 
+##  40.1027894  -0.1590846 
+## 
+## [[683]]
+## (Intercept)  horsepower 
+##  39.0919787  -0.1508806 
+## 
+## [[684]]
+## (Intercept)  horsepower 
+##  39.3329090  -0.1497657 
+## 
+## [[685]]
+## (Intercept)  horsepower 
+##  39.0962261  -0.1522231 
+## 
+## [[686]]
+## (Intercept)  horsepower 
+##  40.2315355  -0.1580481 
+## 
+## [[687]]
+## (Intercept)  horsepower 
+##  40.0247058  -0.1574297 
+## 
+## [[688]]
+## (Intercept)  horsepower 
+##  39.7067617  -0.1557007 
+## 
+## [[689]]
+## (Intercept)  horsepower 
+##   39.993523   -0.164225 
+## 
+## [[690]]
+## (Intercept)  horsepower 
+##  41.0362392  -0.1641524 
+## 
+## [[691]]
+## (Intercept)  horsepower 
+##  38.6815685  -0.1495959 
+## 
+## [[692]]
+## (Intercept)  horsepower 
+##  39.2968928  -0.1539828 
+## 
+## [[693]]
+## (Intercept)  horsepower 
+##  40.8286491  -0.1663304 
+## 
+## [[694]]
+## (Intercept)  horsepower 
+##  39.3966392  -0.1543656 
+## 
+## [[695]]
+## (Intercept)  horsepower 
+##  39.6651250  -0.1561348 
+## 
+## [[696]]
+## (Intercept)  horsepower 
+##  38.3231783  -0.1414682 
+## 
+## [[697]]
+## (Intercept)  horsepower 
+##  40.0581112  -0.1566757 
+## 
+## [[698]]
+## (Intercept)  horsepower 
+##  39.9724160  -0.1572767 
+## 
+## [[699]]
+## (Intercept)  horsepower 
+##  40.1981328  -0.1606968 
+## 
+## [[700]]
+## (Intercept)  horsepower 
+##  40.9769595  -0.1691948 
+## 
+## [[701]]
+## (Intercept)  horsepower 
+##  39.3788245  -0.1522924 
+## 
+## [[702]]
+## (Intercept)  horsepower 
+##  40.6029767  -0.1635377 
+## 
+## [[703]]
+## (Intercept)  horsepower 
+##  39.1791047  -0.1522624 
+## 
+## [[704]]
+## (Intercept)  horsepower 
+##  40.5393665  -0.1636451 
+## 
+## [[705]]
+## (Intercept)  horsepower 
+##  40.0527454  -0.1601214 
+## 
+## [[706]]
+## (Intercept)  horsepower 
+##  39.4240679  -0.1513692 
+## 
+## [[707]]
+## (Intercept)  horsepower 
+##  39.6090409  -0.1559877 
+## 
+## [[708]]
+## (Intercept)  horsepower 
+##  40.3429202  -0.1618254 
+## 
+## [[709]]
+## (Intercept)  horsepower 
+##  40.2672275  -0.1612436 
+## 
+## [[710]]
+## (Intercept)  horsepower 
+##  39.1953892  -0.1522702 
+## 
+## [[711]]
+## (Intercept)  horsepower 
+##  39.9420499  -0.1604307 
+## 
+## [[712]]
+## (Intercept)  horsepower 
+##   39.187377   -0.148378 
+## 
+## [[713]]
+## (Intercept)  horsepower 
+##  40.4390183  -0.1613771 
+## 
+## [[714]]
+## (Intercept)  horsepower 
+##  40.0156072  -0.1562212 
+## 
+## [[715]]
+## (Intercept)  horsepower 
+##  39.9464048  -0.1573383 
+## 
+## [[716]]
+## (Intercept)  horsepower 
+##  39.9508255  -0.1578191 
+## 
+## [[717]]
+## (Intercept)  horsepower 
+##  39.6900856  -0.1575512 
+## 
+## [[718]]
+## (Intercept)  horsepower 
+##  39.5780574  -0.1555209 
+## 
+## [[719]]
+## (Intercept)  horsepower 
+##  39.9258074  -0.1625823 
+## 
+## [[720]]
+## (Intercept)  horsepower 
+##  39.5974656  -0.1529142 
+## 
+## [[721]]
+## (Intercept)  horsepower 
+##  39.6919146  -0.1550517 
+## 
+## [[722]]
+## (Intercept)  horsepower 
+##  39.7734499  -0.1583477 
+## 
+## [[723]]
+## (Intercept)  horsepower 
+##  39.3539648  -0.1581179 
+## 
+## [[724]]
+## (Intercept)  horsepower 
+##  40.7530883  -0.1660518 
+## 
+## [[725]]
+## (Intercept)  horsepower 
+##  39.9807506  -0.1643673 
+## 
+## [[726]]
+## (Intercept)  horsepower 
+##  40.3986632  -0.1601935 
+## 
+## [[727]]
+## (Intercept)  horsepower 
+##  39.6025132  -0.1571371 
+## 
+## [[728]]
+## (Intercept)  horsepower 
+##  40.1377085  -0.1601783 
+## 
+## [[729]]
+## (Intercept)  horsepower 
+##  40.6285419  -0.1623414 
+## 
+## [[730]]
+## (Intercept)  horsepower 
+##  39.1601744  -0.1555022 
+## 
+## [[731]]
+## (Intercept)  horsepower 
+##  39.3783663  -0.1545931 
+## 
+## [[732]]
+## (Intercept)  horsepower 
+##  40.2912073  -0.1610205 
+## 
+## [[733]]
+## (Intercept)  horsepower 
+##  40.5694974  -0.1609545 
+## 
+## [[734]]
+## (Intercept)  horsepower 
+##  39.6108072  -0.1545337 
+## 
+## [[735]]
+## (Intercept)  horsepower 
+##  40.9369163  -0.1660037 
+## 
+## [[736]]
+## (Intercept)  horsepower 
+##  41.4288356  -0.1715815 
+## 
+## [[737]]
+## (Intercept)  horsepower 
+##  39.2105091  -0.1544041 
+## 
+## [[738]]
+## (Intercept)  horsepower 
+##  39.1017485  -0.1520009 
+## 
+## [[739]]
+## (Intercept)  horsepower 
+##  38.3102602  -0.1465162 
+## 
+## [[740]]
+## (Intercept)  horsepower 
+##  39.7936264  -0.1567475 
+## 
+## [[741]]
+## (Intercept)  horsepower 
+##   39.852634   -0.156439 
+## 
+## [[742]]
+## (Intercept)  horsepower 
+##  38.2641247  -0.1464276 
+## 
+## [[743]]
+## (Intercept)  horsepower 
+##  40.2392032  -0.1566729 
+## 
+## [[744]]
+## (Intercept)  horsepower 
+##  40.1603461  -0.1614535 
+## 
+## [[745]]
+## (Intercept)  horsepower 
+##   39.857379   -0.153981 
+## 
+## [[746]]
+## (Intercept)  horsepower 
+##  40.3046594  -0.1617536 
+## 
+## [[747]]
+## (Intercept)  horsepower 
+##  40.2489887  -0.1587126 
+## 
+## [[748]]
+## (Intercept)  horsepower 
+##  39.8114877  -0.1559045 
+## 
+## [[749]]
+## (Intercept)  horsepower 
+##  39.3215011  -0.1513581 
+## 
+## [[750]]
+## (Intercept)  horsepower 
+##  39.9154626  -0.1553812 
+## 
+## [[751]]
+## (Intercept)  horsepower 
+##   40.139852   -0.158688 
+## 
+## [[752]]
+## (Intercept)  horsepower 
+##  40.0835604  -0.1557298 
+## 
+## [[753]]
+## (Intercept)  horsepower 
+##  41.1045213  -0.1671429 
+## 
+## [[754]]
+## (Intercept)  horsepower 
+##  39.5739980  -0.1553514 
+## 
+## [[755]]
+## (Intercept)  horsepower 
+##  39.2838313  -0.1503503 
+## 
+## [[756]]
+## (Intercept)  horsepower 
+##  39.6701831  -0.1571223 
+## 
+## [[757]]
+## (Intercept)  horsepower 
+##   39.677692   -0.154161 
+## 
+## [[758]]
+## (Intercept)  horsepower 
+##  39.3775160  -0.1552324 
+## 
+## [[759]]
+## (Intercept)  horsepower 
+##   40.446728   -0.160673 
+## 
+## [[760]]
+## (Intercept)  horsepower 
+##  39.3302527  -0.1542366 
+## 
+## [[761]]
+## (Intercept)  horsepower 
+##  40.3620379  -0.1650035 
+## 
+## [[762]]
+## (Intercept)  horsepower 
+##  40.6074510  -0.1647035 
+## 
+## [[763]]
+## (Intercept)  horsepower 
+##  39.7939629  -0.1540339 
+## 
+## [[764]]
+## (Intercept)  horsepower 
+##  39.0940006  -0.1461497 
+## 
+## [[765]]
+## (Intercept)  horsepower 
+##  40.0637812  -0.1582252 
+## 
+## [[766]]
+## (Intercept)  horsepower 
+##  40.6231349  -0.1627018 
+## 
+## [[767]]
+## (Intercept)  horsepower 
+##  40.0596474  -0.1556088 
+## 
+## [[768]]
+## (Intercept)  horsepower 
+##  40.3007490  -0.1558875 
+## 
+## [[769]]
+## (Intercept)  horsepower 
+##  38.8946338  -0.1482429 
+## 
+## [[770]]
+## (Intercept)  horsepower 
+##  40.0342399  -0.1617548 
+## 
+## [[771]]
+## (Intercept)  horsepower 
+##  39.2610724  -0.1483918 
+## 
+## [[772]]
+## (Intercept)  horsepower 
+##  39.8315076  -0.1533407 
+## 
+## [[773]]
+## (Intercept)  horsepower 
+##  40.2628717  -0.1603833 
+## 
+## [[774]]
+## (Intercept)  horsepower 
+##   40.312293   -0.161334 
+## 
+## [[775]]
+## (Intercept)  horsepower 
+##  39.2384255  -0.1541276 
+## 
+## [[776]]
+## (Intercept)  horsepower 
+##  40.0464692  -0.1562403 
+## 
+## [[777]]
+## (Intercept)  horsepower 
+##  39.9936727  -0.1624586 
+## 
+## [[778]]
+## (Intercept)  horsepower 
+##  39.0288834  -0.1495556 
+## 
+## [[779]]
+## (Intercept)  horsepower 
+##  40.4734633  -0.1649151 
+## 
+## [[780]]
+## (Intercept)  horsepower 
+##  39.0994313  -0.1501923 
+## 
+## [[781]]
+## (Intercept)  horsepower 
+##  40.8928974  -0.1681543 
+## 
+## [[782]]
+## (Intercept)  horsepower 
+##  38.6823131  -0.1467149 
+## 
+## [[783]]
+## (Intercept)  horsepower 
+##  39.6599028  -0.1548064 
+## 
+## [[784]]
+## (Intercept)  horsepower 
+##  39.8750489  -0.1582749 
+## 
+## [[785]]
+## (Intercept)  horsepower 
+##  40.2820361  -0.1622645 
+## 
+## [[786]]
+## (Intercept)  horsepower 
+##  39.8466947  -0.1549771 
+## 
+## [[787]]
+## (Intercept)  horsepower 
+##  39.5487040  -0.1560177 
+## 
+## [[788]]
+## (Intercept)  horsepower 
+##  40.6600673  -0.1641528 
+## 
+## [[789]]
+## (Intercept)  horsepower 
+##  39.9383511  -0.1605173 
+## 
+## [[790]]
+## (Intercept)  horsepower 
+##  38.9512068  -0.1469583 
+## 
+## [[791]]
+## (Intercept)  horsepower 
+##  40.4321856  -0.1572797 
+## 
+## [[792]]
+## (Intercept)  horsepower 
+##  40.5177729  -0.1652612 
+## 
+## [[793]]
+## (Intercept)  horsepower 
+##  39.0793902  -0.1542182 
+## 
+## [[794]]
+## (Intercept)  horsepower 
+##  39.8596645  -0.1592084 
+## 
+## [[795]]
+## (Intercept)  horsepower 
+##  40.3587168  -0.1623492 
+## 
+## [[796]]
+## (Intercept)  horsepower 
+##  40.5455954  -0.1623149 
+## 
+## [[797]]
+## (Intercept)  horsepower 
+##  38.9098870  -0.1518876 
+## 
+## [[798]]
+## (Intercept)  horsepower 
+##  39.7768639  -0.1558318 
+## 
+## [[799]]
+## (Intercept)  horsepower 
+##  39.8885670  -0.1591213 
+## 
+## [[800]]
+## (Intercept)  horsepower 
+##  40.0697548  -0.1604494 
+## 
+## [[801]]
+## (Intercept)  horsepower 
+##  39.1570192  -0.1503815 
+## 
+## [[802]]
+## (Intercept)  horsepower 
+##  39.3034819  -0.1538739 
+## 
+## [[803]]
+## (Intercept)  horsepower 
+##  40.7709026  -0.1663675 
+## 
+## [[804]]
+## (Intercept)  horsepower 
+##  39.4488712  -0.1541677 
+## 
+## [[805]]
+## (Intercept)  horsepower 
+##  39.5007285  -0.1549629 
+## 
+## [[806]]
+## (Intercept)  horsepower 
+##  40.1292926  -0.1599569 
+## 
+## [[807]]
+## (Intercept)  horsepower 
+##  39.8816721  -0.1593299 
+## 
+## [[808]]
+## (Intercept)  horsepower 
+##  40.1092644  -0.1580329 
+## 
+## [[809]]
+## (Intercept)  horsepower 
+##  40.8843806  -0.1652203 
+## 
+## [[810]]
+## (Intercept)  horsepower 
+##  40.4798089  -0.1628174 
+## 
+## [[811]]
+## (Intercept)  horsepower 
+##  40.6085010  -0.1606495 
+## 
+## [[812]]
+## (Intercept)  horsepower 
+##  40.1035931  -0.1614814 
+## 
+## [[813]]
+## (Intercept)  horsepower 
+##  40.7589269  -0.1665769 
+## 
+## [[814]]
+## (Intercept)  horsepower 
+##  39.6531311  -0.1558353 
+## 
+## [[815]]
+## (Intercept)  horsepower 
+##  39.1916662  -0.1474173 
+## 
+## [[816]]
+## (Intercept)  horsepower 
+##  40.4788700  -0.1603021 
+## 
+## [[817]]
+## (Intercept)  horsepower 
+##  39.8871334  -0.1525108 
+## 
+## [[818]]
+## (Intercept)  horsepower 
+##   39.496185   -0.157204 
+## 
+## [[819]]
+## (Intercept)  horsepower 
+##  40.5795504  -0.1624697 
+## 
+## [[820]]
+## (Intercept)  horsepower 
+##  39.6160846  -0.1536725 
+## 
+## [[821]]
+## (Intercept)  horsepower 
+##  38.1888312  -0.1416751 
+## 
+## [[822]]
+## (Intercept)  horsepower 
+##  40.7453981  -0.1641011 
+## 
+## [[823]]
+## (Intercept)  horsepower 
+##   39.450741   -0.152538 
+## 
+## [[824]]
+## (Intercept)  horsepower 
+##  40.5839070  -0.1638367 
+## 
+## [[825]]
+## (Intercept)  horsepower 
+##   40.362568   -0.161486 
+## 
+## [[826]]
+## (Intercept)  horsepower 
+##  39.8320856  -0.1589011 
+## 
+## [[827]]
+## (Intercept)  horsepower 
+##  40.9775815  -0.1678421 
+## 
+## [[828]]
+## (Intercept)  horsepower 
+##  39.1749287  -0.1521002 
+## 
+## [[829]]
+## (Intercept)  horsepower 
+##   38.459457   -0.140866 
+## 
+## [[830]]
+## (Intercept)  horsepower 
+##  41.6444912  -0.1766301 
+## 
+## [[831]]
+## (Intercept)  horsepower 
+##  39.4293392  -0.1535648 
+## 
+## [[832]]
+## (Intercept)  horsepower 
+##  39.7343139  -0.1565904 
+## 
+## [[833]]
+## (Intercept)  horsepower 
+##  39.4283872  -0.1533811 
+## 
+## [[834]]
+## (Intercept)  horsepower 
+##   39.014854   -0.149972 
+## 
+## [[835]]
+## (Intercept)  horsepower 
+##  39.7859277  -0.1556053 
+## 
+## [[836]]
+## (Intercept)  horsepower 
+##  40.0978772  -0.1639104 
+## 
+## [[837]]
+## (Intercept)  horsepower 
+##  39.0880224  -0.1482984 
+## 
+## [[838]]
+## (Intercept)  horsepower 
+##  38.8017574  -0.1528747 
+## 
+## [[839]]
+## (Intercept)  horsepower 
+##  40.6073056  -0.1613577 
+## 
+## [[840]]
+## (Intercept)  horsepower 
+##  39.7329117  -0.1516594 
+## 
+## [[841]]
+## (Intercept)  horsepower 
+##  39.9323679  -0.1581045 
+## 
+## [[842]]
+## (Intercept)  horsepower 
+##  40.7947251  -0.1643277 
+## 
+## [[843]]
+## (Intercept)  horsepower 
+##  39.6968178  -0.1591358 
+## 
+## [[844]]
+## (Intercept)  horsepower 
+##  40.7671139  -0.1647306 
+## 
+## [[845]]
+## (Intercept)  horsepower 
+##  39.3687445  -0.1524165 
+## 
+## [[846]]
+## (Intercept)  horsepower 
+##  40.7347456  -0.1621298 
+## 
+## [[847]]
+## (Intercept)  horsepower 
+##  41.0065441  -0.1702513 
+## 
+## [[848]]
+## (Intercept)  horsepower 
+##  39.1202891  -0.1499724 
+## 
+## [[849]]
+## (Intercept)  horsepower 
+##  40.3298037  -0.1627495 
+## 
+## [[850]]
+## (Intercept)  horsepower 
+##  37.9122330  -0.1412086 
+## 
+## [[851]]
+## (Intercept)  horsepower 
+##  40.5853504  -0.1638791 
+## 
+## [[852]]
+## (Intercept)  horsepower 
+##  40.0443605  -0.1599826 
+## 
+## [[853]]
+## (Intercept)  horsepower 
+##  40.2486937  -0.1586009 
+## 
+## [[854]]
+## (Intercept)  horsepower 
+##   39.330655   -0.155513 
+## 
+## [[855]]
+## (Intercept)  horsepower 
+##  41.0670879  -0.1678794 
+## 
+## [[856]]
+## (Intercept)  horsepower 
+##  38.5968985  -0.1461197 
+## 
+## [[857]]
+## (Intercept)  horsepower 
+##  39.3678340  -0.1540749 
+## 
+## [[858]]
+## (Intercept)  horsepower 
+##  38.7168643  -0.1484614 
+## 
+## [[859]]
+## (Intercept)  horsepower 
+##  40.9312260  -0.1632645 
+## 
+## [[860]]
+## (Intercept)  horsepower 
+##  39.8932726  -0.1596032 
+## 
+## [[861]]
+## (Intercept)  horsepower 
+##  38.7208992  -0.1480864 
+## 
+## [[862]]
+## (Intercept)  horsepower 
+##  39.7101885  -0.1553889 
+## 
+## [[863]]
+## (Intercept)  horsepower 
+##  39.2426820  -0.1512771 
+## 
+## [[864]]
+## (Intercept)  horsepower 
+##  40.0137156  -0.1567188 
+## 
+## [[865]]
+## (Intercept)  horsepower 
+##  37.9622670  -0.1431672 
+## 
+## [[866]]
+## (Intercept)  horsepower 
+##  39.3866860  -0.1550671 
+## 
+## [[867]]
+## (Intercept)  horsepower 
+##  38.8735300  -0.1487488 
+## 
+## [[868]]
+## (Intercept)  horsepower 
+##  40.7069622  -0.1621565 
+## 
+## [[869]]
+## (Intercept)  horsepower 
+##  40.3735518  -0.1640552 
+## 
+## [[870]]
+## (Intercept)  horsepower 
+##   41.085591   -0.166701 
+## 
+## [[871]]
+## (Intercept)  horsepower 
+##  39.8576160  -0.1543065 
+## 
+## [[872]]
+## (Intercept)  horsepower 
+##  39.6240808  -0.1556993 
+## 
+## [[873]]
+## (Intercept)  horsepower 
+##  39.3946900  -0.1503367 
+## 
+## [[874]]
+## (Intercept)  horsepower 
+##  39.5260850  -0.1561312 
+## 
+## [[875]]
+## (Intercept)  horsepower 
+##  39.7629896  -0.1553082 
+## 
+## [[876]]
+## (Intercept)  horsepower 
+##  41.0836253  -0.1682755 
+## 
+## [[877]]
+## (Intercept)  horsepower 
+##  41.2663210  -0.1682109 
+## 
+## [[878]]
+## (Intercept)  horsepower 
+##  39.8209050  -0.1552811 
+## 
+## [[879]]
+## (Intercept)  horsepower 
+##  39.1517491  -0.1498476 
+## 
+## [[880]]
+## (Intercept)  horsepower 
+##   40.343630   -0.162037 
+## 
+## [[881]]
+## (Intercept)  horsepower 
+##  41.2989182  -0.1689022 
+## 
+## [[882]]
+## (Intercept)  horsepower 
+##  39.5738972  -0.1524727 
+## 
+## [[883]]
+## (Intercept)  horsepower 
+##  39.9793011  -0.1585686 
+## 
+## [[884]]
+## (Intercept)  horsepower 
+##  40.2429128  -0.1625834 
+## 
+## [[885]]
+## (Intercept)  horsepower 
+##  40.1028545  -0.1580146 
+## 
+## [[886]]
+## (Intercept)  horsepower 
+##  38.3195628  -0.1451329 
+## 
+## [[887]]
+## (Intercept)  horsepower 
+##  40.5850698  -0.1595182 
+## 
+## [[888]]
+## (Intercept)  horsepower 
+##  41.5881272  -0.1707614 
+## 
+## [[889]]
+## (Intercept)  horsepower 
+##   40.925603   -0.167252 
+## 
+## [[890]]
+## (Intercept)  horsepower 
+##  40.4697539  -0.1634783 
+## 
+## [[891]]
+## (Intercept)  horsepower 
+##  40.2145210  -0.1604052 
+## 
+## [[892]]
+## (Intercept)  horsepower 
+##  41.0290760  -0.1660027 
+## 
+## [[893]]
+## (Intercept)  horsepower 
+##  40.6987911  -0.1594369 
+## 
+## [[894]]
+## (Intercept)  horsepower 
+##  39.9398971  -0.1563004 
+## 
+## [[895]]
+## (Intercept)  horsepower 
+##  39.4969895  -0.1542574 
+## 
+## [[896]]
+## (Intercept)  horsepower 
+##  40.4092498  -0.1600834 
+## 
+## [[897]]
+## (Intercept)  horsepower 
+##  39.3444405  -0.1551739 
+## 
+## [[898]]
+## (Intercept)  horsepower 
+##  41.2351706  -0.1688288 
+## 
+## [[899]]
+## (Intercept)  horsepower 
+##  40.1269588  -0.1610919 
+## 
+## [[900]]
+## (Intercept)  horsepower 
+##  39.4841926  -0.1530155 
+## 
+## [[901]]
+## (Intercept)  horsepower 
+##  39.8824452  -0.1561253 
+## 
+## [[902]]
+## (Intercept)  horsepower 
+##  39.4839344  -0.1578613 
+## 
+## [[903]]
+## (Intercept)  horsepower 
+##  40.7325562  -0.1643893 
+## 
+## [[904]]
+## (Intercept)  horsepower 
+##  39.8739524  -0.1578806 
+## 
+## [[905]]
+## (Intercept)  horsepower 
+##  39.0486937  -0.1555495 
+## 
+## [[906]]
+## (Intercept)  horsepower 
+##  40.0218563  -0.1597314 
+## 
+## [[907]]
+## (Intercept)  horsepower 
+##  38.6249376  -0.1481092 
+## 
+## [[908]]
+## (Intercept)  horsepower 
+##  41.1513962  -0.1670602 
+## 
+## [[909]]
+## (Intercept)  horsepower 
+##  40.1679532  -0.1611735 
+## 
+## [[910]]
+## (Intercept)  horsepower 
+##  39.4328974  -0.1561585 
+## 
+## [[911]]
+## (Intercept)  horsepower 
+##  40.1092778  -0.1552901 
+## 
+## [[912]]
+## (Intercept)  horsepower 
+##  39.9705557  -0.1582378 
+## 
+## [[913]]
+## (Intercept)  horsepower 
+##  41.2011967  -0.1685721 
+## 
+## [[914]]
+## (Intercept)  horsepower 
+##  40.1347989  -0.1615469 
+## 
+## [[915]]
+## (Intercept)  horsepower 
+##  39.9382322  -0.1577842 
+## 
+## [[916]]
+## (Intercept)  horsepower 
+##  40.8277501  -0.1684406 
+## 
+## [[917]]
+## (Intercept)  horsepower 
+##   39.882815   -0.158755 
+## 
+## [[918]]
+## (Intercept)  horsepower 
+##  40.0000567  -0.1591823 
+## 
+## [[919]]
+## (Intercept)  horsepower 
+##  39.9477238  -0.1596909 
+## 
+## [[920]]
+## (Intercept)  horsepower 
+##  39.8306187  -0.1609955 
+## 
+## [[921]]
+## (Intercept)  horsepower 
+##   39.555435   -0.155202 
+## 
+## [[922]]
+## (Intercept)  horsepower 
+##  38.5891642  -0.1474612 
+## 
+## [[923]]
+## (Intercept)  horsepower 
+##  38.5892814  -0.1436393 
+## 
+## [[924]]
+## (Intercept)  horsepower 
+##  40.2487442  -0.1607852 
+## 
+## [[925]]
+## (Intercept)  horsepower 
+##  39.4633831  -0.1580345 
+## 
+## [[926]]
+## (Intercept)  horsepower 
+##  39.9829332  -0.1602359 
+## 
+## [[927]]
+## (Intercept)  horsepower 
+##  39.5063168  -0.1541429 
+## 
+## [[928]]
+## (Intercept)  horsepower 
+##  39.1798304  -0.1548976 
+## 
+## [[929]]
+## (Intercept)  horsepower 
+##  39.1968693  -0.1520828 
+## 
+## [[930]]
+## (Intercept)  horsepower 
+##  39.3421963  -0.1536696 
+## 
+## [[931]]
+## (Intercept)  horsepower 
+##  39.0620201  -0.1472987 
+## 
+## [[932]]
+## (Intercept)  horsepower 
+##  39.6743333  -0.1504059 
+## 
+## [[933]]
+## (Intercept)  horsepower 
+##  38.8316134  -0.1463643 
+## 
+## [[934]]
+## (Intercept)  horsepower 
+##  39.9230253  -0.1555708 
+## 
+## [[935]]
+## (Intercept)  horsepower 
+##  41.2815337  -0.1724662 
+## 
+## [[936]]
+## (Intercept)  horsepower 
+##   39.571080   -0.159058 
+## 
+## [[937]]
+## (Intercept)  horsepower 
+##  40.2498096  -0.1558503 
+## 
+## [[938]]
+## (Intercept)  horsepower 
+##  39.9039149  -0.1559185 
+## 
+## [[939]]
+## (Intercept)  horsepower 
+##  40.6018348  -0.1625995 
+## 
+## [[940]]
+## (Intercept)  horsepower 
+##    40.02401    -0.15590 
+## 
+## [[941]]
+## (Intercept)  horsepower 
+##  39.2628806  -0.1551312 
+## 
+## [[942]]
+## (Intercept)  horsepower 
+##  39.6572361  -0.1572104 
+## 
+## [[943]]
+## (Intercept)  horsepower 
+##  38.6154611  -0.1466608 
+## 
+## [[944]]
+## (Intercept)  horsepower 
+##  39.4962863  -0.1523947 
+## 
+## [[945]]
+## (Intercept)  horsepower 
+##  39.6893455  -0.1563132 
+## 
+## [[946]]
+## (Intercept)  horsepower 
+##  40.8672761  -0.1654187 
+## 
+## [[947]]
+## (Intercept)  horsepower 
+##  41.5917968  -0.1733266 
+## 
+## [[948]]
+## (Intercept)  horsepower 
+##  40.6229579  -0.1674325 
+## 
+## [[949]]
+## (Intercept)  horsepower 
+##  40.2141928  -0.1641932 
+## 
+## [[950]]
+## (Intercept)  horsepower 
+##   38.553069   -0.148483 
+## 
+## [[951]]
+## (Intercept)  horsepower 
+##  39.4802628  -0.1490459 
+## 
+## [[952]]
+## (Intercept)  horsepower 
+##  39.9501351  -0.1584735 
+## 
+## [[953]]
+## (Intercept)  horsepower 
+##  39.8317421  -0.1575276 
+## 
+## [[954]]
+## (Intercept)  horsepower 
+##  39.1135431  -0.1449971 
+## 
+## [[955]]
+## (Intercept)  horsepower 
+##  39.4594027  -0.1491685 
+## 
+## [[956]]
+## (Intercept)  horsepower 
+##  39.4189550  -0.1573291 
+## 
+## [[957]]
+## (Intercept)  horsepower 
+##  39.3321627  -0.1543486 
+## 
+## [[958]]
+## (Intercept)  horsepower 
+##  39.8528177  -0.1574034 
+## 
+## [[959]]
+## (Intercept)  horsepower 
+##  39.9475426  -0.1585826 
+## 
+## [[960]]
+## (Intercept)  horsepower 
+##  39.8427879  -0.1565519 
+## 
+## [[961]]
+## (Intercept)  horsepower 
+##   40.359369   -0.158876 
+## 
+## [[962]]
+## (Intercept)  horsepower 
+##  39.8323791  -0.1568189 
+## 
+## [[963]]
+## (Intercept)  horsepower 
+##  39.7776256  -0.1581397 
+## 
+## [[964]]
+## (Intercept)  horsepower 
+##  40.6175057  -0.1674063 
+## 
+## [[965]]
+## (Intercept)  horsepower 
+##  38.9046930  -0.1480393 
+## 
+## [[966]]
+## (Intercept)  horsepower 
+##  38.8969953  -0.1447938 
+## 
+## [[967]]
+## (Intercept)  horsepower 
+##  40.2522592  -0.1592828 
+## 
+## [[968]]
+## (Intercept)  horsepower 
+##  41.1272327  -0.1739835 
+## 
+## [[969]]
+## (Intercept)  horsepower 
+##  40.2862041  -0.1571654 
+## 
+## [[970]]
+## (Intercept)  horsepower 
+##  39.7370445  -0.1542555 
+## 
+## [[971]]
+## (Intercept)  horsepower 
+##  38.8141756  -0.1479584 
+## 
+## [[972]]
+## (Intercept)  horsepower 
+##  40.2582817  -0.1600649 
+## 
+## [[973]]
+## (Intercept)  horsepower 
+##  39.9391093  -0.1586584 
+## 
+## [[974]]
+## (Intercept)  horsepower 
+##  40.4329752  -0.1618723 
+## 
+## [[975]]
+## (Intercept)  horsepower 
+##  41.3109100  -0.1742695 
+## 
+## [[976]]
+## (Intercept)  horsepower 
+##  40.0561437  -0.1596104 
+## 
+## [[977]]
+## (Intercept)  horsepower 
+##  38.3533940  -0.1424435 
+## 
+## [[978]]
+## (Intercept)  horsepower 
+##  40.2019465  -0.1613147 
+## 
+## [[979]]
+## (Intercept)  horsepower 
+##  40.3854292  -0.1591208 
+## 
+## [[980]]
+## (Intercept)  horsepower 
+##  40.2281877  -0.1604024 
+## 
+## [[981]]
+## (Intercept)  horsepower 
+##  40.7873744  -0.1643383 
+## 
+## [[982]]
+## (Intercept)  horsepower 
+##  38.3800852  -0.1419252 
+## 
+## [[983]]
+## (Intercept)  horsepower 
+##  40.2015762  -0.1614201 
+## 
+## [[984]]
+## (Intercept)  horsepower 
+##   39.851291   -0.157331 
+## 
+## [[985]]
+## (Intercept)  horsepower 
+##  39.2264421  -0.1509098 
+## 
+## [[986]]
+## (Intercept)  horsepower 
+##  39.3224752  -0.1523126 
+## 
+## [[987]]
+## (Intercept)  horsepower 
+##  40.4872013  -0.1618712 
+## 
+## [[988]]
+## (Intercept)  horsepower 
+##  39.6132886  -0.1581214 
+## 
+## [[989]]
+## (Intercept)  horsepower 
+##  39.9354746  -0.1572458 
+## 
+## [[990]]
+## (Intercept)  horsepower 
+##  39.1977429  -0.1520091 
+## 
+## [[991]]
+## (Intercept)  horsepower 
+##  40.2363844  -0.1609104 
+## 
+## [[992]]
+## (Intercept)  horsepower 
+##  40.2655033  -0.1604819 
+## 
+## [[993]]
+## (Intercept)  horsepower 
+##  40.6224390  -0.1618327 
+## 
+## [[994]]
+## (Intercept)  horsepower 
+##  40.0776847  -0.1540276 
+## 
+## [[995]]
+## (Intercept)  horsepower 
+##  39.5230700  -0.1526811 
+## 
+## [[996]]
+## (Intercept)  horsepower 
+##  40.1546702  -0.1620206 
+## 
+## [[997]]
+## (Intercept)  horsepower 
+##  39.4325851  -0.1479894 
+## 
+## [[998]]
+## (Intercept)  horsepower 
+##  42.3139795  -0.1774157 
+## 
+## [[999]]
+## (Intercept)  horsepower 
+##  41.0829348  -0.1656016 
+## 
+## [[1000]]
+## (Intercept)  horsepower 
+##   39.092764   -0.149022
+```
+]
+]
+
+.pull-right[
+.question[
+How can I get these into a data frame?
+]
+]
+
+---
+
+## Back to our example!
+
+.pull-left[
+.small[
+
+```r
+B &lt;- 1000
+map_df(1:B, ~ bootstrap_residual(e, y_hat, model, Auto))
+```
+
+```
+## # A tibble: 1,000 x 2
+##    `(Intercept)` horsepower
+##            &lt;dbl&gt;      &lt;dbl&gt;
+##  1          40.3     -0.165
+##  2          40.3     -0.162
+##  3          39.3     -0.156
+##  4          38.5     -0.145
+##  5          38.9     -0.150
+##  6          41.0     -0.168
+##  7          40.4     -0.164
+##  8          38.4     -0.144
+##  9          39.2     -0.153
+## 10          40.4     -0.163
+## # … with 990 more rows
+```
+]
+]
+
+.pull-right[
+.question[
+How can I get these into a data frame?
+]
+]
+
+---
+
+class: inverse
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 640 512"&gt;&lt;path d="M512 64v256H128V64h384m16-64H112C85.5 0 64 21.5 64 48v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm100 416H389.5c-3 0-5.5 2.1-5.9 5.1C381.2 436.3 368 448 352 448h-64c-16 0-29.2-11.7-31.6-26.9-.5-2.9-3-5.1-5.9-5.1H12c-6.6 0-12 5.4-12 12v36c0 26.5 21.5 48 48 48h544c26.5 0 48-21.5 48-48v-36c0-6.6-5.4-12-12-12z"/&gt;&lt;/svg&gt; `Application Exercise`
+
+* Using the function created in the previous application exercise, run a bootstrap on the following model:
+
+Using the `mtcars` data set fit a model predicting `mpg` from `wt` and `cyl`.
+
+---
+## Bootstrap
+
+* Generate `\(\epsilon^*\)` from sampling with replacement from `\(e_1,\dots,e_n\)` (the residuals)
+* Calculate `\(\mathbf{y}^* =\mathbf{X}\hat\beta+\epsilon^*\)`
+* Compute `\(\hat\beta^*\)` from `\((\mathbf{X}, \mathbf{y}^*)\)`
+
+---
+
+## Bootstrap
+
+
+
+
+```r
+boot_coefs &lt;- map_df(1:B, ~ bootstrap_residual(e, y_hat, model, Auto))
+
+ggplot(boot_coefs, aes(x = horsepower)) + 
+  geom_histogram(bins = 25)
+```
+
+![](10-bootstrap-ci_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+
+---
+
+## Bootstrap
+
+
+```r
+ggplot(boot_coefs, aes(x = horsepower)) + 
+  geom_histogram(bins = 25) + 
+  geom_vline(xintercept = c(quantile(boot_coefs$horsepower, 0.025), quantile(boot_coefs$horsepower, 0.975)))
+```
+
+![](10-bootstrap-ci_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+
+---
+
+## Bootstrap Percentile Confidence Intervals
+
+
+
+```r
+quantile(boot_coefs$horsepower, 0.025)
+```
+
+```
+##       2.5% 
+## -0.1705285
+```
+
+```r
+quantile(boot_coefs$horsepower, 0.975)
+```
+
+```
+##      97.5% 
+## -0.1449497
+```
+
+--
+
+* The `quantile()` function calculates sample quantiles, here we are calculating the 2.5% and 97.5% of the `horsepower` bootstrapped coefficients.
+
+---
+
+## Bootstrap Percentile Confidence Intervals
+
+* The bootstrap percentile confidence interval for the coefficient for horsepower is (-0.170, -0.145)
+
+--
+* Let's compare this to the confidence interval calculated using the usual method
+
+--
+
+
+```r
+confint(lm(mpg ~ horsepower, data = Auto))
+```
+
+```
+##                 2.5 %     97.5 %
+## (Intercept) 38.525212 41.3465103
+## horsepower  -0.170517 -0.1451725
+```
+
+---
+
+## Bootstrap "standard error"
+
+* We can also calculate the average coefficient and standard error
+
+--
+
+
+```r
+(beta_avg &lt;- mean(boot_coefs$horsepower))
+```
+
+```
+## [1] -0.1579431
+```
+
+```r
+(beta_se &lt;- sd(boot_coefs$horsepower))
+```
+
+```
+## [1] 0.006454474
+```
+
+--
+
+* We can use the "standard error method" to calculate a slightly different bootstrap confidence interval
+
+---
+
+## Bootstrap standard error method
+
+`$$\hat\beta_i \pm t^* \hat{SE}_{\beta_i}$$`
+
+
+```r
+t_star &lt;- qt(0.975, nrow(Auto) - 2)
+beta_avg - t_star * beta_se
+```
+
+```
+## [1] -0.170633
+```
+
+```r
+beta_avg + t_star * beta_se
+```
+
+```
+## [1] -0.1452532
+```
+
+--
+
+* Looks very similar!
+
+
+---
+
+
+## Bootstrap
+
+.small[
+
+```r
+ggplot(boot_coefs, aes(x = horsepower)) + 
+  geom_histogram(bins = 25) + 
+  geom_vline(xintercept = c(quantile(boot_coefs$horsepower, 0.025), quantile(boot_coefs$horsepower, 0.975))) 
+```
+
+![](10-bootstrap-ci_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+]
+---
+
+## Bootstrap
+
+.small[
+
+```r
+ggplot(boot_coefs, aes(x = horsepower)) + 
+  geom_histogram(bins = 25) + 
+  geom_vline(xintercept = c(quantile(boot_coefs$horsepower, 0.025), quantile(boot_coefs$horsepower, 0.975))) + 
+  geom_vline(xintercept = c(beta_avg - t_star * beta_se, beta_avg + t_star * beta_se), lty = 2) 
+```
+
+![](10-bootstrap-ci_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
+
+]
+---
+
+## Bootstrap
+
+.small[
+
+```r
+ggplot(boot_coefs, aes(x = horsepower)) + 
+  geom_histogram(bins = 25) + 
+  geom_vline(xintercept = c(quantile(boot_coefs$horsepower, 0.025), quantile(boot_coefs$horsepower, 0.975))) + 
+  geom_vline(xintercept = c(beta_avg - t_star * beta_se, beta_avg + t_star * beta_se), lty = 2) + 
+  geom_vline(xintercept = confint(lm(mpg ~ horsepower, Auto))[2, ], lty = 3)
+```
+
+![](10-bootstrap-ci_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
+]
+
+---
+
+class: inverse
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 640 512"&gt;&lt;path d="M512 64v256H128V64h384m16-64H112C85.5 0 64 21.5 64 48v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm100 416H389.5c-3 0-5.5 2.1-5.9 5.1C381.2 436.3 368 448 352 448h-64c-16 0-29.2-11.7-31.6-26.9-.5-2.9-3-5.1-5.9-5.1H12c-6.6 0-12 5.4-12 12v36c0 26.5 21.5 48 48 48h544c26.5 0 48-21.5 48-48v-36c0-6.6-5.4-12-12-12z"/&gt;&lt;/svg&gt; `Application Exercise`
+
+* Calculate a bootstrap percentile confidence interval for the coefficient associated with `wt`
+* Calculate a bootstrap confidence interval using the standard error method for the coefficient associated with `wt`
+* Compare these intervals to the interval computed from the `confint` function.
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

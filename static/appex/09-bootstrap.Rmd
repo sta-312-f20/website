@@ -1,0 +1,43 @@
+---
+title: "Application Exercise"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: lab.css
+link-citations: yes
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE     # for regression output
+)
+```
+
+
+1. Open Rstudio Server Pro
+2. Create a new project 
+3. Click File > New File > R Markdown
+4. Delete everything except for 
+```
+---
+title: "Untitled"
+output: html_document
+---
+```
+5. Give your work a sensible title
+6. When you've finished, upload the .html file to Canvas
+
+* Set a seed
+* Use the `sample()` function to sample from the following vector with replacement: `c(1, 2, 3, 4, 5)`
+* Write a function to perform a bootstrap.
+* Using the function created in the previous exercise, run a bootstrap on the following model:
+
+Using the `mtcars` data set fit a model predicting `mpg` from `wt` and `cyl`.
+
+
+* Calculate a bootstrap percentile confidence interval for the coefficient associated with `wt`
+* Calculate a bootstrap confidence interval using the standard error method for the coefficient associated with `wt`
+* Compare these intervals to the interval computed from the `confint` function.
