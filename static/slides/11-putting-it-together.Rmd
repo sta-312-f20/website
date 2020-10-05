@@ -1,0 +1,210 @@
+---
+title: "Putting it all together"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+class: middle 
+
+$$$$
+
+![](img/11/pyramid/pyramid.001.png)
+
+---
+
+class: middle 
+
+
+$$\Huge\mathbf{y} = \mathbf{X}\beta+\epsilon$$
+![](img/11/pyramid/pyramid.002.png)
+---
+
+class: middle 
+
+
+$$\Huge\mathbf{y} = \mathbf{X}\beta+\epsilon$$
+
+![](img/11/pyramid/pyramid.003.png)
+
+---
+
+class: middle 
+
+
+$$\Huge E[\hat\beta]=\beta$$
+![](img/11/pyramid/pyramid.004.png)
+---
+
+class: middle 
+
+
+$$\Huge\textrm{var}(\hat\beta)=\hat\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$$
+![](img/11/pyramid/pyramid.006.png)
+
+---
+
+class: middle 
+
+
+$$\Huge E[\hat\beta-\beta] = 0$$
+
+![](img/11/pyramid/pyramid.009.png)
+
+
+---
+
+class: middle 
+
+
+$$\Huge\textrm{var}(\hat\beta)=\hat\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$$
+![](img/11/pyramid/pyramid.010.png)
+
+---
+
+
+class: middle 
+
+
+$$\Large\textrm{var}(\hat\beta)=\hat\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\leq \textrm{var}(\tilde\beta)$$
+![](img/11/pyramid/pyramid.011.png)
+---
+
+class: middle 
+
+
+$$\Huge E[\tilde\beta-\beta]=0$$
+![](img/11/pyramid/pyramid.012.png)
+
+---
+
+class: middle 
+
+
+$$\Large\textrm{var}(\hat\beta)=\hat\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\leq \textrm{var}(\tilde\beta)$$
+
+![](img/11/pyramid/pyramid.013.png)
+---
+
+class: middle 
+
+
+$$\Huge\textrm{RSS}=\sum e^2$$
+![](img/11/pyramid/pyramid.014.png)
+---
+
+class: middle 
+
+
+$$\Huge\textrm{RSS}=\sum e^2$$
+
+![](img/11/pyramid/pyramid.015.png)
+
+---
+
+class: middle 
+
+
+$$\Huge E[\mathbf{e}^T\mathbf{e}] = \sigma^2(n-(p+1))$$
+
+![](img/11/pyramid/pyramid.016.png)
+
+---
+
+class: middle 
+
+
+$$\Large E[\mathbf{e}^T\mathbf{e}]=E[\mathbf{y}^T(\mathbf{I-H})\mathbf{y}]$$
+
+![](img/11/pyramid/pyramid.017.png)
+---
+
+class: middle 
+
+
+$$\Huge\hat\sigma^2=\frac{\textrm{RSS}}{(n-(p+1))}$$
+
+![](img/11/pyramid/pyramid.018.png)
+
+---
+
+class: middle 
+
+
+$$\Huge\hat\sigma^2=\frac{\textrm{RSS}}{(n-(p+1))}$$
+
+![](img/11/pyramid/pyramid.019.png)
+
+---
+
+class: middle 
+
+
+$$\Huge\textrm{var}(\hat\beta) = \hat\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$$
+
+![](img/11/pyramid/pyramid.019.png)
+
+---
+
+class: middle 
+
+
+$$F = \frac{RSS_{small} - RSS_{larger} / (df_{small}- df_{larger})}{RSS_{larger}/df_{larger}}\sim F_{df_{small}- df_{larger}, df_{larger}}$$
+
+![](img/11/pyramid/pyramid.020.png)
+
+---
+
+class: middle 
+
+
+$$F = \frac{RSS_{small} - RSS_{larger} / (df_{small}- df_{larger})}{RSS_{larger}/df_{larger}}\sim F_{df_{small}- df_{larger}, df_{larger}}$$
+
+![](img/11/pyramid/pyramid.021.png)
+
+---
+
+class: middle 
+
+
+$$F = \frac{RSS_{small} - RSS_{larger} / (df_{small}- df_{larger})}{RSS_{larger}/df_{larger}}\sim F_{df_{small}- df_{larger}, df_{larger}}$$
+
+![](img/11/pyramid/pyramid.022.png)
+---
+
+class: middle 
+
+
+$$F = \frac{RSS_{small} - RSS_{larger} / (df_{small}- df_{larger})}{RSS_{larger}/df_{larger}}\sim F_{df_{small}- df_{larger}, df_{larger}}$$
+
+![](img/11/pyramid/pyramid.023.png)
+
+---
+
+class: middle 
+
+
+$$\Huge\hat\beta\pm t^*SE_{\hat\beta}$$
+
+![](img/11/pyramid/pyramid.024.png)
+
