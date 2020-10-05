@@ -130,6 +130,7 @@ lessons:
   - title: "Bootstrap Confidence Intervals Walk Through"
     video: "https://youtu.be/5Yc5yDvN2vs"
   - title: "Putting it all together" 
+    slides: "11-putting-it-together.html"
     video: "https://youtu.be/DwPiYk5HgRc"
     appex: "10-write-up.html"
   - date: "Thurs, Oct 8"
