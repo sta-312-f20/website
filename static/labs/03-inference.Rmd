@@ -65,10 +65,10 @@ Remember: The Console is at the bottom of your RStudio workspace. Things you typ
 
 3. The hypothesis tests we considered in this class so far require the assumption of _normal errors_. Another way to complete hypothesis testing is via _permutation tests_, which do not require this assumption. To do this:
 
-* Step (1): Fit a your linear model and calculate the F-statistic for your hypothesis of interest
-* Step (2): _Shuffle the responses_ of your outcome variable so they are random and re-fit your linear model. Calculate an F-statistic for your hypothesis of interest for this new model
-* Step (3): Repeat step 2 several times and save your F-statistic each time
-* Step (4): Compare your F-statistic from step (1) to those generated in step (3). Calculate the proportion of F-statistics calculated in Step 3 that are as extreme or more extreme than the one calculated in step (1).
+* Step (1): Fit a your linear model and calculate the test statistic (for example the t-statistic or the F-statistic) for your hypothesis of interest
+* Step (2): _Shuffle the responses_ of your outcome variable so they are random and re-fit your linear model using this new outcome. Calculate the test-statistic for your hypothesis of interest for this new model
+* Step (3): Repeat step 2 several times and save your test statistic each time
+* Step (4): Compare your F-statistic from step (1) to those generated in step (3). Calculate the proportion of test statistics calculated in Step 3 that are as extreme or more extreme than the one calculated in step (1).
 
 Describe the ways in which this method is _similar to_ and _different from_ the bootstrap method we discussed previously.
 
