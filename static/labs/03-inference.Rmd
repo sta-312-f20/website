@@ -20,7 +20,7 @@ options(
 
 # Getting started
 
-- Go to RStudio Pro. Create a **New Project** by clicking File > New Project > New Directory. Name the directory something sensible (for example `02-lab-least-squares`)
+- Go to RStudio Pro. Create a **New Project** by clicking File > New Project > New Directory. Name the directory something sensible
 - Create a new the .Rmd file in this project and you're ready to go!
 
 
