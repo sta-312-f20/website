@@ -82,7 +82,7 @@ Describe the ways in which this method is _similar to_ and _different from_ the 
 
 7. Compute 90% and 95% confidence intervals for the predictor body weight. Interpret these.
 
-8. Compute 90% and 95% _bootstrap_ confidence intervals for the predictor body weight. How do these compare to those calculated in Exercise 7?
+8. Compute 90% and 95% _bootstrap_ confidence intervals (using the percentile method) for the predictor body weight. How do these compare to those calculated in Exercise 7?
 
 9. Test the null hypothesis that the coefficient for body weight is 0. What is the test statistic? What is the result of this hypothesis test?
 
