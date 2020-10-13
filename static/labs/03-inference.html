@@ -566,7 +566,7 @@ color: #333333;
 <span id="cb4-16"><a href="#cb4-16"></a><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="kw">c</span>(t, <span class="op">-</span>t))</span>
 <span id="cb4-17"><a href="#cb4-17"></a></span>
 <span id="cb4-18"><a href="#cb4-18"></a><span class="co">## calculate the proportion of permutations that are as extreme or more extreme than the one originally calculated</span></span>
-<span id="cb4-19"><a href="#cb4-19"></a><span class="kw">mean</span>(perms<span class="op">$</span>t <span class="op">&gt;</span><span class="st"> </span>t <span class="op">|</span><span class="st"> </span>perms<span class="op">$</span>t <span class="op">&lt;</span><span class="st"> </span><span class="op">-</span><span class="st"> </span>t)</span></code></pre></div>
+<span id="cb4-19"><a href="#cb4-19"></a><span class="kw">mean</span>(perms<span class="op">$</span>t <span class="op">&gt;=</span><span class="st"> </span>t <span class="op">|</span><span class="st"> </span>perms<span class="op">$</span>t <span class="op">&lt;=</span><span class="st"> </span><span class="op">-</span><span class="st"> </span>t)</span></code></pre></div>
 </div>
 </div>
 

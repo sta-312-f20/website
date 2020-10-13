@@ -107,6 +107,6 @@ ggplot(perms, aes(x = t)) +
   geom_vline(xintercept = c(t, -t))
 
 ## calculate the proportion of permutations that are as extreme or more extreme than the one originally calculated
-mean(perms$t > t | perms$t < - t)
+mean(perms$t >= t | perms$t <= - t)
 ```
 
