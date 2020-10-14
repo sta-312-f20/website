@@ -1,0 +1,191 @@
+---
+title: "Prediction Intervals"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+  <span>
+  Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## Predictions
+
+Once we have built a model, $\hat{\mathbf{y}} = \mathbf{X}\hat\beta$, we can calculate _predicted_ y, $\hat{\mathbf{y}}_0$ values for a new set of _predictors_, $\mathbf{x}_0$.
+
+--
+
+$$\hat{\mathbf{y}}_0=\mathbf{x}_0^T\hat\beta$$
+
+--
+
+For example, if we fit a model $\hat{y} = 1.2+2.5x_1+3x_2$
+
+And would like to know the predicted value for someone with $x_1 = 3$ and $x_2 = 2$, we would calculate
+
+--
+
+$$\hat{\mathbf{y}}_0 = \begin{bmatrix}1&3&2\end{bmatrix} \begin{bmatrix}1.2\\2.5\\3\end{bmatrix}$$
+--
+
+$$\hat{\mathbf{y}}_0 = 14.7$$
+
+---
+
+class: inverse
+
+## `r fa("laptop")` `Application Exercise`
+
+We are interested in predicting a chicken's weight based on their diet using the `chickwts` dataset
+
+* Fit the model of interest and extract the estimated $\beta$ coefficients
+* Construct $\mathbf{x}_0$ for a chicken that is eating "sunflower". 
+* Find the predicted weight for a chicken eating sunflowers.
+
+---
+
+## Predictions
+
+There are `r emo::ji("v")` kinds of predictions that can be made from regression models
+
+--
+* A predicted _mean response_
+
+--
+* A prediction of a _future observation_
+
+--
+
+.definition[
+This matters for estimating the **uncertainty**
+]
+---
+
+## Example
+
+* What would a chicken who eats sunflowers weigh **on average**?
+
+--
+* Suppose you want to feed your chicken sunflowers, what will your chicken's predicted weight be?
+
+--
+
+.question[
+What is the difference?
+]
+
+--
+
+* one is a prediction for an **average** one is for an **individual**
+
+---
+
+## Prediction of the mean response
+
+.definition[
+Example: What would a chicken who eats sunflowers weigh **on average**?
+]
+
+The prediction is $\mathbf{x}_0^T\beta$, estimated by $\mathbf{x}_0^T\hat\beta$.
+
+--
+
+.question[
+What is the variance of this prediction?
+]
+
+---
+
+class: inverse
+
+## `r fa("edit")` `Application Exercise`
+
+Show that the variance of $\mathbf{x}_0^T\hat\beta$ is 
+
+$$\textrm{var}(\mathbf{x}_0^T\hat\beta) = \mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0\sigma^2$$
+
+---
+
+## Confidence interval for a mean response
+
+$$\hat{\mathbf{y}_0}\pm t*\hat\sigma\sqrt{\mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0}$$
+
+---
+
+## Prediction of a future value
+
+
+.definition[
+Example: Suppose you want to feed your chicken sunflowers, what will your chicken's predicted weight be?
+]
+
+The prediction is $\mathbf{x}_0^T\beta + \epsilon$.
+
+.question[
+What is the expected value? What is the variance?
+]
+
+---
+
+class: inverse
+
+## `r fa("edit")` `Application Exercise`
+
+* What is the expected value of $\mathbf{x}_0^T\beta + \epsilon$?
+* Show that the variance is 
+
+$$(1 + \mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0)\sigma^2$$
+
+---
+
+## Prediction Intervals
+
+$$\hat{\mathbf{y}}_0\pm t^*\hat\sigma\sqrt{1+\mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0}$$
+
+---
+
+## Prediction Intervals
+
+* There is an **important conceptual difference here**
+--
+
+* _parameters_ (like $\beta_1$, $\beta_2$, etc) are considered **fixed** but **unknown** (they are **not random**) which is why we interpret confidence intervals like we do
+--
+
+* A _future observation_ **is** a **random variable**. Therefore, we are saying there is a 95% chance that the future value falls within this interval
+--
+
+* **THIS IS NOT the correct interpretation of a parameter's confidence interval**. It **is** the correct interpretation of a prediction interval
+
+---
+
+## Prediction Intervals
+
+Which is larger?
+
+$$(\mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0)\sigma^2$$
+
+or 
+
+$$(1 + \mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0)\sigma^2$$
+
+--
+
+* _prediction intervals_ tend to be wider than confidence intervals for a _mean response_

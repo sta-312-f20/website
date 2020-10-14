@@ -1,0 +1,272 @@
+---
+title: "Indicator Variables"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+  <span>
+  Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+```{r, include = FALSE}
+library(tidyverse)
+```
+
+## Variable types
+
+* So far, our models have only included _numeric_ (_quantitative_) variables
+--
+
+  * What would the equation be for predicting $y$ from $x$ when $x$ is numeric?
+--
+
+* What would happen if $x$ is categorical?
+--
+
+  * What would the equation be for predicting $y$ from $x$ if $x$ is categorical with 2 levels?
+--
+
+  * What would the equation be for predicting $y$ from $x$ if $x$ is categorical with 3 levels?
+  
+---
+
+class: middle
+
+## indicator variable
+
+An **indicator variable** uses two values, usually 0 and 1, to indicate whether a data case does (1) or does not (0) belong to a specific category
+
+---
+
+```{r, echo = TRUE, message = FALSE, warning = FALSE}
+library(Stat2Data)
+data("Diamonds")
+```
+
+.small[
+```{r, echo = FALSE}
+Diamonds %>% 
+  select(TotalPrice, Color, Carat) %>%
+  DT::datatable()
+```
+]
+
+---
+
+## Indicator variables
+
+.question[
+What does this line of code do?
+]
+```{r, echo = TRUE}
+Diamonds$ColorD <- ifelse(Diamonds$Color == "D", 1, 0) #<<
+Diamonds$ColorE <- ifelse(Diamonds$Color == "E", 1, 0)
+Diamonds$ColorF <- ifelse(Diamonds$Color == "F", 1, 0)
+Diamonds$ColorG <- ifelse(Diamonds$Color == "G", 1, 0)
+Diamonds$ColorH <- ifelse(Diamonds$Color == "H", 1, 0)
+Diamonds$ColorI <- ifelse(Diamonds$Color == "I", 1, 0)
+Diamonds$ColorJ <- ifelse(Diamonds$Color == "J", 1, 0)
+```
+
+---
+
+
+## Indicator variables
+
+.question[
+What does this line of code do?
+]
+```{r, echo = TRUE}
+Diamonds$ColorD <- ifelse(Diamonds$Color == "D", 1, 0) 
+Diamonds$ColorE <- ifelse(Diamonds$Color == "E", 1, 0) #<<
+Diamonds$ColorF <- ifelse(Diamonds$Color == "F", 1, 0)
+Diamonds$ColorG <- ifelse(Diamonds$Color == "G", 1, 0)
+Diamonds$ColorH <- ifelse(Diamonds$Color == "H", 1, 0)
+Diamonds$ColorI <- ifelse(Diamonds$Color == "I", 1, 0)
+Diamonds$ColorJ <- ifelse(Diamonds$Color == "J", 1, 0)
+```
+
+---
+
+## Indicator variables
+
+.small[
+```{r, echo = FALSE}
+Diamonds %>%
+  select(TotalPrice, Carat, Color, ColorD, ColorE, ColorF, ColorG, ColorH, ColorI) %>%
+  DT::datatable()
+```
+]
+
+---
+
+## Indicator variables
+
+.question[
+What if I wanted to model the relationship between `TotalPrice` and `Color`?
+]
+
+.small[
+```{r}
+Diamonds %>%
+  select(TotalPrice, Carat, Color, ColorD, ColorE, ColorF, ColorG, ColorH, ColorI) %>%
+  DT::datatable(options = list(pageLength = 5))
+```
+]
+
+---
+
+## Indicator variables
+
+.question[
+Why is `ColorJ` `NA`?
+]
+
+.small[
+```{r, echo = TRUE, highlight.output = c(9, 10)}
+lm(TotalPrice ~ ColorD + ColorE + ColorF + ColorG + ColorH + ColorI + ColorJ,
+   data = Diamonds)
+```
+]
+
+--
+
+* When including indicator variables in a model for `k` categories, always include `k-1` 
+--
+
+* The one that is left out is the "reference" category
+
+---
+
+## Indicator variables
+
+.question[
+What is the reference category?
+]
+
+.small[
+```{r, echo = TRUE}
+lm(TotalPrice ~ ColorD + ColorE + ColorF + ColorG + ColorH + ColorI,
+   data = Diamonds)
+```
+]
+
+--
+
+* **Interpretation:** A diamond with Color `D` compared to color `J` increases the expected total price by 3632.
+--
+
+* **Interpretation:** A diamond with Color `E` compared to color `J` increases the expected total price by 2423
+
+---
+
+## Indicator variables
+
+.question[
+What is the reference category?
+]
+
+.small[
+```{r, echo = TRUE}
+lm(TotalPrice ~ ColorD + ColorE + ColorF + ColorG + ColorH + ColorI,
+   data = Diamonds)
+```
+]
+
+
+* **Interpretation:** A diamond with Color `D` compared to color `J` increases the expected total price by 3632.
+* What is the interpretation for a diamond with Color `F`?
+
+---
+
+## In design matrix form
+
+.question[
+What would the design matrix look like?
+]
+
+$$\begin{bmatrix}1&0&1&0&0&0\\
+1&0&0&1&0&0\\
+1&0&0&0&0&1\\
+1&0&0&1&0&0\\
+\vdots&\vdots&\vdots&\vdots&\vdots&\vdots\end{bmatrix}$$
+
+--
+
+.question[
+How many columns would this have?
+]
+
+--
+
+* The number of indicator variables (-1 for the referent) + 1 for the intercept
+
+---
+
+## R is smart
+
+.small[
+```{r, echo = TRUE}
+lm(TotalPrice ~ Color, data = Diamonds)
+```
+]
+
+---
+
+## R is smart
+
+.question[
+What is the reference category?
+]
+.small[
+```{r, echo = TRUE}
+lm(TotalPrice ~ Color, data = Diamonds)
+```
+]
+
+--
+
+* What is the interpretation for Color `E` now?
+
+--
+* What if we wanted a different referent category?
+
+--
+  * We could code the indicators ourselves
+  
+--
+  * We can change the level with the `levels()` function
+---
+
+## `r fa("laptop")` `Application Exercise`
+
+Input the **design matrix**, $\mathbf{X}$ from the following data in R
+
+y | age
+---|----
+2 | "<20"
+3 | "20-50"
+5 | ">50"
+10 | "<20"
+1 | "20-50"
+3 | ">50"
+
+Estimate the $\beta$ coefficients for predicting y from age.

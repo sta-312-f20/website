@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Prediction Intervals</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Prediction Intervals
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+  &lt;span&gt;
+  Dr. Lucy D'Agostino McGowan
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+## Predictions
+
+Once we have built a model, `\(\hat{\mathbf{y}} = \mathbf{X}\hat\beta\)`, we can calculate _predicted_ y, `\(\hat{\mathbf{y}}_0\)` values for a new set of _predictors_, `\(\mathbf{x}_0\)`.
+
+--
+
+`$$\hat{\mathbf{y}}_0=\mathbf{x}_0^T\hat\beta$$`
+
+--
+
+For example, if we fit a model `\(\hat{y} = 1.2+2.5x_1+3x_2\)`
+
+And would like to know the predicted value for someone with `\(x_1 = 3\)` and `\(x_2 = 2\)`, we would calculate
+
+--
+
+`$$\hat{\mathbf{y}}_0 = \begin{bmatrix}1&amp;3&amp;2\end{bmatrix} \begin{bmatrix}1.2\\2.5\\3\end{bmatrix}$$`
+--
+
+`$$\hat{\mathbf{y}}_0 = 14.7$$`
+
+---
+
+class: inverse
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 640 512"&gt;&lt;path d="M512 64v256H128V64h384m16-64H112C85.5 0 64 21.5 64 48v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm100 416H389.5c-3 0-5.5 2.1-5.9 5.1C381.2 436.3 368 448 352 448h-64c-16 0-29.2-11.7-31.6-26.9-.5-2.9-3-5.1-5.9-5.1H12c-6.6 0-12 5.4-12 12v36c0 26.5 21.5 48 48 48h544c26.5 0 48-21.5 48-48v-36c0-6.6-5.4-12-12-12z"/&gt;&lt;/svg&gt; `Application Exercise`
+
+We are interested in predicting a chicken's weight based on their diet using the `chickwts` dataset
+
+* Fit the model of interest and extract the estimated `\(\beta\)` coefficients
+* Construct `\(\mathbf{x}_0\)` for a chicken that is eating "sunflower". 
+* Find the predicted weight for a chicken eating sunflowers.
+
+---
+
+## Predictions
+
+There are ✌️ kinds of predictions that can be made from regression models
+
+--
+* A predicted _mean response_
+
+--
+* A prediction of a _future observation_
+
+--
+
+.definition[
+This matters for estimating the **uncertainty**
+]
+---
+
+## Example
+
+* What would a chicken who eats sunflowers weigh **on average**?
+
+--
+* Suppose you want to feed your chicken sunflowers, what will your chicken's predicted weight be?
+
+--
+
+.question[
+What is the difference?
+]
+
+--
+
+* one is a prediction for an **average** one is for an **individual**
+
+---
+
+## Prediction of the mean response
+
+.definition[
+Example: What would a chicken who eats sunflowers weigh **on average**?
+]
+
+The prediction is `\(\mathbf{x}_0^T\beta\)`, estimated by `\(\mathbf{x}_0^T\hat\beta\)`.
+
+--
+
+.question[
+What is the variance of this prediction?
+]
+
+---
+
+class: inverse
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/&gt;&lt;/svg&gt; `Application Exercise`
+
+Show that the variance of `\(\mathbf{x}_0^T\hat\beta\)` is 
+
+`$$\textrm{var}(\mathbf{x}_0^T\hat\beta) = \mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0\sigma^2$$`
+
+---
+
+## Confidence interval for a mean response
+
+`$$\hat{\mathbf{y}_0}\pm t*\hat\sigma\sqrt{\mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0}$$`
+
+---
+
+## Prediction of a future value
+
+
+.definition[
+Example: Suppose you want to feed your chicken sunflowers, what will your chicken's predicted weight be?
+]
+
+The prediction is `\(\mathbf{x}_0^T\beta + \epsilon\)`.
+
+.question[
+What is the expected value? What is the variance?
+]
+
+---
+
+class: inverse
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/&gt;&lt;/svg&gt; `Application Exercise`
+
+* What is the expected value of `\(\mathbf{x}_0^T\beta + \epsilon\)`?
+* Show that the variance is 
+
+`$$(1 + \mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0)\sigma^2$$`
+
+---
+
+## Prediction Intervals
+
+`$$\hat{\mathbf{y}}_0\pm t^*\hat\sigma\sqrt{1+\mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0}$$`
+
+---
+
+## Prediction Intervals
+
+* There is an **important conceptual difference here**
+--
+
+* _parameters_ (like `\(\beta_1\)`, `\(\beta_2\)`, etc) are considered **fixed** but **unknown** (they are **not random**) which is why we interpret confidence intervals like we do
+--
+
+* A _future observation_ **is** a **random variable**. Therefore, we are saying there is a 95% chance that the future value falls within this interval
+--
+
+* **THIS IS NOT the correct interpretation of a parameter's confidence interval**. It **is** the correct interpretation of a prediction interval
+
+---
+
+## Prediction Intervals
+
+Which is larger?
+
+`$$(\mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0)\sigma^2$$`
+
+or 
+
+`$$(1 + \mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0)\sigma^2$$`
+
+--
+
+* _prediction intervals_ tend to be wider than confidence intervals for a _mean response_
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
