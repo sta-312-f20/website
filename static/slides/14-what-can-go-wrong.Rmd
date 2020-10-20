@@ -1,0 +1,150 @@
+---
+title: "What can go wrong with prediction?"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+  <span>
+  Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+
+## What can go wrong?
+
+* Bad model.
+--
+
+* Quantitative extrapolation.
+--
+
+* Qualitative extrapolation. 
+--
+
+* Overconfidence due to overfitting.
+--
+
+* Black swans. 
+
+---
+
+## Bad Model
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+set.seed(1)
+library(tidyverse)
+d <- tibble(
+  x = rnorm(100, 0, 1.5),
+  y = x + x^2 + rnorm(100)
+)
+
+ggplot(d, aes(x, y)) + 
+  geom_smooth(method = "lm", formula = y ~ x) + 
+  geom_point()
+```
+
+---
+
+## Quantitative extrapolation
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+set.seed(1)
+library(tidyverse)
+d <- tibble(
+  x = rnorm(100, 0, 1.5),
+  y = x + x^2 + rnorm(100)
+)
+
+ggplot(d, aes(x, y)) + 
+  geom_smooth(method = "lm", formula = y ~ x + I(x^2)) + 
+  geom_point()
+```
+
+---
+
+## Quantitative extrapolation
+
+
+```{r, echo = FALSE}
+lm(y ~ x + I(x^2), data = d) %>%
+  broom::tidy() %>%
+  knitr::kable()
+```
+
+--
+
+.question[
+What would the predicted value be when x = 10?
+]
+
+--
+
+```{r}
+x0 <- c(1, 10, 10^2)
+beta_hat <- c(0.056, 1.01, 0.95)
+t(x0) %*% beta_hat
+```
+
+
+---
+
+## Quantitative extrapolation
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+ggplot(d, aes(x, y)) + 
+  geom_smooth(method = "lm", formula = y ~ x + I(x^2)) + 
+  geom_point() +
+  geom_point(aes(x = 10, y = 105.156), color = "red", shape = "star")
+```
+
+---
+
+## Qualitative extrapolation
+
+* Trying to predict outcomes for observations that come from a different population 
+
+![](img/14/heart.png)
+
+---
+
+## Overconfidence due to overfitting
+
+```{r, echo = FALSE}
+set.seed(1)
+d <- tibble(
+  x = rnorm(100),
+  y = x + rnorm(100)
+)
+ggplot(d, aes(x, y)) +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 10), se = FALSE) +
+  geom_point()
+```
+
+---
+
+## Black Swan events
+
+* Sometimes errors can appear to be normally distributed because you haven’t seen enough data to be aware of extremes
+
+* This is of particular concern in **financial applications** where stock prices are characterized by mostly small changes (normally distributed) but with infrequent large changes 
+
+
+

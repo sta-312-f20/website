@@ -1,0 +1,106 @@
+---
+title: "Comparing Prediction Models"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+  <span>
+  Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## Comparison metrics
+
+* Adjusted $R^2$
+* Mallow's Cp
+
+---
+
+## $R^2$
+
+.question[
+How do we estimate $R^2$?
+]
+
+$$\Huge 1 - \frac{RSS}{TSS}$$
+
+--
+
+.question[
+How do you interpret this?
+]
+
+---
+
+## $R^2$
+
+$$\Huge 1 - \frac{RSS}{TSS}$$
+
+* Adding a new variable to a model can **only decrease** the RSS
+
+--
+
+.question[
+What does this mean for $R^2$?
+]
+
+---
+
+## $R^2$
+
+* This means that $R^2$ by itself is not a good criteria for determining model fit, because we'd always just pick the largest model!
+
+--
+* Enter Adjusted $R^2$!
+
+---
+
+## Adjusted $R^2$ 
+
+$$\Large R^2 = 1 - \frac{RSS/(n-(p+1))}{TSS/(n-1)}$$
+--
+
+* Now this will only chose a larger model if it has some predictive value
+
+---
+
+## Mallow's Cp
+
+* This estimates the average mean square error of prediction:
+
+$$\Large\frac{1}{\sigma^2}\sum E[(\hat{y}_i-E[y_i])^2]$$
+--
+
+* This can be estimated by
+
+$$C_p = \frac{RSS_p}{\hat{\sigma}^2}+ 2p-n$$
+
+where $\hat\sigma^2$ is from the full model and $RSS_p$ is the RSS from a reduced model. 
+
+---
+
+class: inverse
+
+## `r fa("edit")` `Application Exercise`
+
+Show that Mallow's Cp for a full model (where the full model and the reduced model have the same predictors, p) is equal to p
+
+
+
