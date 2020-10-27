@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Checking Error Assumptions</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Checking Error Assumptions
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Lucy D'Agostino McGowan
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+## What are the assumptions for linear regression with respect to `\(\epsilon\)`?
+
+--
+
+* Constant Variance
+--
+
+* Normality
+--
+
+* Independence
+
+
+---
+
+## Checking assumptions for the error
+
+* We cannot observe the error, `\(\epsilon\)`, themselves. 
+
+.question[
+What can we observe?
+]
+
+--
+
+* The residuals! (I often write these as `\(e\)` your book writes it as `\(\hat\epsilon\)`)
+
+---
+
+
+## Residuals versus `\(\epsilon\)`
+
+* The residuals are not **exactly** the same as the error
+
+.question[
+Why?
+]
+
+--
+
+`$$\begin{align}e &amp;= y - \hat{y}\\
+\end{align}$$`
+
+---
+
+
+## Residuals versus `\(\epsilon\)`
+
+* The residuals are not **exactly** the same as the error
+
+.question[
+Why?
+]
+
+
+`$$\begin{align}e &amp;= y - \hat{y}\\
+&amp; =(\mathbf{I-H})y\\
+\end{align}$$`
+
+---
+
+
+## Residuals versus `\(\epsilon\)`
+
+* The residuals are not **exactly** the same as the error
+
+.question[
+Why?
+]
+
+
+`$$\begin{align}e &amp;= y - \hat{y}\\
+&amp; =(\mathbf{I-H})y\\
+&amp;=(\mathbf{I-H})\mathbf{X}\beta + (\mathbf{I-H})\epsilon\\
+\end{align}$$`
+
+---
+
+
+## Residuals versus `\(\epsilon\)`
+
+* The residuals are not **exactly** the same as the error
+
+.question[
+Why?
+]
+
+
+`$$\begin{align}e &amp;= y - \hat{y}\\
+&amp; =(\mathbf{I-H})y\\
+&amp;=(\mathbf{I-H})\mathbf{X}\beta + (\mathbf{I-H})\epsilon\\
+&amp;=(\mathbf{I-H})\epsilon
+\end{align}$$`
+
+---
+
+
+## Residuals versus `\(\epsilon\)`
+
+* The residuals are not **exactly** the same as the error
+
+.question[
+Why?
+]
+
+
+`$$\begin{align}e &amp;= y - \hat{y}\\
+&amp; =(\mathbf{I-H})y\\
+&amp;=(\mathbf{I-H})\mathbf{X}\beta + (\mathbf{I-H})\epsilon\\
+&amp;=(\mathbf{I-H})\epsilon
+\end{align}$$`
+
+.question[
+What is the variance of e?
+]
+
+--
+
+`$$\textrm{var}(e) = (\mathbf{I-H})\textrm{var}(\epsilon) = (\mathbf{I-H})\sigma^2$$`
+
+---
+
+## Residuals versus `\(\epsilon\)`
+
+* The residuals are not **exactly** the same as the error
+* Nevertheless, diagnostics can be applied to the residuals to check the assumptions of the error
+
+---
+
+## Constant variance
+
+* "Residuals versus fits" plot
+
+.question[
+What do you think would be on the x-axis and y-axis on a "residuals versus fits" plot?
+]
+
+---
+
+## Constant variance
+
+![](16-checking-error-assumptions_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+---
+
+## Constant variance
+
+### Residuals versus fits plot: What are we looking for?
+
+* random variation above and below 0
+* no apparent "patterns"
+* the width of the "band" of points is relatively constant
+
+---
+
+# Constant Variance
+
+.question[
+What do you think of this plot?
+]
+
+![](16-checking-error-assumptions_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+---
+
+# Constant Variance
+
+.question[
+What do you think of this plot?
+]
+
+![](16-checking-error-assumptions_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+---
+
+# Constant Variance
+
+.question[
+What do you think of this plot?
+]
+
+![](16-checking-error-assumptions_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+---
+
+## Constant variance
+
+* In addition to looking at the residuals versus the fitted values, you can also look at the residuals versus _predictors_ or other `\(x\)` variables on the x-axis.
+
+---
+
+## Checking constant variance in R
+
+
+```r
+mod &lt;- lm(mpg ~ disp, mtcars)
+d &lt;- data.frame(
+  e = resid(mod),
+  fit = fitted(mod)
+)
+```
+--
+
+
+```r
+library(ggplot2)
+ggplot(d, aes(x = fit, y = e)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+---
+
+## Checking constant variance in R
+
+
+
+```r
+ggplot(d, aes(x = fit, y = e)) +
+  geom_point() +
+* geom_hline(yintercept = 0)
+```
+
+![](16-checking-error-assumptions_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+---
+
+## Generating data in R
+
+.small[
+
+```r
+n &lt;- 50
+fit &lt;- runif(n)
+good &lt;- data.frame(
+  fit = fit,
+  e = rnorm(n),
+  type = "good"
+)
+
+really_bad_var &lt;- data.frame(
+  fit = fit,
+  e = fit * rnorm(n),
+  type = "really bad non-constant variance"
+)
+
+mildly_bad_var &lt;- data.frame(
+  fit = fit,
+  e = sqrt(fit) * rnorm(n),
+  type = "mildly bad non-constant variance"
+)
+
+bad_nonlinear &lt;- data.frame(
+  fit = fit,
+  e = cos(fit * pi / 25) * rnorm(n),
+  type = "bad, non-linear"
+)
+
+d &lt;- rbind(good, really_bad_var, mildly_bad_var, bad_nonlinear)
+```
+]
+
+---
+
+## Generating data in R
+
+
+```r
+ggplot(d, aes(x = fit, y = e)) +
+  geom_point() + 
+  geom_hline(yintercept = 0) +
+  facet_grid(~type)
+```
+
+![](16-checking-error-assumptions_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+
+---
+
+## Let's look at a bunch of "good" plots
+
+
+```r
+good &lt;- function(i, n = 50) {
+  fit &lt;- runif(n)
+  data.frame(
+    fit = fit,
+    e = rnorm(n),
+    run = i
+  )
+}
+
+d &lt;- purrr::map_df(1:9, good)
+```
+
+---
+
+## Let's look at a bunch of good plots
+
+
+```r
+ggplot(d, aes(x = fit, y = e)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  facet_wrap(~run)
+```
+
+![](16-checking-error-assumptions_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+---
+
+## Let's look at a bunch of good plots
+
+
+![](16-checking-error-assumptions_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+---
+
+class: inverse
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 640 512"&gt;&lt;path d="M512 64v256H128V64h384m16-64H112C85.5 0 64 21.5 64 48v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm100 416H389.5c-3 0-5.5 2.1-5.9 5.1C381.2 436.3 368 448 352 448h-64c-16 0-29.2-11.7-31.6-26.9-.5-2.9-3-5.1-5.9-5.1H12c-6.6 0-12 5.4-12 12v36c0 26.5 21.5 48 48 48h544c26.5 0 48-21.5 48-48v-36c0-6.6-5.4-12-12-12z"/&gt;&lt;/svg&gt; `Application Exercise`
+
+Using the code provided in the previous slides, generate multiple "bad" plots that have non-constant variance and discuss what they look like.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

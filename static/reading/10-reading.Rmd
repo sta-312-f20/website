@@ -1,0 +1,14 @@
+---
+title: "Reading 10"
+output: 
+  html_document: 
+    theme: yeti
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Required:
+
+- Linear Models with R Section 6.1

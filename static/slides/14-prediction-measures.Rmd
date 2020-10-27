@@ -90,7 +90,7 @@ $$\Large\frac{1}{\sigma^2}\sum E[(\hat{y}_i-E[y_i])^2]$$
 
 * This can be estimated by
 
-$$C_p = \frac{RSS_p}{\hat{\sigma}^2}+ 2p-n$$
+$$C_p = \frac{RSS_p}{\hat{\sigma}^2}+ 2(p+1)-n$$
 
 where $\hat\sigma^2$ is from the full model and $RSS_p$ is the RSS from a reduced model. 
 
@@ -100,7 +100,7 @@ class: inverse
 
 ## `r fa("edit")` `Application Exercise`
 
-Show that Mallow's Cp for a full model (where the full model and the reduced model have the same predictors, p) is equal to p
+Show that Mallow's Cp for a full model (where the full model and the reduced model have the same predictors, p) is equal to p+1
 
 
 

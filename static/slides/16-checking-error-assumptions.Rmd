@@ -1,0 +1,401 @@
+---
+title: "Checking Error Assumptions"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## What are the assumptions for linear regression with respect to $\epsilon$?
+
+--
+
+* Constant Variance
+--
+
+* Normality
+--
+
+* Independence
+
+
+---
+
+## Checking assumptions for the error
+
+* We cannot observe the error, $\epsilon$, themselves. 
+
+.question[
+What can we observe?
+]
+
+--
+
+* The residuals! (I often write these as $e$ your book writes it as $\hat\epsilon$)
+
+---
+
+
+## Residuals versus $\epsilon$
+
+* The residuals are not **exactly** the same as the error
+
+.question[
+Why?
+]
+
+--
+
+$$\begin{align}e &= y - \hat{y}\\
+\end{align}$$
+
+---
+
+
+## Residuals versus $\epsilon$
+
+* The residuals are not **exactly** the same as the error
+
+.question[
+Why?
+]
+
+
+$$\begin{align}e &= y - \hat{y}\\
+& =(\mathbf{I-H})y\\
+\end{align}$$
+
+---
+
+
+## Residuals versus $\epsilon$
+
+* The residuals are not **exactly** the same as the error
+
+.question[
+Why?
+]
+
+
+$$\begin{align}e &= y - \hat{y}\\
+& =(\mathbf{I-H})y\\
+&=(\mathbf{I-H})\mathbf{X}\beta + (\mathbf{I-H})\epsilon\\
+\end{align}$$
+
+---
+
+
+## Residuals versus $\epsilon$
+
+* The residuals are not **exactly** the same as the error
+
+.question[
+Why?
+]
+
+
+$$\begin{align}e &= y - \hat{y}\\
+& =(\mathbf{I-H})y\\
+&=(\mathbf{I-H})\mathbf{X}\beta + (\mathbf{I-H})\epsilon\\
+&=(\mathbf{I-H})\epsilon
+\end{align}$$
+
+---
+
+
+## Residuals versus $\epsilon$
+
+* The residuals are not **exactly** the same as the error
+
+.question[
+Why?
+]
+
+
+$$\begin{align}e &= y - \hat{y}\\
+& =(\mathbf{I-H})y\\
+&=(\mathbf{I-H})\mathbf{X}\beta + (\mathbf{I-H})\epsilon\\
+&=(\mathbf{I-H})\epsilon
+\end{align}$$
+
+.question[
+What is the variance of e?
+]
+
+--
+
+$$\textrm{var}(e) = (\mathbf{I-H})\textrm{var}(\epsilon) = (\mathbf{I-H})\sigma^2$$
+
+---
+
+## Residuals versus $\epsilon$
+
+* The residuals are not **exactly** the same as the error
+* Nevertheless, diagnostics can be applied to the residuals to check the assumptions of the error
+
+---
+
+## Constant variance
+
+* "Residuals versus fits" plot
+
+.question[
+What do you think would be on the x-axis and y-axis on a "residuals versus fits" plot?
+]
+
+---
+
+## Constant variance
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(Stat2Data)
+library(tidyverse)
+data("Sparrows")
+Sparrows <- Sparrows %>%
+  mutate(y_hat = lm(Weight ~ WingLength, data = Sparrows) %>% predict(),
+         residuals = Weight - y_hat) 
+
+ggplot(Sparrows, aes(x = y_hat, y = residuals)) + 
+  geom_point() + 
+  geom_hline(yintercept = 0) +
+  labs(title = "Residuals versus fits", 
+       subtitle = "The relationship between WingLength and Weight for Sparrows",
+       x = "y hat")
+```
+
+---
+
+## Constant variance
+
+### Residuals versus fits plot: What are we looking for?
+
+* random variation above and below 0
+* no apparent "patterns"
+* the width of the "band" of points is relatively constant
+
+---
+
+# Constant Variance
+
+.question[
+What do you think of this plot?
+]
+
+```{r, echo = FALSE}
+set.seed(1)
+bad_variance <- tibble(
+  x = runif(1000, min = 0, max = 10),
+  y = 1 + 2 * x + (x / 2) * rnorm(1000, sd = 3),
+  y_hat = 1 + 2 * x,
+  residual = y - y_hat
+)
+
+ggplot(bad_variance, aes(y_hat, residual)) + 
+  geom_point() + 
+  geom_hline(yintercept = 0) + 
+  labs(title = "Residuals versus fits", 
+       # subtitle = "Bad example (non-constant variance)",
+       x = "y hat")
+```
+
+---
+
+# Constant Variance
+
+.question[
+What do you think of this plot?
+]
+
+```{r, echo = FALSE}
+set.seed(1)
+bad_linear <- tibble(
+  x = runif(1000, min = 0, max = 10),
+  y = 1 + 2 * x + x^2 + rnorm(1000, sd = 10),
+  y_hat = 1 + 2 * x,
+  residual = y - y_hat
+)
+
+ggplot(bad_linear, aes(y_hat, residual)) + 
+  geom_point() + 
+  geom_hline(yintercept = 0) + 
+  labs(title = "Residuals versus fits", 
+       # subtitle = "Bad example (non-linearity)",
+       x = "y hat")
+```
+
+---
+
+# Constant Variance
+
+.question[
+What do you think of this plot?
+]
+
+```{r, echo = FALSE}
+set.seed(1)
+bad_linear_variance <- tibble(
+  x = runif(1000, min = 0, max = 10),
+  y = 1 + 2 * x + x^2 + (x / 2) * rnorm(100, sd = 10),
+  y_hat = 1 + 2 * x,
+  residual = y - y_hat
+)
+
+ggplot(bad_linear_variance, aes(y_hat, residual)) + 
+  geom_point() + 
+  geom_hline(yintercept = 0) + 
+  labs(title = "Residuals versus fits", 
+       # subtitle = "Bad example (non-linearity and non-constant variance)",
+       x = "y hat")
+```
+
+---
+
+## Constant variance
+
+* In addition to looking at the residuals versus the fitted values, you can also look at the residuals versus _predictors_ or other $x$ variables on the x-axis.
+
+---
+
+## Checking constant variance in R
+
+```{r}
+mod <- lm(mpg ~ disp, mtcars)
+d <- data.frame(
+  e = resid(mod),
+  fit = fitted(mod)
+)
+```
+--
+
+```{r, eval = FALSE}
+library(ggplot2)
+ggplot(d, aes(x = fit, y = e)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+---
+
+## Checking constant variance in R
+
+
+```{r}
+ggplot(d, aes(x = fit, y = e)) +
+  geom_point() +
+  geom_hline(yintercept = 0) #<<
+```
+
+---
+
+## Generating data in R
+
+.small[
+```{r}
+n <- 50
+fit <- runif(n)
+good <- data.frame(
+  fit = fit,
+  e = rnorm(n),
+  type = "good"
+)
+
+really_bad_var <- data.frame(
+  fit = fit,
+  e = fit * rnorm(n),
+  type = "really bad non-constant variance"
+)
+
+mildly_bad_var <- data.frame(
+  fit = fit,
+  e = sqrt(fit) * rnorm(n),
+  type = "mildly bad non-constant variance"
+)
+
+bad_nonlinear <- data.frame(
+  fit = fit,
+  e = cos(fit * pi / 25) * rnorm(n),
+  type = "bad, non-linear"
+)
+
+d <- rbind(good, really_bad_var, mildly_bad_var, bad_nonlinear)
+```
+]
+
+---
+
+## Generating data in R
+
+```{r}
+ggplot(d, aes(x = fit, y = e)) +
+  geom_point() + 
+  geom_hline(yintercept = 0) +
+  facet_grid(~type)
+```
+
+---
+
+## Let's look at a bunch of "good" plots
+
+```{r}
+good <- function(i, n = 50) {
+  fit <- runif(n)
+  data.frame(
+    fit = fit,
+    e = rnorm(n),
+    run = i
+  )
+}
+
+d <- purrr::map_df(1:9, good)
+```
+
+---
+
+## Let's look at a bunch of good plots
+
+```{r}
+ggplot(d, aes(x = fit, y = e)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  facet_wrap(~run)
+```
+
+---
+
+## Let's look at a bunch of good plots
+
+
+```{r, echo = FALSE, fig.height = 3}
+ggplot(d, aes(x = fit, y = e)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  facet_wrap(~run)
+```
+
+---
+
+class: inverse
+
+## `r fa("laptop")` `Application Exercise`
+
+Using the code provided in the previous slides, generate multiple "bad" plots that have non-constant variance and discuss what they look like.
