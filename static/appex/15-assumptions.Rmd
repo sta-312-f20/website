@@ -1,0 +1,53 @@
+---
+title: "Application Exercise"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: lab.css
+link-citations: yes
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE     # for regression output
+)
+```
+
+
+1. Open Rstudio Server Pro
+2. Create a new project
+3. Click File > New File > R Markdown
+4. Delete everything except for 
+```
+---
+title: "Untitled"
+output: html_document
+---
+```
+5. Give your work a sensible title
+6. When you've finished, upload the .html file to Canvas
+
+Generate some "fake" residuals under the following scenarios and plot the Q-Q plot and histogram for each. Describe what you see.
+
+* Left-skewed data
+* Right-skewed data
+* Data generated under a lognormal distribution (use the `rlnorm()` function)
+* Data generated under a t-distribution with 2 degrees of freedom (use the `rt()` function)
+
+Copy the code below to create a design matrix, `X` and an outcome, y. 
+
+
+```{r}
+set.seed(1)
+X <- matrix(c(rep(1, 100),
+            rnorm(100)), ncol = 2)
+y <- 2 + 3 * X[, 2] + 2 * X[, 2]^2 + 0.5 * X[, 2]^3 + rnorm(100)
+```
+
+
+* Add to this design matrix so you can fit a model with a 3rd degree polynomial. 
+* Fit this model using linear regression
+* Calculate the expected change in Y given a change from the 25th percentile to the 75th percentile

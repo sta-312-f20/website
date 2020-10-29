@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Checking Error Assumptions</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Checking Error Assumptions
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Lucy D'Agostino McGowan
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+## What are the assumptions for linear regression with respect to `\(\epsilon\)`?
+
+--
+
+* Constant Variance
+--
+
+* Normality
+--
+
+* Independence
+
+
+---
+
+## Checking Normality
+
+* Hypothesis tests and confidence intervals rely on the errors being normally distributed
+--
+
+* We can check the distribution of the _residuals_ using a Q-Q plot and a histogram
+
+---
+
+## Q-Q plot
+
+* Plot the sorted residuals against `\(\Phi^{-1}\left(\frac{i}{n+1}\right)\)` for `\(i = 1, \dots, n\)`
+--
+
+
+```r
+e &lt;- resid(lm(mpg ~ disp, data = mtcars)) # get the residuals
+e &lt;- e[order(e)] # sort 
+n &lt;- nrow(mtcars) # calculate n
+q &lt;- qnorm(1:n/(n + 1)) # calculate q
+```
+
+---
+
+## Q-Q plot
+
+* Plot the sorted residuals against `\(\Phi^{-1}\left(\frac{i}{n+1}\right)\)` for `\(i = 1, \dots, n\)`
+
+
+```r
+*e &lt;- resid(lm(mpg ~ disp, data = mtcars)) # get the residuals
+e &lt;- e[order(e)] # sort 
+n &lt;- nrow(mtcars) # calculate n
+q &lt;- qnorm(1:n/(n + 1)) # calculate q
+```
+
+---
+
+## Q-Q plot
+
+* Plot the sorted residuals against `\(\Phi^{-1}\left(\frac{i}{n+1}\right)\)` for `\(i = 1, \dots, n\)`
+
+
+```r
+e &lt;- resid(lm(mpg ~ disp, data = mtcars)) # get the residuals 
+*e &lt;- e[order(e)] # sort
+n &lt;- nrow(mtcars) # calculate n
+q &lt;- qnorm(1:n/(n + 1)) # calculate q
+```
+
+---
+
+## Q-Q plot
+
+* Plot the sorted residuals against `\(\Phi^{-1}\left(\frac{i}{n+1}\right)\)` for `\(i = 1, \dots, n\)`
+
+
+```r
+e &lt;- resid(lm(mpg ~ disp, data = mtcars)) # get the residuals 
+e &lt;- e[order(e)] # sort 
+*n &lt;- nrow(mtcars) # calculate n
+q &lt;- qnorm(1:n/(n + 1)) # calculate q
+```
+
+---
+
+## Q-Q plot
+
+* Plot the sorted residuals against `\(\Phi^{-1}\left(\frac{i}{n+1}\right)\)` for `\(i = 1, \dots, n\)`
+
+
+```r
+e &lt;- resid(lm(mpg ~ disp, data = mtcars)) # get the residuals 
+e &lt;- e[order(e)] # sort 
+n &lt;- nrow(mtcars) # calculate n
+*q &lt;- qnorm(1:n/(n + 1)) # calculate q
+
+d &lt;- data.frame(
+  e = e,
+  q = q
+)
+```
+
+---
+
+## Q-Q plot
+
+* "by hand"
+
+.small[
+
+```r
+library(ggplot2)
+
+ggplot(d, aes(x = q, y = e)) + 
+  geom_point()
+```
+
+![](17-checking-error-assumptions_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Q-Q plot
+
+* Let ggplot do the heavy lifting
+
+.small[
+
+```r
+ggplot(d, aes(sample = e)) +
+  geom_qq() +
+  geom_qq_line()
+```
+
+![](17-checking-error-assumptions_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Q-Q plot
+
+* Let ggplot do the heavy lifting
+
+.small[
+
+```r
+*ggplot(d, aes(sample = e)) +
+  geom_qq() +
+  geom_qq_line()
+```
+
+![](17-checking-error-assumptions_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Q-Q plot
+
+* Let ggplot do the heavy lifting
+
+.small[
+
+```r
+ggplot(d, aes(sample = e)) +
+* geom_qq() +
+  geom_qq_line()
+```
+
+![](17-checking-error-assumptions_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Q-Q plot
+
+* Let ggplot do the heavy lifting
+
+.small[
+
+```r
+ggplot(d, aes(sample = e)) +
+  geom_qq() +
+* geom_qq_line()
+```
+
+![](17-checking-error-assumptions_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Histogram
+
+
+```r
+ggplot(d, aes(x = e)) +
+  geom_histogram(bins = 15)
+```
+
+![](17-checking-error-assumptions_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+---
+
+## Generate a normal one
+
+
+```r
+set.seed(1)
+e &lt;- rnorm(1000) # generate some normally distributed errors
+e &lt;- e[order(e)]
+d &lt;- data.frame(e)
+```
+
+---
+
+## Normal Q-Q plot
+
+
+```r
+ggplot(d, aes(sample = e)) +
+  geom_qq() +
+  geom_qq_line()
+```
+
+![](17-checking-error-assumptions_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+
+---
+
+## Normal Histogram
+
+
+```r
+ggplot(d, aes(e)) +
+  geom_histogram(bins = 20)
+```
+
+![](17-checking-error-assumptions_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+---
+
+
+## Skewed Right
+
+.small[
+
+```r
+e_right &lt;- c(e[e &gt; 0] * 5, e)  ## generate right skewed data
+d &lt;- data.frame(e_right)
+ggplot(d, aes(x = e_right)) +
+  geom_histogram(bins = 30)
+```
+
+![](17-checking-error-assumptions_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Skewed Right
+
+.small[
+
+```r
+ggplot(d, aes(sample = e_right)) +
+  geom_qq() +
+  geom_qq_line()
+```
+
+![](17-checking-error-assumptions_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+]
+
+---
+
+
+## Skewed Left
+
+.small[
+
+```r
+e_left &lt;- c(e[e &lt; 0] * 5, e)  ## generate left skewed data
+d &lt;- data.frame(e_left)
+ggplot(d, aes(x = e_left)) +
+  geom_histogram(bins = 30)
+```
+
+![](17-checking-error-assumptions_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+## Skewed Left
+
+.small[
+
+```r
+ggplot(d, aes(sample = e_left)) +
+  geom_qq() +
+  geom_qq_line()
+```
+
+![](17-checking-error-assumptions_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+]
+
+---
+
+class: inverse
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 640 512"&gt;&lt;path d="M512 64v256H128V64h384m16-64H112C85.5 0 64 21.5 64 48v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm100 416H389.5c-3 0-5.5 2.1-5.9 5.1C381.2 436.3 368 448 352 448h-64c-16 0-29.2-11.7-31.6-26.9-.5-2.9-3-5.1-5.9-5.1H12c-6.6 0-12 5.4-12 12v36c0 26.5 21.5 48 48 48h544c26.5 0 48-21.5 48-48v-36c0-6.6-5.4-12-12-12z"/&gt;&lt;/svg&gt; `Application Exercise`
+
+Generate some "fake" residuals under the following scenarios and plot the Q-Q plot and histogram for each. Describe what you see.
+
+1. Left-skewed data
+2. Right-skewed data
+3. Data generated under a lognormal distribution (use the `rlnorm()` function)
+4. Data generated under a t-distribution with 2 degrees of freedom (use the `rt()` function)
+
+---
+
+## Correlated Errors
+
+* There is not a _single_ check for correlated errors since there so many different ways errors can be correlated
+--
+
+* Examples: 
+  * Data collected over time
+  * Spatial data
+  * Data collected in blocks (for example eyes!)
+---
+
+## "Solving" these problems
+
+* **Constant Variance**
+--
+
+* This can sometimes be resolved by fitting your model differently, perhaps incorporating _transformations_ (for example you could try to take the log of the outcome, y)
+--
+
+* Another fix is **weighted least squares**
+---
+
+## "Solving" these problems
+
+
+* **Normality**
+--
+
+* Appealing to the _central limit theorem_ if you have a large enough data set we don't have to worry as much about normality since our confidence intervals will be approximately correct
+--
+
+* For skewed distributions, transformations can help
+--
+
+* Check for constant variance (and linearity) first
+---
+
+## "Solving" these problems
+
+* **Correlated Errors**
+--
+
+* You need to update the **structure** of the model 
+* **generalized least squares**
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Linearity Assumption</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Linearity Assumption
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Lucy D'Agostino McGowan
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+## Non-linearity
+
+* In addition to the assumptions we've discussed related to the _errors_ we also assume **linearity**
+* This can also be checked via a residuals vs fits plot, or by examining the relationship between predictors (or a combination of predictors) and the outcome
+
+---
+
+## Non-linearity
+
+* This is often due to _model mispecificiation_
+--
+
+* One way to account for this is via the introduction of transformations or terms such as _polynomials_ or _splines_. 
+--
+
+* For the sake of time, we will focus on _polynomials_ but _splines_ are important and frequently used in linear models as well! (You can find more information on these in your book!)
+
+---
+
+## Non-linearity
+
+![](17-linearity_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+---
+
+## Polynomials
+
+
+`$$y_i = \beta_0 + \beta_1x_i + \beta_2x_i^2+\beta_3x_i^3 \dots + \beta_dx_i^d+\epsilon_i$$`
+
+
+![](17-linearity_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+
+---
+
+## Polynomials
+
+`$$y_i = \beta_0 + \beta_1x_i + \beta_2x_i^2+\beta_3x_i^3 \dots + \beta_dx_i^d+\epsilon_i$$`
+
+
+![](17-linearity_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+--
+
+* Fit here with a 3rd degree polynomial 
+
+---
+
+## How is it done?
+
+* New variables are created ( `\(X_1 = X\)`, `\(X_2 = X^2\)`, `\(X_3 = X^3\)`, etc) and treated as multiple linear regression
+--
+
+* We are _not_ interested in the individual coefficients, we are interested in how a _specific_ `\(x\)` value behaves
+
+`$$\hat{f}(x_0) = \hat\beta_0 + \hat\beta_1x_0 + \hat\beta_2x_0^2 + \hat\beta_3x_0^3 + \hat\beta_4x_0^4$$`
+
+--
+
+* _or more often a change between two values_, `\(a\)` and `\(b\)`
+
+`$$\hat{f}(b) -\hat{f}(a) = \hat\beta_1b + \hat\beta_2b^2 + \hat\beta_3b^3 + \hat\beta_4b^4 - \hat\beta_1a - \hat\beta_2a^2 - \hat\beta_3a^3 -\hat\beta_4a^4$$`
+
+--
+
+`$$\hat{f}(b) -\hat{f}(a) =\hat\beta_1(b-a) + \hat\beta_2(b^2-a^2)+\hat\beta_3(b^3-a^3)+\hat\beta_4(b^4-a^4)$$`
+
+---
+
+## Polynomial Regression 
+
+`$$\hat{f}(b) -\hat{f}(a) =\hat\beta_1(b-a) + \hat\beta_2(b^2-a^2)+\hat\beta_3(b^3-a^3)+\hat\beta_4(b^4-a^4)$$`
+
+.question[
+How do you pick `\(a\)` and `\(b\)`?
+]
+
+--
+
+* If given no other information, a sensible choice may be the 25th and 75th percentiles of `\(x\)`
+
+---
+
+## Polynomial Regression 
+
+![](17-linearity_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+---
+
+## Polynomials
+
+Calculating a quantile in R:
+
+
+```r
+x &lt;- rnorm(100)
+quantile(x, 0.25)
+```
+
+```
+##        25% 
+## -0.4551485
+```
+
+```r
+quantile(x, 0.75)
+```
+
+```
+##       75% 
+## 0.6984908
+```
+
+---
+
+## Polynomial Regression
+
+.question[
+You see non-linearity on your plot, how do you pick the degree of the polynomial?
+]
+
+--
+
+* The **best** way to do this is via a method called **cross validation** (we won't get into that in this class, for now, I will tell you what degree of polynomial to use).
+
+---
+
+class: inverse
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 640 512"&gt;&lt;path d="M512 64v256H128V64h384m16-64H112C85.5 0 64 21.5 64 48v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm100 416H389.5c-3 0-5.5 2.1-5.9 5.1C381.2 436.3 368 448 352 448h-64c-16 0-29.2-11.7-31.6-26.9-.5-2.9-3-5.1-5.9-5.1H12c-6.6 0-12 5.4-12 12v36c0 26.5 21.5 48 48 48h544c26.5 0 48-21.5 48-48v-36c0-6.6-5.4-12-12-12z"/&gt;&lt;/svg&gt; `Application Exercise`
+
+Copy the code below to create a design matrix, `X` and an outcome, y. 
+
+.small[
+
+```r
+set.seed(1)
+X &lt;- matrix(c(rep(1, 100),
+            rnorm(100)), ncol = 2)
+y &lt;- 2 + 3 * X[, 2] + 2 * X[, 2]^2 + 0.5 * X[, 2]^3 + rnorm(100)
+```
+]
+
+* Add to this design matrix so you can fit a model with a 3rd degree polynomial. 
+* Fit this model using linear regression
+* Calculate the expected change in Y given a change from the 25th percentile to the 75th percentile
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,191 @@
+---
+title: "Linearity Assumption"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## Non-linearity
+
+* In addition to the assumptions we've discussed related to the _errors_ we also assume **linearity**
+* This can also be checked via a residuals vs fits plot, or by examining the relationship between predictors (or a combination of predictors) and the outcome
+
+---
+
+## Non-linearity
+
+* This is often due to _model mispecificiation_
+--
+
+* One way to account for this is via the introduction of transformations or terms such as _polynomials_ or _splines_. 
+--
+
+* For the sake of time, we will focus on _polynomials_ but _splines_ are important and frequently used in linear models as well! (You can find more information on these in your book!)
+
+---
+
+## Non-linearity
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+set.seed(1)
+d <- tibble(
+  x = rnorm(100),
+  y = 3 + x + 2 * x^2 + 0.3 * x^3 + rnorm(100)
+)
+
+mod <- lm(y ~ x, data = d)
+d2 <- data.frame(
+  e = resid(mod),
+  f = fitted(mod)
+)
+ggplot(d2, aes(f, e)) +
+  geom_point() +
+  geom_hline(yintercept = 0) + 
+  labs(x = "fitted", y = "residuals")
+```
+
+---
+
+## Polynomials
+
+
+$$y_i = \beta_0 + \beta_1x_i + \beta_2x_i^2+\beta_3x_i^3 \dots + \beta_dx_i^d+\epsilon_i$$
+
+
+```{r, echo = FALSE}
+ggplot(d, aes(x, y)) + 
+  geom_point() + 
+  geom_smooth(formula = y ~ poly(x, 3), method = "lm")
+```
+
+
+---
+
+## Polynomials
+
+$$y_i = \beta_0 + \beta_1x_i + \beta_2x_i^2+\beta_3x_i^3 \dots + \beta_dx_i^d+\epsilon_i$$
+
+
+```{r, echo = FALSE}
+ggplot(d, aes(x, y)) + 
+  geom_point() + 
+  geom_smooth(formula = y ~ poly(x, 3), method = "lm")
+```
+
+--
+
+* Fit here with a 3rd degree polynomial 
+
+---
+
+## How is it done?
+
+* New variables are created ( $X_1 = X$, $X_2 = X^2$, $X_3 = X^3$, etc) and treated as multiple linear regression
+--
+
+* We are _not_ interested in the individual coefficients, we are interested in how a _specific_ $x$ value behaves
+
+$$\hat{f}(x_0) = \hat\beta_0 + \hat\beta_1x_0 + \hat\beta_2x_0^2 + \hat\beta_3x_0^3 + \hat\beta_4x_0^4$$
+
+--
+
+* _or more often a change between two values_, $a$ and $b$
+
+$$\hat{f}(b) -\hat{f}(a) = \hat\beta_1b + \hat\beta_2b^2 + \hat\beta_3b^3 + \hat\beta_4b^4 - \hat\beta_1a - \hat\beta_2a^2 - \hat\beta_3a^3 -\hat\beta_4a^4$$
+
+--
+
+$$\hat{f}(b) -\hat{f}(a) =\hat\beta_1(b-a) + \hat\beta_2(b^2-a^2)+\hat\beta_3(b^3-a^3)+\hat\beta_4(b^4-a^4)$$
+
+---
+
+## Polynomial Regression 
+
+$$\hat{f}(b) -\hat{f}(a) =\hat\beta_1(b-a) + \hat\beta_2(b^2-a^2)+\hat\beta_3(b^3-a^3)+\hat\beta_4(b^4-a^4)$$
+
+.question[
+How do you pick $a$ and $b$?
+]
+
+--
+
+* If given no other information, a sensible choice may be the 25th and 75th percentiles of $x$
+
+---
+
+## Polynomial Regression 
+
+```{r, echo = FALSE}
+ggplot(d, aes(x, y)) + 
+  geom_point() + 
+  geom_smooth(formula = y ~ poly(x, 3), method = "lm") +
+  geom_vline(xintercept = c(quantile(d$x, 0.25), quantile(d$x, 0.75)), lty = 2)
+
+```
+
+---
+
+## Polynomials
+
+Calculating a quantile in R:
+
+```{r}
+x <- rnorm(100)
+quantile(x, 0.25)
+quantile(x, 0.75)
+```
+
+---
+
+## Polynomial Regression
+
+.question[
+You see non-linearity on your plot, how do you pick the degree of the polynomial?
+]
+
+--
+
+* The **best** way to do this is via a method called **cross validation** (we won't get into that in this class, for now, I will tell you what degree of polynomial to use).
+
+---
+
+class: inverse
+
+## `r fa("laptop")` `Application Exercise`
+
+Copy the code below to create a design matrix, `X` and an outcome, y. 
+
+.small[
+```{r}
+set.seed(1)
+X <- matrix(c(rep(1, 100),
+            rnorm(100)), ncol = 2)
+y <- 2 + 3 * X[, 2] + 2 * X[, 2]^2 + 0.5 * X[, 2]^3 + rnorm(100)
+```
+]
+
+* Add to this design matrix so you can fit a model with a 3rd degree polynomial. 
+* Fit this model using linear regression
+* Calculate the expected change in Y given a change from the 25th percentile to the 75th percentile
