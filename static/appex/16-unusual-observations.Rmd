@@ -46,7 +46,7 @@ Using the data above calculate:
 
 * Show that 
 
-$$\hat{\textrm{var}}(\hat{y}_{(i)}) = \hat{\sigma}^2_{(i)}(1+x_i^T(\mathbf{X}_{(i)}^T\mathbf{X}_{(i)})^{-1}x_i)$$
+$$\hat{\textrm{var}}(y_i - \hat{y}_{(i)}) = \hat{\sigma}^2_{(i)}(1+x_i^T(\mathbf{X}_{(i)}^T\mathbf{X}_{(i)})^{-1}x_i)$$
 
 
 * Using the data above, calculate $\hat{\textrm{var}}(\hat{y})_{(i)}$ for observation 5.
