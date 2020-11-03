@@ -1,0 +1,54 @@
+---
+title: "Application Exercise"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: lab.css
+link-citations: yes
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE     # for regression output
+)
+```
+
+
+1. Open Rstudio Server Pro
+2. Create a new project
+3. Click File > New File > R Markdown
+4. Delete everything except for 
+```
+---
+title: "Untitled"
+output: html_document
+---
+```
+5. Give your work a sensible title
+6. When you've finished, upload the .html file to Canvas
+
+
+y | x
+--|--
+1 | 0
+5 | 4
+2 | 2
+2 | 1
+11 | 10
+
+Using the data above calculate:
+
+* The leverage for each observation. Are any "unusual"?
+* The standardized residuals, $r_i$. 
+
+* Show that 
+
+$$\hat{\textrm{var}}(\hat{y}_{(i)}) = \hat{\sigma}^2_{(i)}(1+x_i^T(\mathbf{X}_{(i)}^T\mathbf{X}_{(i)})^{-1}x_i)$$
+
+
+* Using the data above, calculate $\hat{\textrm{var}}(\hat{y})_{(i)}$ for observation 5.
+* Calculate the studentized residuals for the data above.
+* Calculate Cook's Distance for the data above and plot it with the row number on the x-axis and Cook's Distance on the y-axis.

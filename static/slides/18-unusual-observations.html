@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Unusual Observations</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Unusual Observations
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Lucy D'Agostino McGowan
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+## Leverage
+
+* _leverage_ is the amount of influence an observation has on the estimation of `\(\hat\beta\)`
+--
+
+* Mathematically, we can define this as the _diagonal elements of the hat matrix_.
+--
+
+.question[
+What is the hat matrix?
+]
+--
+
+* `\(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\)`
+
+---
+
+## Leverage
+
+* _leverage_ is the amount of influence an observation has on the estimation of `\(\hat\beta\)`
+* Mathematically, we can define this as the _diagonal elements of the hat matrix_.
+
+`$$h_i = H_{ii}\\
+h_i = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T_{ii}$$`
+---
+
+## Leverage
+
+.question[
+What do we use the diagnonal of the hat matrix?
+]
+--
+
+* Recall that the variance of the residuals is 
+
+`$$\textrm{var}(e_i) = \sigma^2(1 - h_i)$$`
+
+* so _large_ leverage points will pull the fit towards `\(y_i\)`
+
+---
+
+## Leverage
+
+* The _leverage_, `\(h_i\)`, will always be between 0 and 1
+
+.question[
+How do we know this? Let's show it using the fact that the hat matrix is _idempotent_ and _symmetric_.
+]
+
+--
+
+`$$\begin{align}h_i &amp;= \sum_{j}H_{ij}H_{ji}\\
+\end{align}$$`
+
+
+---
+
+## Leverage
+
+* The _leverage_, `\(h_i\)`, will always be between 0 and 1
+
+.question[
+How do we know this? Let's show it using the fact that the hat matrix is _idempotent_ and _symmetric_.
+]
+
+`$$\begin{align}h_i &amp;= \sum_{j}H_{ij}H_{ji}\\
+&amp;=\sum_{j}H_{ij}^2\end{align}$$`
+
+---
+
+## Leverage
+
+* The _leverage_, `\(h_i\)`, will always be between 0 and 1
+
+.question[
+How do we know this? Let's show it using the fact that the hat matrix is _idempotent_ and _symmetric_.
+]
+
+`$$\begin{align}h_i &amp;= \sum_{j}H_{ij}H_{ji}\\
+&amp;=\sum_{j}H_{ij}^2\\
+&amp;=H_{ii}^2+\sum_{j\neq i}H_{ij}^2\end{align}$$`
+
+
+---
+
+## Leverage
+
+* The _leverage_, `\(h_i\)`, will always be between 0 and 1
+
+.question[
+How do we know this? Let's show it using the fact that the hat matrix is _idempotent_ and _symmetric_.
+]
+
+`$$\begin{align}h_i &amp;= \sum_{j}H_{ij}H_{ji}\\
+&amp;=\sum_{j}H_{ij}^2\\
+&amp;=H_{ii}^2+\sum_{j\neq i}H_{ij}^2\\
+&amp;=h_i^2 + \sum_{j\neq i}H_{ij}^2\end{align}$$`
+
+---
+
+## Leverage
+
+* The _leverage_, `\(h_i\)`, will always be between 0 and 1
+
+`$$\begin{align}h_i &amp;= \sum_{j}H_{ij}H_{ji}\\
+&amp;=\sum_{j}H_{ij}^2\\
+&amp;=H_{ii}^2+\sum_{j\neq i}H_{ij}^2\\
+&amp;=h_i^2 + \sum_{j\neq i}H_{ij}^2\end{align}$$`
+
+* This means that `\(h_i\)` must be **larger** than `\(h_i^2\)`, implying that `\(h_i\)` will always be between 0 and 1 ✅
+
+---
+
+## Leverage
+
+* The `\(\sum_i h_i = p+1\)` (remember when we calculated the trace of H?) 
+--
+
+* This means an _average_ value for `\(h_i\)` is `\((p+1)/n\)`
+--
+
+* 👍 A rule of thumb leverages greater than `\(2(p+1)/n\)` should get an extra look
+
+---
+
+## Standardized residuals
+
+* We can use the _leverages_ to standardize the residuals
+--
+
+* Instead of plotting the residuals, `\(e\)`, we can plot the _standardized residuals_  
+
+`$$r_i = \frac{e}{\hat\sigma\sqrt{1-h_i}}$$`
+--
+
+* 👍 A rule of thumb for standardized residuals: those greater than 4 would be very unusual and should get an extra look
+
+---
+
+class: inverse
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 640 512"&gt;&lt;path d="M512 64v256H128V64h384m16-64H112C85.5 0 64 21.5 64 48v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm100 416H389.5c-3 0-5.5 2.1-5.9 5.1C381.2 436.3 368 448 352 448h-64c-16 0-29.2-11.7-31.6-26.9-.5-2.9-3-5.1-5.9-5.1H12c-6.6 0-12 5.4-12 12v36c0 26.5 21.5 48 48 48h544c26.5 0 48-21.5 48-48v-36c0-6.6-5.4-12-12-12z"/&gt;&lt;/svg&gt; `Application Exercise`
+
+y | x
+--|--
+1 | 0
+5 | 4
+2 | 2
+2 | 1
+11 | 10
+
+Using the data above calculate:
+
+* The leverage for each observation. Are any "unusual"?
+* The standardized residuals, `\(r_i\)`. 
+
+---
+
+
+
+## Doing it in R
+
+* It is good to understand how to calculate these standardized residuals _by hand_, but there is an R function that does this for you (`rstandard()`)
+* There is also an R function to calculate the _leverage_ (`hatvalues()`)
+
+---
+
+## Standardized residuals
+
+.small[
+
+```r
+mod &lt;- lm(mpg ~ disp, data = mtcars)
+d &lt;- data.frame(
+* standardized_resid = rstandard(mod),
+  fit = fitted(mod)
+)
+ggplot(d, aes(fit, standardized_resid)) +
+  geom_point() +geom_hline(yintercept = 0) + 
+  labs(y = "Standardized Residual")
+```
+
+![](18-unusual-observations_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Outliers
+
+* An _outlier_ is a point that doesn't fit the current model well
+
+--
+
+![](18-unusual-observations_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+
+---
+
+## Outliers
+
+* An _outlier_ is a point that doesn't fit the current model well
+
+![](18-unusual-observations_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+* This first plot, see a point that is definitely an _outlier_ but it doesn't have much _leverage_ or _influence_ over the fit
+
+---
+
+## Outliers
+
+* An _outlier_ is a point that doesn't fit the current model well
+
+![](18-unusual-observations_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+* This second plot, see a point that has a large _leverage_ but is not an outlier and doesn't have much _influence_ over the fit
+
+---
+
+## Outliers
+
+* An _outlier_ is a point that doesn't fit the current model well
+
+![](18-unusual-observations_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+* In the third plot, the point is both an _outlier_ and very _influential_. Not only is the residual for this point large, but it inflates the residuals for the other points
+
+---
+
+## Outliers
+
+* To detect points like this third example, it can be prudent to _exclude_ the point and recompute the estimates to get `\(\hat\beta_{(i)}\)` and `\(\hat\sigma^2_{(i)}\)`
+
+--
+
+`$$\hat{y}_{(i)} = x_i^T\hat\beta_{(i)}$$`
+--
+
+* If `\(\hat{y}_{(i)}- y_i\)` is large, then observation `\(i\)` is an _outlier_.
+
+--
+
+.question[
+How do we determine "large"? We need to scale it using the variance!
+]
+
+---
+
+class: inverse
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"/&gt;&lt;/svg&gt; `Application Exercise` 
+
+Show that 
+
+`$$\hat{\textrm{var}}(\hat{y}_{(i)}) = \hat{\sigma}^2_{(i)}(1+x_i^T(\mathbf{X}_{(i)}^T\mathbf{X}_{(i)})^{-1}x_i)$$`
+
+y | x
+--|--
+1 | 0
+5 | 4
+2 | 2
+2 | 1
+11 | 10
+
+Using the data above, calculate `\(\hat{\textrm{var}}(\hat{y})_{(i)}\)` for observation 5.
+
+---
+
+## Studentized residuals
+
+`$$t_i = \frac{y_i - \hat{y}_{(i)}}{\hat\sigma_{(i)}(1+x_i^T(\mathbf{X}_{(i)}^T\mathbf{X}_{(i)})^{-1}x_i)^{1/2}}$$`
+The have a `\(t\)` distribution with `\((n-1)-(p+1) = n-p-2\)` degrees of freedom if the model is correct and `\(\epsilon ~ N(0, \sigma^2\mathbf{I})\)`.
+
+--
+
+* There is an easier way to compute these using the studentized residuals!
+
+`$$t_i = r_i\left(\frac{n-p-2}{n-p-1-r_i^2}\right)^{1/2}$$`
+
+---
+
+class: inverse
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 640 512"&gt;&lt;path d="M512 64v256H128V64h384m16-64H112C85.5 0 64 21.5 64 48v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm100 416H389.5c-3 0-5.5 2.1-5.9 5.1C381.2 436.3 368 448 352 448h-64c-16 0-29.2-11.7-31.6-26.9-.5-2.9-3-5.1-5.9-5.1H12c-6.6 0-12 5.4-12 12v36c0 26.5 21.5 48 48 48h544c26.5 0 48-21.5 48-48v-36c0-6.6-5.4-12-12-12z"/&gt;&lt;/svg&gt; `Application Exercise`
+
+y | x
+--|--
+1 | 0
+5 | 4
+2 | 2
+2 | 1
+11 | 10
+
+Calculate the studentized residuals for the data above.
+
+---
+
+
+## Studentized residuals
+
+It is good to understand how to calculate these studentized residuals _by hand_, but there is an R function that does this for you (`rstudent()`)
+
+---
+
+## Influential points
+
+* A common measure to determine _influential_ points is Cook's D
+
+`$$D_i = \frac{(\hat{y}-\hat{y}_{(i)})^T(\hat{y}-\hat{y}_{(i)})}{(p+1)\hat\sigma^2}$$`
+
+--
+
+* `\((\hat{y}-\hat{y}_{(i)})\)` is the _change in the fit_ after leaving observation `\(i\)` out.
+--
+
+* This can be calculated using:
+
+`$$\frac{1}{p+1}r_i^2\frac{h_i}{1-h_i}$$`
+
+--
+
+* 👍 A rule of thumb is to give observations with Cook's Distance &gt; `\(4/n\)` an extra look
+
+---
+
+## Cook's Distance
+
+![](18-unusual-observations_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+---
+
+class: inverse
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 640 512"&gt;&lt;path d="M512 64v256H128V64h384m16-64H112C85.5 0 64 21.5 64 48v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm100 416H389.5c-3 0-5.5 2.1-5.9 5.1C381.2 436.3 368 448 352 448h-64c-16 0-29.2-11.7-31.6-26.9-.5-2.9-3-5.1-5.9-5.1H12c-6.6 0-12 5.4-12 12v36c0 26.5 21.5 48 48 48h544c26.5 0 48-21.5 48-48v-36c0-6.6-5.4-12-12-12z"/&gt;&lt;/svg&gt; `Application Exercise`
+
+y | x
+--|--
+1 | 0
+5 | 4
+2 | 2
+2 | 1
+11 | 10
+
+Calculate Cook's Distance for the data above and plot it with the row number on the x-axis and Cook's Distance on the y-axis.
+
+---
+
+
+## Cook's Distance
+
+It is good to understand how to calculate these _by hand_, but there is an R function that does this for you (`cooks.distance()`)
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

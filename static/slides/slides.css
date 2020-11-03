@@ -40,6 +40,7 @@ a, a > code {
   color: #f3f3f3;
 }
 
+.inverse thead, .inverse tfoot, .inverse tr:nth-child(even) { background: #6B5876 }
 
 /* Code formatting */
 .remark-code-line-highlighted {

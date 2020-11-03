@@ -1,0 +1,415 @@
+---
+title: "Unusual Observations"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## Leverage
+
+* _leverage_ is the amount of influence an observation has on the estimation of $\hat\beta$
+--
+
+* Mathematically, we can define this as the _diagonal elements of the hat matrix_.
+--
+
+.question[
+What is the hat matrix?
+]
+--
+
+* $\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$
+
+---
+
+## Leverage
+
+* _leverage_ is the amount of influence an observation has on the estimation of $\hat\beta$
+* Mathematically, we can define this as the _diagonal elements of the hat matrix_.
+
+$$h_i = H_{ii}\\
+h_i = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T_{ii}$$
+---
+
+## Leverage
+
+.question[
+What do we use the diagnonal of the hat matrix?
+]
+--
+
+* Recall that the variance of the residuals is 
+
+$$\textrm{var}(e_i) = \sigma^2(1 - h_i)$$
+
+* so _large_ leverage points will pull the fit towards $y_i$
+
+---
+
+## Leverage
+
+* The _leverage_, $h_i$, will always be between 0 and 1
+
+.question[
+How do we know this? Let's show it using the fact that the hat matrix is _idempotent_ and _symmetric_.
+]
+
+--
+
+$$\begin{align}h_i &= \sum_{j}H_{ij}H_{ji}\\
+\end{align}$$
+
+
+---
+
+## Leverage
+
+* The _leverage_, $h_i$, will always be between 0 and 1
+
+.question[
+How do we know this? Let's show it using the fact that the hat matrix is _idempotent_ and _symmetric_.
+]
+
+$$\begin{align}h_i &= \sum_{j}H_{ij}H_{ji}\\
+&=\sum_{j}H_{ij}^2\end{align}$$
+
+---
+
+## Leverage
+
+* The _leverage_, $h_i$, will always be between 0 and 1
+
+.question[
+How do we know this? Let's show it using the fact that the hat matrix is _idempotent_ and _symmetric_.
+]
+
+$$\begin{align}h_i &= \sum_{j}H_{ij}H_{ji}\\
+&=\sum_{j}H_{ij}^2\\
+&=H_{ii}^2+\sum_{j\neq i}H_{ij}^2\end{align}$$
+
+
+---
+
+## Leverage
+
+* The _leverage_, $h_i$, will always be between 0 and 1
+
+.question[
+How do we know this? Let's show it using the fact that the hat matrix is _idempotent_ and _symmetric_.
+]
+
+$$\begin{align}h_i &= \sum_{j}H_{ij}H_{ji}\\
+&=\sum_{j}H_{ij}^2\\
+&=H_{ii}^2+\sum_{j\neq i}H_{ij}^2\\
+&=h_i^2 + \sum_{j\neq i}H_{ij}^2\end{align}$$
+
+---
+
+## Leverage
+
+* The _leverage_, $h_i$, will always be between 0 and 1
+
+$$\begin{align}h_i &= \sum_{j}H_{ij}H_{ji}\\
+&=\sum_{j}H_{ij}^2\\
+&=H_{ii}^2+\sum_{j\neq i}H_{ij}^2\\
+&=h_i^2 + \sum_{j\neq i}H_{ij}^2\end{align}$$
+
+* This means that $h_i$ must be **larger** than $h_i^2$, implying that $h_i$ will always be between 0 and 1 `r emo::ji("check")`
+
+---
+
+## Leverage
+
+* The $\sum_i h_i = p+1$ (remember when we calculated the trace of H?) 
+--
+
+* This means an _average_ value for $h_i$ is $(p+1)/n$
+--
+
+* `r emo::ji("+1")` A rule of thumb leverages greater than $2(p+1)/n$ should get an extra look
+
+---
+
+## Standardized residuals
+
+* We can use the _leverages_ to standardize the residuals
+--
+
+* Instead of plotting the residuals, $e$, we can plot the _standardized residuals_  
+
+$$r_i = \frac{e}{\hat\sigma\sqrt{1-h_i}}$$
+--
+
+* `r emo::ji("+1")` A rule of thumb for standardized residuals: those greater than 4 would be very unusual and should get an extra look
+
+---
+
+class: inverse
+
+## `r fa("laptop")` `Application Exercise`
+
+y | x
+--|--
+1 | 0
+5 | 4
+2 | 2
+2 | 1
+11 | 10
+
+Using the data above calculate:
+
+* The leverage for each observation. Are any "unusual"?
+* The standardized residuals, $r_i$. 
+
+---
+
+```{r, echo = FALSE}
+library(ggplot2)
+```
+
+## Doing it in R
+
+* It is good to understand how to calculate these standardized residuals _by hand_, but there is an R function that does this for you (`rstandard()`)
+* There is also an R function to calculate the _leverage_ (`hatvalues()`)
+
+---
+
+## Standardized residuals
+
+.small[
+```{r, fig.height = 2}
+mod <- lm(mpg ~ disp, data = mtcars)
+d <- data.frame(
+  standardized_resid = rstandard(mod), #<<
+  fit = fitted(mod)
+)
+ggplot(d, aes(fit, standardized_resid)) +
+  geom_point() +geom_hline(yintercept = 0) + 
+  labs(y = "Standardized Residual")
+```
+]
+
+---
+
+## Outliers
+
+* An _outlier_ is a point that doesn't fit the current model well
+
+--
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+set.seed(123)
+d <- data.frame(x = 1:10, y = 1:10 + rnorm(10))
+l <- lm(y ~ x, data = d)
+p1 <- ggplot(rbind(d, c(5.5, 12)), aes(x, y)) + 
+  geom_point() +
+  geom_smooth(method = "lm", formula = "y ~ x") +
+  geom_line(aes(x = c(1:5, 5.5, 6:10), y = predict(l, newdata = data.frame(x = c(1:5, 5.5, 6:10)))), lty = 2) +
+  geom_point(aes(x = 5.5, y = 12), color = "red")
+
+p2 <- ggplot(rbind(d, c(15, 15.1)), aes(x, y)) + 
+  geom_point() +
+  geom_smooth(method = "lm", formula = "y ~ x") +
+  geom_line(aes(x = c(1:5, 5.5, 6:10), y = predict(l, newdata = data.frame(x = c(1:5, 5.5, 6:10)))), lty = 2) +
+  geom_point(aes(x = 15, y = 15.1), color = "red")
+
+p3 <- ggplot(rbind(d, c(15, 5.1)), aes(x, y)) + 
+  geom_point() +
+  geom_smooth(method = "lm", formula = "y ~ x") +
+  geom_line(aes(x = c(1:5, 5.5, 6:10), y = predict(l, newdata = data.frame(x = c(1:5, 5.5, 6:10)))), lty = 2) +
+  geom_point(aes(x = 15, y = 5.1), color = "red")
+
+gridExtra::grid.arrange(p1, p2, p3, nrow = 1)
+```
+
+
+---
+
+## Outliers
+
+* An _outlier_ is a point that doesn't fit the current model well
+
+```{r, echo = FALSE}
+gridExtra::grid.arrange(p1, p2, p3, nrow = 1)
+```
+
+* This first plot, see a point that is definitely an _outlier_ but it doesn't have much _leverage_ or _influence_ over the fit
+
+---
+
+## Outliers
+
+* An _outlier_ is a point that doesn't fit the current model well
+
+```{r, echo = FALSE}
+gridExtra::grid.arrange(p1, p2, p3, nrow = 1)
+```
+
+* This second plot, see a point that has a large _leverage_ but is not an outlier and doesn't have much _influence_ over the fit
+
+---
+
+## Outliers
+
+* An _outlier_ is a point that doesn't fit the current model well
+
+```{r, echo = FALSE}
+gridExtra::grid.arrange(p1, p2, p3, nrow = 1)
+```
+
+* In the third plot, the point is both an _outlier_ and very _influential_. Not only is the residual for this point large, but it inflates the residuals for the other points
+
+---
+
+## Outliers
+
+* To detect points like this third example, it can be prudent to _exclude_ the point and recompute the estimates to get $\hat\beta_{(i)}$ and $\hat\sigma^2_{(i)}$
+
+--
+
+$$\hat{y}_{(i)} = x_i^T\hat\beta_{(i)}$$
+--
+
+* If $\hat{y}_{(i)}- y_i$ is large, then observation $i$ is an _outlier_.
+
+--
+
+.question[
+How do we determine "large"? We need to scale it using the variance!
+]
+
+---
+
+class: inverse
+
+## `r fa("edit")` `Application Exercise` 
+
+Show that 
+
+$$\hat{\textrm{var}}(\hat{y}_{(i)}) = \hat{\sigma}^2_{(i)}(1+x_i^T(\mathbf{X}_{(i)}^T\mathbf{X}_{(i)})^{-1}x_i)$$
+
+y | x
+--|--
+1 | 0
+5 | 4
+2 | 2
+2 | 1
+11 | 10
+
+Using the data above, calculate $\hat{\textrm{var}}(\hat{y})_{(i)}$ for observation 5.
+
+---
+
+## Studentized residuals
+
+$$t_i = \frac{y_i - \hat{y}_{(i)}}{\hat\sigma_{(i)}(1+x_i^T(\mathbf{X}_{(i)}^T\mathbf{X}_{(i)})^{-1}x_i)^{1/2}}$$
+The have a $t$ distribution with $(n-1)-(p+1) = n-p-2$ degrees of freedom if the model is correct and $\epsilon ~ N(0, \sigma^2\mathbf{I})$.
+
+--
+
+* There is an easier way to compute these using the studentized residuals!
+
+$$t_i = r_i\left(\frac{n-p-2}{n-p-1-r_i^2}\right)^{1/2}$$
+
+---
+
+class: inverse
+
+## `r fa("laptop")` `Application Exercise`
+
+y | x
+--|--
+1 | 0
+5 | 4
+2 | 2
+2 | 1
+11 | 10
+
+Calculate the studentized residuals for the data above.
+
+---
+
+
+## Studentized residuals
+
+It is good to understand how to calculate these studentized residuals _by hand_, but there is an R function that does this for you (`rstudent()`)
+
+---
+
+## Influential points
+
+* A common measure to determine _influential_ points is Cook's D
+
+$$D_i = \frac{(\hat{y}-\hat{y}_{(i)})^T(\hat{y}-\hat{y}_{(i)})}{(p+1)\hat\sigma^2}$$
+
+--
+
+* $(\hat{y}-\hat{y}_{(i)})$ is the _change in the fit_ after leaving observation $i$ out.
+--
+
+* This can be calculated using:
+
+$$\frac{1}{p+1}r_i^2\frac{h_i}{1-h_i}$$
+
+--
+
+* `r emo::ji("+1")` A rule of thumb is to give observations with Cook's Distance > $4/n$ an extra look
+
+---
+
+## Cook's Distance
+
+```{r, echo = FALSE}
+d <- data.frame(x = cooks.distance(mod))
+ggplot(d, aes(x = 1:nrow(d), y = x)) +
+  geom_point() +
+  labs(x = "Index",
+       y = "Cook's D") +
+  geom_hline(yintercept = 4/32, lty = 2)
+```
+
+---
+
+class: inverse
+
+## `r fa("laptop")` `Application Exercise`
+
+y | x
+--|--
+1 | 0
+5 | 4
+2 | 2
+2 | 1
+11 | 10
+
+Calculate Cook's Distance for the data above and plot it with the row number on the x-axis and Cook's Distance on the y-axis.
+
+---
+
+
+## Cook's Distance
+
+It is good to understand how to calculate these _by hand_, but there is an R function that does this for you (`cooks.distance()`)
+
+
