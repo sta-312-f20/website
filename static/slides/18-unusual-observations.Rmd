@@ -307,7 +307,7 @@ class: inverse
 
 Show that 
 
-$$\hat{\textrm{var}}(\hat{y}_{(i)}) = \hat{\sigma}^2_{(i)}(1+x_i^T(\mathbf{X}_{(i)}^T\mathbf{X}_{(i)})^{-1}x_i)$$
+$$\hat{\textrm{var}}((\hat{y}-\hat{y}_{(i)})) = \hat{\sigma}^2_{(i)}(1+x_i^T(\mathbf{X}_{(i)}^T\mathbf{X}_{(i)})^{-1}x_i)$$
 
 y | x
 --|--

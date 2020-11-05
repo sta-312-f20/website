@@ -12,7 +12,7 @@
 
 
 
-<title>Lab 03 - Multiple Regression Inference</title>
+<title>Lab 04</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -495,11 +495,11 @@ color: #333333;
 
 
 
-<h1 class="title toc-ignore">Lab 03 - Multiple Regression Inference</h1>
+<h1 class="title toc-ignore">Lab 04</h1>
 
 
 
-<p><strong>Due:</strong> Tuesday 2020-10-13 at 5pm</p>
+<p><strong>Due:</strong> Tuesday 2020-11-10 at 5pm</p>
 <div id="getting-started" class="section level1">
 <h1>Getting started</h1>
 <ul>
@@ -509,64 +509,34 @@ color: #333333;
 </div>
 <div id="packages" class="section level1">
 <h1>Packages</h1>
-<p>In this lab we will work with one package: <code>Stat2Data</code>.</p>
+<p>In this lab we will work with one package: <code>faraway</code>.</p>
 <p>If you need to install this package, run the following code <strong>once</strong> in your Console:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;Stat2Data&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;faraway&quot;</span>)</span></code></pre></div>
 <p>If you’d like to run your code in the Console as well you’ll also need to load the packages there. To do so, run the following in the console.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">library</span>(Stat2Data) </span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">library</span>(faraway) </span></code></pre></div>
 <p>Note that the packages are also loaded with the same commands in your R Markdown document.</p>
 </div>
 <div id="data" class="section level1">
 <h1>Data</h1>
-<p>The data frame we will be working with today is called <code>Backpack</code> and it is in the <code>Stat2Data</code> package. To load the data add the following to your .Rmd file:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">data</span>(<span class="st">&quot;Backpack&quot;</span>)</span></code></pre></div>
-<p>To find out more about the dataset, type the following in your Console: <code>?Backpack</code>. A question mark before the name of an object will always bring up its help file. This command must be ran in the Console.</p>
-<p><label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote"><span style="display: block;">Remember: The Console is at the bottom of your RStudio workspace. Things you type in the Console will not be in your final report. This is a good place to peek at data (try typing <code>Backpack</code> in the Console) and look at help files with the <code>?</code>.</span></span></p>
-<div id="conceptual-exercises" class="section level2">
-<h2>Conceptual Exercises</h2>
+<p>The data frame we will be working with today is called <code>teengamb</code> and it is in the <code>faraway</code> package. To load the data add the following to your .Rmd file:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">data</span>(<span class="st">&quot;teengamb&quot;</span>)</span></code></pre></div>
+<p>To find out more about the dataset, type the following in your Console: <code>?teengamb</code>. A question mark before the name of an object will always bring up its help file. This command must be ran in the Console.</p>
+<p><label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote"><span style="display: block;">Remember: The Console is at the bottom of your RStudio workspace. Things you type in the Console will not be in your final report. This is a good place to peek at data (try typing <code>teengamb</code> in the Console) and look at help files with the <code>?</code>.</span></span></p>
+<div id="exercises" class="section level2">
+<h2>Exercises</h2>
 <ol style="list-style-type: decimal">
-<li><p>Describe what a 95% confidence interval means.</p></li>
-<li><p>Find a formula relating <span class="math inline">\(R^2\)</span> and the <span class="math inline">\(F\)</span>-test. Show all steps completed using Latex.</p></li>
-<li><p>The hypothesis tests we considered in this class so far require the assumption of <em>normal errors</em>. Another way to complete hypothesis testing is via <em>permutation tests</em>, which do not require this assumption. To do this:</p></li>
+<li><p>Examine the <code>teengamb</code> data. What are the variables? How many observations are there?</p></li>
+<li><p>Using the <code>teengamb</code> data, fit a model with gamble as the response and the other variables as predictors.</p></li>
+<li><p>Using the model fit in Exercise 2, check the constant variance assumption for the errors. Explain your result.</p></li>
+<li><p>Using the model fit in Exercise 2, check the normality assumption. Explain your result.</p></li>
+<li><p>Using the model fit in Exercise 2, check for large leverage points. Explain your result.</p></li>
+<li><p>Using the model fit in Exercise 2, check for outliers. Explain your result.</p></li>
+<li><p>Using the model fit in Exercise 2, check for influential points. Explain your result.</p></li>
+<li><p>Using the model fit in Exercise 2, predict the amount that a (future) male with average (given these data) status, income and verbal score would gamble along with an appropriate 95% CI.</p></li>
+<li><p>Using the model fit in Exercise 2, repeat the prediction for a male with maximal values (for this data) of status, income and verbal score. Which CI is wider and why is this result expected?</p></li>
+<li><p>Fit a model with <code>sqrt(gamble)</code> as the response but with the same predictors as Exercise 2. Now predict the response and give a 95% prediction interval for the individual in Exercise 8. Take care to give your answer in the original units of the response.</p></li>
+<li><p>Repeat the prediction for the model in Exercise 10 for a female with status = 20, income = 1, verbal = 10. Comment on the credibility of the result.</p></li>
 </ol>
-<ul>
-<li>Step (1): Fit a your linear model and calculate the test statistic (for example the t-statistic or the F-statistic) for your hypothesis of interest</li>
-<li>Step (2): <em>Shuffle the responses</em> of your outcome variable so they are random and re-fit your linear model using this new outcome. Calculate the test-statistic for your hypothesis of interest for this new model</li>
-<li>Step (3): Repeat step 2 several times and save your test statistic each time</li>
-<li>Step (4): Compare your test statistic from step (1) to those generated in step (3). Calculate the proportion of test statistics calculated in Step 3 that are as extreme or more extreme than the one calculated in step (1).</li>
-</ul>
-<p>Describe the ways in which this method is <em>similar to</em> and <em>different from</em> the bootstrap method we discussed previously.</p>
-</div>
-<div id="backpack-data" class="section level2">
-<h2>Backpack Data</h2>
-<ol start="4" style="list-style-type: decimal">
-<li><p>Based on the help function, how many rows (n) and how many columns (p) does the <code>Backpack</code> data have? What are the variables included in the data frame? Add your responses to your lab report.</p></li>
-<li><p>Fit a regression model predicting a student’s backpack weight from their body weight, year in school, whether they are a graduate or undergraduate student, and the number of credits they are taking that quarter. Use an F-test to determine whether collectively these four predictors have a relationship to the response. Interpret this result.</p></li>
-<li><p>Using the model created in Exercise 5, interpret the coefficient for body weight.</p></li>
-<li><p>Compute 90% and 95% confidence intervals for the predictor body weight. Interpret these.</p></li>
-<li><p>Compute 90% and 95% <em>bootstrap</em> confidence intervals (using the percentile method) for the predictor body weight. How do these compare to those calculated in Exercise 7?</p></li>
-<li><p>Test the null hypothesis that the coefficient for body weight is 0. What is the test statistic? What is the result of this hypothesis test?</p></li>
-<li><p>Fill in the code below to use a <strong>permutation test</strong> to test the null hypothesis that the coefficient for body weight is 0. Interpret this result.</p></li>
-</ol>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>model &lt;-<span class="st"> </span><span class="co">## insert your model here from exercise 5</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>t &lt;-<span class="st"> </span><span class="kw">summary</span>(model)<span class="op">$</span>coef[<span class="st">&quot;BodyWeight&quot;</span>, <span class="dv">3</span>] <span class="co">## this will pull out the t-stat for BodyWeight</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a></span>
-<span id="cb4-4"><a href="#cb4-4"></a>perm_test &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
-<span id="cb4-5"><a href="#cb4-5"></a>  m &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">sample</span>(BackpackWeight) <span class="op">~</span><span class="st"> </span><span class="op">---</span>, <span class="dt">data =</span> <span class="op">---</span>) <span class="co">## fill in with the same model as exercise 5, except sample from BackpackWeight</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>  <span class="kw">return</span>(<span class="kw">c</span>(<span class="dt">t =</span> <span class="kw">summary</span>(m)<span class="op">$</span>coef[<span class="st">&quot;BodyWeight&quot;</span>, <span class="dv">3</span>]))</span>
-<span id="cb4-7"><a href="#cb4-7"></a>}</span>
-<span id="cb4-8"><a href="#cb4-8"></a></span>
-<span id="cb4-9"><a href="#cb4-9"></a></span>
-<span id="cb4-10"><a href="#cb4-10"></a>perms &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map_df</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>, <span class="op">~</span><span class="st"> </span><span class="kw">perm_test</span>())</span>
-<span id="cb4-11"><a href="#cb4-11"></a></span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="co">## plot a histogram of the permutations</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a></span>
-<span id="cb4-14"><a href="#cb4-14"></a><span class="kw">ggplot</span>(perms, <span class="kw">aes</span>(<span class="dt">x =</span> t)) <span class="op">+</span></span>
-<span id="cb4-15"><a href="#cb4-15"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">30</span>) <span class="op">+</span></span>
-<span id="cb4-16"><a href="#cb4-16"></a><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="kw">c</span>(t, <span class="op">-</span>t))</span>
-<span id="cb4-17"><a href="#cb4-17"></a></span>
-<span id="cb4-18"><a href="#cb4-18"></a><span class="co">## calculate the proportion of permutations that are as extreme or more extreme than the one originally calculated</span></span>
-<span id="cb4-19"><a href="#cb4-19"></a><span class="kw">mean</span>(perms<span class="op">$</span>t <span class="op">&gt;=</span><span class="st"> </span>t <span class="op">|</span><span class="st"> </span>perms<span class="op">$</span>t <span class="op">&lt;=</span><span class="st"> </span><span class="op">-</span><span class="st"> </span>t)</span></code></pre></div>
 </div>
 </div>
 

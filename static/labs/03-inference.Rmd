@@ -26,7 +26,7 @@ options(
 
 # Packages
 
-In this lab we will work with one packages: `Stat2Data`.
+In this lab we will work with one package: `Stat2Data`.
 
 If you need to install this package, run the following code **once** in your Console:
 
