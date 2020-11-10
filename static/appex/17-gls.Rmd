@@ -1,0 +1,45 @@
+---
+title: "Content Assessment"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: lab.css
+link-citations: yes
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE     # for regression output
+)
+```
+
+_You may use any notes, lectures, or your textbook. Do not work with anyone else on this assessment._
+
+1. Open Rstudio Server Pro
+2. Create a new project
+3. Click File > New File > R Markdown
+4. Delete everything except for 
+```
+---
+title: "Untitled"
+output: html_document
+---
+```
+5. Give your work a sensible title
+6. When you've finished, upload the .html file to Canvas
+
+* Show that 
+
+$$\textrm{var}(\epsilon')=\sigma^2\mathbf{I}$$
+
+* Minimize $(y - \mathbf{X}\beta)^T\Sigma^{-1}(y-\mathbf{X}\beta)$ with respect to $\beta$ to calculate the estimate for $\hat\beta$
+
+* Using the estimate for $\hat\beta$ that you previously calculated, take the expectation of $\hat\beta$. Is this an unbiased estimate for $\beta$?
+
+
+* Show that 
+
+$$\textrm{var}(\hat\beta)=(\mathbf{X}^T\Sigma^{-1}\mathbf{X})^{-1}\sigma^2$$
