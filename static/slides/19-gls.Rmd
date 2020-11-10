@@ -1,0 +1,226 @@
+---
+title: "Generalized Least Squares"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## GLS
+
+* So far we have assumed $\textrm{var}(\epsilon)=\sigma^2\mathbf{I}$
+--
+
+.question[
+When is this assumption wrong?
+]
+--
+
+* Sometimes the errors have **non constant variance**
+--
+
+.question[
+How do you know?
+]
+--
+
+* Sometimes the errors are **correlated**
+---
+
+## GLS
+
+* Instead of assuming the $\textrm{var}(\epsilon) = \sigma^2\mathbf{I}$, you can assume
+
+$$\textrm{var}(\epsilon)=\sigma^2\Sigma$$
+--
+
+* $\sigma^2$ is unknown (the absolute scale of the variation)
+--
+
+* $\Sigma$ is known (the correlation and relative variance between the errors)
+---
+
+## GLS
+
+* We can write $\Sigma = \mathbf{SS}^T$ where $\mathbf{S}$ is a triangular matrix
+--
+
+* _This is done using the Choleski decomposition, which is akin to taking the square root of a matrix_
+--
+
+* Then we can do a **transformation** of our original least squares model
+--
+
+$$\begin{align}y &=\mathbf{X}\beta+\epsilon\\
+\end{align}$$
+
+---
+
+## GLS
+
+* We can write $\Sigma = \mathbf{SS}^T$ where $\mathbf{S}$ is a triangular matrix
+* _This is done using the Choleski decomposition, which is akin to taking the square root of a matrix_
+* Then we can do a **transformation** of our original least squares model
+
+$$\begin{align}y &=\mathbf{X}\beta+\epsilon\\
+\mathbf{S}^{-1}y &= \mathbf{S}^{-1}\mathbf{X}\beta+\mathbf{S}^{-1}\epsilon\\
+\end{align}$$
+---
+
+## GLS
+
+* We can write $\Sigma = \mathbf{SS}^T$ where $\mathbf{S}$ is a triangular matrix
+* _This is done using the Choleski decomposition, which is akin to taking the square root of a matrix_
+* Then we can do a **transformation** of our original least squares model
+
+
+$$\begin{align}y &=\mathbf{X}\beta+\epsilon\\
+\mathbf{S}^{-1}y &= \mathbf{S}^{-1}\mathbf{X}\beta+\mathbf{S}^{-1}\epsilon\\
+y'&=\mathbf{X}'\beta + \epsilon'
+\end{align}$$
+
+---
+
+## GLS
+
+* Let's look at some properties of $y'=\mathbf{X}'\beta + \epsilon'$
+--
+
+$$\textrm{var}(\epsilon')=\sigma^2\mathbf{I}$$
+--
+
+* We've returned to the ordinary least squares problem if we regress $y'$ on $\mathbf{X}'$ (yay!)
+---
+
+class: inverse
+
+## `r fa("edit")` `Content Assessment`
+
+* Show that 
+
+$$\textrm{var}(\epsilon')=\sigma^2\mathbf{I}$$
+---
+
+## GLS
+
+* Let's look at some properties of $y'=\mathbf{X}'\beta + \epsilon'$
+--
+
+* The sum of squares is:
+--
+
+$$\begin{align}RSS&=(y' - \mathbf{X}'\beta)^T(y' - \mathbf{X}'\beta)\\
+\end{align}$$
+---
+
+## GLS
+
+* Let's look at some properties of $y'=\mathbf{X}'\beta + \epsilon'$
+* The sum of squares is:
+
+
+$$\begin{align}RSS&=(y' - \mathbf{X}'\beta)^T(y' - \mathbf{X}'\beta)\\
+&=(\mathbf{S}^{-1}y - \mathbf{S}^{-1}\mathbf{X}\beta)^T(\mathbf{S}^{-1}y - \mathbf{S}^{-1}\mathbf{X}\beta)\\
+\end{align}$$
+---
+
+## GLS
+
+* Let's look at some properties of $y'=\mathbf{X}'\beta + \epsilon'$
+* The sum of squares is:
+
+
+$$\begin{align}RSS&=(y' - \mathbf{X}'\beta)^T(y' - \mathbf{X}'\beta)\\
+&=(\mathbf{S}^{-1}y - \mathbf{S}^{-1}\mathbf{X}\beta)^T(\mathbf{S}^{-1}y - \mathbf{S}^{-1}\mathbf{X}\beta)\\
+&=(y - \mathbf{X}\beta)^T\mathbf{S}^{-T}\mathbf{S}^{-1}(y-\mathbf{X}\beta)\\
+\end{align}$$
+
+---
+
+## GLS
+
+* Let's look at some properties of $y'=\mathbf{X}'\beta + \epsilon'$
+* The sum of squares is:
+
+
+$$\begin{align}RSS&=(y' - \mathbf{X}'\beta)^T(y' - \mathbf{X}'\beta)\\
+&=(\mathbf{S}^{-1}y - \mathbf{S}^{-1}\mathbf{X}\beta)^T(\mathbf{S}^{-1}y - \mathbf{S}^{-1}\mathbf{X}\beta)\\
+&=(y - \mathbf{X}\beta)^T\mathbf{S}^{-T}\mathbf{S}^{-1}(y-\mathbf{X}\beta)\\
+&=(y - \mathbf{X}\beta)^T\Sigma^{-1}(y-\mathbf{X}\beta)
+\end{align}$$
+
+---
+
+class: inverse
+
+## `r fa("edit")` `Content Assessment`
+
+Minimize $(y - \mathbf{X}\beta)^T\Sigma^{-1}(y-\mathbf{X}\beta)$ with respect to $\beta$ to calculate the estimate for $\hat\beta$
+
+[*Remember how we did this for least squares in the **Matrix Review** Lecture*](https://www.youtube.com/watch?v=Mz_6VSIPEI4&feature=youtu.be) 
+
+---
+
+## GLS
+
+* Let's look at some properties of $y'=\mathbf{X}'\beta + \epsilon'$
+--
+
+.question[
+What is the expectation of $\hat\beta$?
+]
+
+---
+
+class: inverse
+
+## `r fa("edit")` `Content Assessment`
+
+Using the estimate for $\hat\beta$ that you previously calculated, take the expectation of $\hat\beta$. Is this an unbiased estimate for $\beta$?
+
+[*Remember how we did this for least squares in the **Calculating a conditional expected value** Lecture*](https://www.youtube.com/watch?v=V3cZUDnEFEE&feature=youtu.be) 
+
+---
+
+## GLS
+
+* Let's look at some properties of $y'=\mathbf{X}'\beta + \epsilon'$
+--
+
+* The variance of $\hat\beta$ is:
+
+$$\textrm{var}(\hat\beta)=(\mathbf{X}^T\Sigma^{-1}\mathbf{X})^{-1}\sigma^2$$
+
+---
+
+class: inverse
+
+## `r fa("edit")` `Content Assessment`
+
+* Show that 
+
+$$\textrm{var}(\hat\beta)=(\mathbf{X}^T\Sigma^{-1}\mathbf{X})^{-1}\sigma^2$$
+
+[*Remember how we did this for least squares in the **The variance of the least squares estimator** Lecture*](https://www.youtube.com/watch?v=92plroy_7xU&feature=youtu.be) 
+
+
