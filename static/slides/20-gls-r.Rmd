@@ -1,0 +1,247 @@
+---
+title: "Generalized Least Squares in R"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## GLS Example
+
+* Global warming data estimating northern hemisphere temperature from 8 climate proxies
+* Each observation represents a year of data (from 1856 to 2000)
+
+.question[
+What could go wrong here if we use ordinary least squares?
+]
+
+---
+
+## GLS Example
+
+```{r}
+library(faraway)
+globwarm_ <- na.omit(globwarm)
+
+lmod <- lm(nhtemp ~ wusa + jasper + westgreen + 
+             chesapeake + tornetrask + urals + 
+             mongolia + tasman, data = globwarm_)
+```
+
+---
+
+## GLS Example
+
+```{r}
+library(faraway)
+globwarm_ <- na.omit(globwarm)
+
+lmod <- lm(nhtemp ~ wusa + jasper + westgreen + 
+             chesapeake + tornetrask + urals + 
+             mongolia + tasman, data = globwarm_)
+
+n <- length(residuals(lmod))
+cor(residuals(lmod)[-1], residuals(lmod)[-n]) #<<
+```
+
+--
+
+.question[
+How would we fit this using GLS?
+]
+---
+
+## Estimate $\Sigma$
+
+* If we assume the errors take a simple auto-regressive form such that each error is correlated with the prior:
+
+$$\epsilon_{i+1}=\phi\epsilon_i+\delta_i$$
+
+* Where $\delta_i\sim N(0, \tau^2)$
+--
+
+* We can estimate $\phi$ from the model.
+
+.small[
+```{r}
+cor(residuals(lmod)[-1], residuals(lmod)[-n])
+```
+]
+
+--
+
+* Under this assumption, $\Sigma_{ij}=\phi^{|i-j|}$. We can estimate it like this:
+
+```{r}
+X <- model.matrix(lmod)
+Sigma <- diag(n)
+Sigma <- 0.5833^abs(row(Sigma) - col(Sigma))
+```
+
+---
+
+## GLS Example
+
+```{r}
+y <- globwarm_$nhtemp
+Sigma_inv <- solve(Sigma)
+XTX_inv <- solve(t(X) %*% Sigma_inv %*% X)
+betahat <- XTX_inv %*% t(X) %*% Sigma_inv %*% y
+betahat
+```
+
+---
+
+## GLS Example
+
+* What is the correlation now?
+
+```{r}
+res <- y - X %*% betahat
+cor(res[-1], res[-n])
+```
+
+---
+
+## GLS Example
+
+* Another way to do this
+
+.small[
+```{r}
+S <- chol(Sigma)
+S_inv <- solve(t(S))
+SX <- S_inv %*% X
+Sy <- S_inv %*% y
+lm(Sy ~ SX - 1)
+```
+]
+
+---
+
+## GLS Example
+
+.pull-left[
+.small[
+```{r}
+betahat
+```
+]
+]
+
+.pull-right[
+.small[
+```{r}
+matrix(lm(Sy ~ SX - 1)$coef)
+```
+
+]
+]
+---
+
+## GLS Example
+
+* The **nlme** package has a function for this
+
+```{r}
+library(nlme)
+glmod <- gls(nhtemp ~ wusa + jasper + westgreen + 
+              chesapeake + tornetrask + urals + 
+              mongolia + tasman, 
+            correlation = corAR1(form = ~ year),
+            data = globwarm_)
+```
+
+
+---
+
+## GLS Example
+
+* The **nlme** package has a function for this
+
+```{r}
+library(nlme)
+glmod <- gls(nhtemp ~ wusa + jasper + westgreen + 
+              chesapeake + tornetrask + urals + 
+              mongolia + tasman, 
+            correlation = corAR1(form = ~ year), #<<
+            data = globwarm_)
+```
+
+---
+
+## GLS Example
+
+* The **nlme** package has a function for this
+
+.small[
+```{r}
+summary(glmod)
+```
+]
+
+---
+
+## GLS Example
+
+* The **nlme** package has a function for this
+
+.small[
+```{r, highlight.output = 9:11}
+summary(glmod)
+```
+]
+
+---
+
+## GLS Example
+
+```{r, highlight.output = 4:5}
+intervals(glmod, which = "var-cov")
+```
+
+---
+
+## Some examples of correlated errors
+
+* Autocorrelation
+* Grouped (block) data
+* Spatial data
+
+---
+
+class: inverse
+
+## `r fa("laptop")` `Application Exercise`
+
+Using the `cheddar` data from the faraway package, run the code below to add a time variable. 
+
+```{r}
+library(faraway)
+cheddar$time <- 1:nrow(cheddar)
+```
+
+* Fit a linear model predicting `taste` from `Acetic`, `H2S` and `Lactic`.
+* Plot the residuals from the model against `time`. What do you see?
+* Fit a GLS model using AR(1) correlation. Is there evidence of correlation between the errors?
+

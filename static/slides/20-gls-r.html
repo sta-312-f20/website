@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Generalized Least Squares in R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Generalized Least Squares in R
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Lucy D'Agostino McGowan
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+## GLS Example
+
+* Global warming data estimating northern hemisphere temperature from 8 climate proxies
+* Each observation represents a year of data (from 1856 to 2000)
+
+.question[
+What could go wrong here if we use ordinary least squares?
+]
+
+---
+
+## GLS Example
+
+
+```r
+library(faraway)
+globwarm_ &lt;- na.omit(globwarm)
+
+lmod &lt;- lm(nhtemp ~ wusa + jasper + westgreen + 
+             chesapeake + tornetrask + urals + 
+             mongolia + tasman, data = globwarm_)
+```
+
+---
+
+## GLS Example
+
+
+```r
+library(faraway)
+globwarm_ &lt;- na.omit(globwarm)
+
+lmod &lt;- lm(nhtemp ~ wusa + jasper + westgreen + 
+             chesapeake + tornetrask + urals + 
+             mongolia + tasman, data = globwarm_)
+
+n &lt;- length(residuals(lmod))
+*cor(residuals(lmod)[-1], residuals(lmod)[-n])
+```
+
+```
+## [1] 0.583339
+```
+
+--
+
+.question[
+How would we fit this using GLS?
+]
+---
+
+## Estimate `\(\Sigma\)`
+
+* If we assume the errors take a simple auto-regressive form such that each error is correlated with the prior:
+
+`$$\epsilon_{i+1}=\phi\epsilon_i+\delta_i$$`
+
+* Where `\(\delta_i\sim N(0, \tau^2)\)`
+--
+
+* We can estimate `\(\phi\)` from the model.
+
+.small[
+
+```r
+cor(residuals(lmod)[-1], residuals(lmod)[-n])
+```
+
+```
+## [1] 0.583339
+```
+]
+
+--
+
+* Under this assumption, `\(\Sigma_{ij}=\phi^{|i-j|}\)`. We can estimate it like this:
+
+
+```r
+X &lt;- model.matrix(lmod)
+Sigma &lt;- diag(n)
+Sigma &lt;- 0.5833^abs(row(Sigma) - col(Sigma))
+```
+
+---
+
+## GLS Example
+
+
+```r
+y &lt;- globwarm_$nhtemp
+Sigma_inv &lt;- solve(Sigma)
+XTX_inv &lt;- solve(t(X) %*% Sigma_inv %*% X)
+betahat &lt;- XTX_inv %*% t(X) %*% Sigma_inv %*% y
+betahat
+```
+
+```
+##                     [,1]
+## (Intercept) -0.234134783
+## wusa         0.068425906
+## jasper      -0.218438446
+## westgreen    0.003880871
+## chesapeake  -0.014952072
+## tornetrask   0.057691347
+## urals        0.222078555
+## mongolia     0.055247801
+## tasman       0.122999856
+```
+
+---
+
+## GLS Example
+
+* What is the correlation now?
+
+
+```r
+res &lt;- y - X %*% betahat
+cor(res[-1], res[-n])
+```
+
+```
+## [1] 0.5887776
+```
+
+---
+
+## GLS Example
+
+* Another way to do this
+
+.small[
+
+```r
+S &lt;- chol(Sigma)
+S_inv &lt;- solve(t(S))
+SX &lt;- S_inv %*% X
+Sy &lt;- S_inv %*% y
+lm(Sy ~ SX - 1)
+```
+
+```
+## 
+## Call:
+## lm(formula = Sy ~ SX - 1)
+## 
+## Coefficients:
+## SX(Intercept)         SXwusa       SXjasper    SXwestgreen   SXchesapeake  
+##     -0.234135       0.068426      -0.218438       0.003881      -0.014952  
+##  SXtornetrask        SXurals     SXmongolia       SXtasman  
+##      0.057691       0.222079       0.055248       0.123000
+```
+]
+
+---
+
+## GLS Example
+
+.pull-left[
+.small[
+
+```r
+betahat
+```
+
+```
+##                     [,1]
+## (Intercept) -0.234134783
+## wusa         0.068425906
+## jasper      -0.218438446
+## westgreen    0.003880871
+## chesapeake  -0.014952072
+## tornetrask   0.057691347
+## urals        0.222078555
+## mongolia     0.055247801
+## tasman       0.122999856
+```
+]
+]
+
+.pull-right[
+.small[
+
+```r
+matrix(lm(Sy ~ SX - 1)$coef)
+```
+
+```
+##               [,1]
+##  [1,] -0.234134783
+##  [2,]  0.068425906
+##  [3,] -0.218438446
+##  [4,]  0.003880871
+##  [5,] -0.014952072
+##  [6,]  0.057691347
+##  [7,]  0.222078555
+##  [8,]  0.055247801
+##  [9,]  0.122999856
+```
+
+]
+]
+---
+
+## GLS Example
+
+* The **nlme** package has a function for this
+
+
+```r
+library(nlme)
+glmod &lt;- gls(nhtemp ~ wusa + jasper + westgreen + 
+              chesapeake + tornetrask + urals + 
+              mongolia + tasman, 
+            correlation = corAR1(form = ~ year),
+            data = globwarm_)
+```
+
+
+---
+
+## GLS Example
+
+* The **nlme** package has a function for this
+
+
+```r
+library(nlme)
+glmod &lt;- gls(nhtemp ~ wusa + jasper + westgreen + 
+              chesapeake + tornetrask + urals + 
+              mongolia + tasman, 
+*           correlation = corAR1(form = ~ year),
+            data = globwarm_)
+```
+
+---
+
+## GLS Example
+
+* The **nlme** package has a function for this
+
+.small[
+
+```r
+summary(glmod)
+```
+
+```
+## Generalized least squares fit by REML
+##   Model: nhtemp ~ wusa + jasper + westgreen + chesapeake + tornetrask +      urals + mongolia + tasman 
+##   Data: globwarm_ 
+##         AIC       BIC   logLik
+##   -108.2074 -76.16822 65.10371
+## 
+## Correlation Structure: AR(1)
+##  Formula: ~year 
+##  Parameter estimate(s):
+##       Phi 
+## 0.7109922 
+## 
+## Coefficients:
+##                   Value  Std.Error   t-value p-value
+## (Intercept) -0.23010624 0.06702406 -3.433188  0.0008
+## wusa         0.06673819 0.09877211  0.675678  0.5004
+## jasper      -0.20244335 0.18802773 -1.076668  0.2835
+## westgreen   -0.00440299 0.08985321 -0.049002  0.9610
+## chesapeake  -0.00735289 0.07349791 -0.100042  0.9205
+## tornetrask   0.03835169 0.09482515  0.404446  0.6865
+## urals        0.24142199 0.22871028  1.055580  0.2930
+## mongolia     0.05694978 0.10489786  0.542907  0.5881
+## tasman       0.12034918 0.07456983  1.613913  0.1089
+## 
+##  Correlation: 
+##            (Intr) wusa   jasper wstgrn chespk trntrs urals  mongol
+## wusa       -0.517                                                 
+## jasper     -0.058 -0.299                                          
+## westgreen   0.330 -0.533  0.121                                   
+## chesapeake  0.090 -0.314  0.230  0.147                            
+## tornetrask -0.430  0.499 -0.197 -0.328 -0.441                     
+## urals      -0.110 -0.142 -0.265  0.075 -0.064 -0.346              
+## mongolia    0.459 -0.437 -0.205  0.217  0.449 -0.343 -0.371       
+## tasman      0.037 -0.322  0.065  0.134  0.116 -0.434  0.416 -0.017
+## 
+## Standardized residuals:
+##         Min          Q1         Med          Q3         Max 
+## -2.31122523 -0.53484054  0.02342908  0.50015642  2.97224724 
+## 
+## Residual standard error: 0.204572 
+## Degrees of freedom: 145 total; 136 residual
+```
+]
+
+---
+
+## GLS Example
+
+* The **nlme** package has a function for this
+
+.small[
+
+```r
+summary(glmod)
+```
+
+```
+## Generalized least squares fit by REML
+##   Model: nhtemp ~ wusa + jasper + westgreen + chesapeake + tornetrask +      urals + mongolia + tasman 
+##   Data: globwarm_ 
+##         AIC       BIC   logLik
+##   -108.2074 -76.16822 65.10371
+## 
+## Correlation Structure: AR(1)
+##  Formula: ~year 
+*##  Parameter estimate(s):
+*##       Phi 
+*## 0.7109922 
+## 
+## Coefficients:
+##                   Value  Std.Error   t-value p-value
+## (Intercept) -0.23010624 0.06702406 -3.433188  0.0008
+## wusa         0.06673819 0.09877211  0.675678  0.5004
+## jasper      -0.20244335 0.18802773 -1.076668  0.2835
+## westgreen   -0.00440299 0.08985321 -0.049002  0.9610
+## chesapeake  -0.00735289 0.07349791 -0.100042  0.9205
+## tornetrask   0.03835169 0.09482515  0.404446  0.6865
+## urals        0.24142199 0.22871028  1.055580  0.2930
+## mongolia     0.05694978 0.10489786  0.542907  0.5881
+## tasman       0.12034918 0.07456983  1.613913  0.1089
+## 
+##  Correlation: 
+##            (Intr) wusa   jasper wstgrn chespk trntrs urals  mongol
+## wusa       -0.517                                                 
+## jasper     -0.058 -0.299                                          
+## westgreen   0.330 -0.533  0.121                                   
+## chesapeake  0.090 -0.314  0.230  0.147                            
+## tornetrask -0.430  0.499 -0.197 -0.328 -0.441                     
+## urals      -0.110 -0.142 -0.265  0.075 -0.064 -0.346              
+## mongolia    0.459 -0.437 -0.205  0.217  0.449 -0.343 -0.371       
+## tasman      0.037 -0.322  0.065  0.134  0.116 -0.434  0.416 -0.017
+## 
+## Standardized residuals:
+##         Min          Q1         Med          Q3         Max 
+## -2.31122523 -0.53484054  0.02342908  0.50015642  2.97224724 
+## 
+## Residual standard error: 0.204572 
+## Degrees of freedom: 145 total; 136 residual
+```
+]
+
+---
+
+## GLS Example
+
+
+```r
+intervals(glmod, which = "var-cov")
+```
+
+```
+## Approximate 95% confidence intervals
+## 
+##  Correlation structure:
+*##         lower      est.     upper
+*## Phi 0.5099744 0.7109922 0.8383752
+## attr(,"label")
+## [1] "Correlation structure:"
+## 
+##  Residual standard error:
+##     lower      est.     upper 
+## 0.1540709 0.2045720 0.2716263
+```
+
+---
+
+## Some examples of correlated errors
+
+* Autocorrelation
+* Grouped (block) data
+* Spatial data
+
+---
+
+class: inverse
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 640 512"&gt;&lt;path d="M512 64v256H128V64h384m16-64H112C85.5 0 64 21.5 64 48v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm100 416H389.5c-3 0-5.5 2.1-5.9 5.1C381.2 436.3 368 448 352 448h-64c-16 0-29.2-11.7-31.6-26.9-.5-2.9-3-5.1-5.9-5.1H12c-6.6 0-12 5.4-12 12v36c0 26.5 21.5 48 48 48h544c26.5 0 48-21.5 48-48v-36c0-6.6-5.4-12-12-12z"/&gt;&lt;/svg&gt; `Application Exercise`
+
+Using the `cheddar` data from the faraway package, run the code below to add a time variable. 
+
+
+```r
+library(faraway)
+cheddar$time &lt;- 1:nrow(cheddar)
+```
+
+* Fit a linear model predicting `taste` from `Acetic`, `H2S` and `Lactic`.
+* Plot the residuals from the model against `time`. What do you see?
+* Fit a GLS model using AR(1) correlation. Is there evidence of correlation between the errors?
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

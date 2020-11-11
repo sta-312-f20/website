@@ -1,0 +1,70 @@
+---
+title: "Weighted Least Squares"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## Weighted Least Squares
+
+* This is a **special case** of GLS where the errors are _uncorrelated_
+--
+
+* Now $\Sigma$ is a diagonal matrix with weights $w_i, \dots,w_n$ on the diagonal
+--
+
+* $\mathbf{S} = \textrm{diag}(\sqrt{1/w_1}, \dots,\sqrt{1/w_n})$
+--
+
+* So we would regress $\sqrt{w_i}y_i$ on $\sqrt{w_i}x_i$
+--
+
+* **Note** the column of 1s in the design matrix should now be replaced with $\sqrt{w_i}$
+--
+
+* cases with low variability get a high weight and those with high variability a low weight
+
+---
+
+## WLS Examples
+
+* You see a positive relationship when you plot the absolute value of the residuals, $|e_i|$, against a predictor, $x_i$. **Errors are proportional to a predictor** This suggests you should use $w_i = x_i^{-1}$
+--
+
+* **Your outcome, $y_i$ is an _average_ of $n_i$ observations**. Here you may want to weight by $w_i = n_i$
+--
+
+* **The observed responses are known to be of varying quality.** Here you may want to use $w_i = 1/\textrm{var}(y_i)$
+
+---
+
+## WLS in R
+
+* You can fit weighted least squares by fitting the _normal_ linear model using `lm` and adding the `weights` parameter
+
+```{r, eval = FALSE}
+lm(y ~ x, data = data, weights = wts)
+```
+
+

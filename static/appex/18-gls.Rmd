@@ -1,5 +1,5 @@
 ---
-title: "Content Assessment"
+title: "Application Exercise"
 output: 
   tufte::tufte_html:
     tufte_variant: "envisioned"
@@ -31,17 +31,13 @@ output: html_document
 5. Give your work a sensible title
 6. When you've finished, upload the .html file to Canvas
 
-* Show that 
+Using the `cheddar` data from the faraway package, run the code below to add a time variable. 
 
-$$\textrm{var}(\epsilon')=\sigma^2\mathbf{I}$$
+```{r}
+library(faraway)
+cheddar$time <- 1:nrow(cheddar)
+```
 
-* Minimize $(y - \mathbf{X}\beta)^T\Sigma^{-1}(y-\mathbf{X}\beta)$ with respect to $\beta$ to calculate the estimate for $\hat\beta$
-
-
-* Using the estimate for $\hat\beta$ that you previously calculated, take the expectation of $\hat\beta$. Is this an unbiased estimate for $\beta$?
-
-
-
-* Show that 
-
-$$\textrm{var}(\hat\beta)=(\mathbf{X}^T\Sigma^{-1}\mathbf{X})^{-1}\sigma^2$$
+* Fit a linear model predicting `taste` from `Acetic`, `H2S` and `Lactic`.
+* Plot the residuals from the model against `time`. What do you see?
+* Fit a GLS model using AR(1) correlation. Is there evidence of correlation between the errors?
