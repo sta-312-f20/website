@@ -169,8 +169,8 @@ cor(res[-1], res[-n])
 .small[
 
 ```r
-S &lt;- chol(Sigma)
-S_inv &lt;- solve(t(S))
+S &lt;- t(chol(Sigma))
+S_inv &lt;- solve(S)
 SX &lt;- S_inv %*% X
 Sy &lt;- S_inv %*% y
 lm(Sy ~ SX - 1)

@@ -1,0 +1,151 @@
+---
+title: "Robust Regression"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## Robust Regression
+
+* When we have outliers, least squares doesn't always perform well
+
+.question[
+How can we tell if we have outliers?
+]
+
+---
+
+## M-estimation
+
+* Modifies least squares to pick a $\beta$ that minimizes the general _objective function_
+
+$$\sum_{i=1}^nf(y_i-x_i^T\beta)$$
+--
+
+.question[
+What would f(e) be for least squares?
+]
+--
+
+Some possibilities:
+
+* $f(e)=e^2$
+* $f(e)=|e|$ (this is least absolute deviation regression)
+* $f(e)=\begin{cases}e^2/2&\textrm{if} |e|\leq c\\ c|e|-c^2/2&\textrm{otherwise}\end{cases}$ (Huber's method)
+
+---
+
+## Solving M-estimation
+
+* Differentiating the _objective function_ with respect to $\beta$ and setting equal to 0 produces $p+1$ estimating equations for the coefficients
+
+$$\sum_{i=1}^{n}f'(y_i-x_i^T\beta)x_i^T=0$$
+
+--
+
+* We can define a _weight function_ such that $w(u) = f'(u)/u$
+---
+
+## Solving M-estimation
+
+* SO we can write the estimating equations as:
+
+$$\sum_{i=1}^{n}w_i(y_i-x_i^T\beta)x_i^T=0$$
+
+--
+
+* Solving this is the same as solving weighted least squares! Minimizing $\sum w_i^2e_i^2$
+--
+
+* But it needs to be solved _iteratively_ because the weights depend on the residuals...which depend on the estimates...which depend on the weights
+--
+
+* Iteratively reweighted least squares (IRLS)
+---
+
+## IRLS
+
+* Select starting values for $\beta^{(0)}$
+--
+
+* At each iteration calculate residuals $e_i^{(t-1)}$ and weights $w_i^{(t-1)}$
+--
+
+* Solve for the new weighted least squares estimate
+
+$$\beta^{(t)}=(\mathbf{X}^T\mathbf{W}^{(t-1)}\mathbf{X})^{-1}\mathbf{X}^T\mathbf{W}^{(t-1)}\mathbf{y}$$
+--
+
+* Repeat until converges!
+
+---
+
+## Weight functions
+
+
+Method | Objective function | Weight function 
+---|-----|----
+Least Squares | $f(e)=e^2$ | $w(e)=1$
+LAD | $f(e)=\lvert e\rvert$ | $w(e) = 1/\lvert e\rvert$
+Huber | $f(e)=\begin{cases}e^2/2&\textrm{if} \lvert e\rvert\leq c\\ c\lvert e\rvert-c^2/2&\textrm{otherwise}\end{cases}$ | $w(e)=\begin{cases}1&\textrm{if }\lvert e\rvert\leq c\\c/\lvert e\rvert&\textrm{otherwise}\end{cases}$
+
+--
+
+* The Huber method combines the downweighting of extreme cases with equal weighting for middle cases
+
+---
+
+## Robust regression in R
+
+You can perform robust regression using the `rlm` function from the `MASS` package
+
+```{r, eval = FALSE}
+library(MASS)
+mod <- rlm(y ~ x, data = data)
+```
+
+--
+
+You can examine the weights like this
+
+```{r, eval = FALSE}
+mod$weights
+```
+
+---
+
+## Robust regression recap
+
+* Useful when there are _outliers_ 
+* If you find the results from least squares and robust regression noticeably different, robust regression is likely more trustworthy
+
+---
+
+class: inverse
+
+## `r fa("laptop")` `Application Exercise`
+
+* Fit a robust regression model to the `gala` data from the `faraway` package, predicting `Species` using `Area`, `Elevation`, `Nearest`, `Scrutz`, and `Adjacent`. 
+* Which observations result in weights less than one? 
+* What does this mean for these observations?
