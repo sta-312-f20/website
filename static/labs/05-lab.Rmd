@@ -1,0 +1,78 @@
+---
+title: "Lab 05: Putting it all together"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: lab.css
+link-citations: yes
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE     # for regression output
+)
+```
+
+**Due:** Tuesday 2020-11-24 at 5pm
+
+# Getting started
+
+- Go to RStudio Pro. Create a **New Project** by clicking File > New Project > New Directory. Name the directory something sensible
+- Create a new the .Rmd file in this project and you're ready to go!
+
+
+# Packages
+
+In this lab we will work with one package: `faraway`.
+
+If you need to install this package, run the following code **once** in your Console:
+
+```{r, eval = FALSE}
+install.packages("faraway")
+```
+
+If you'd like to run your code in the Console as well you'll also need to load the packages there. To do so, run the following in the console. 
+
+```{r}
+library(faraway) 
+```
+
+Note that the packages are also loaded with the same commands in your R Markdown document.
+
+# Data
+
+We will work with two data frames today: `stackloss` and `mammalsleep`, both from the`faraway` package. To load the data add the following to your .Rmd file:
+
+```{r}
+data("stackloss")
+data("mammalsleep")
+```
+
+To find out more about the dataset, type the following in your Console: `?stackloss`. A question mark before the name of an object will always bring up its help file. This command must be ran in the Console.
+
+```{marginfigure}
+Remember: The Console is at the bottom of your RStudio workspace. Things you type in the Console will not be in your final report. This is a good place to peek at data (try typing `stackloss` in the Console) and look at help files with the `?`. 
+```
+
+## Exercises
+
+1. Using all of the tools we've learned so far in this class, use the `stackloss` data set to predict Stack loss using the remaining variables, fitting an appropriate model. Be sure to include:
+
+* A description of the data
+* Checks that all of the assumptions of the model you fit are met
+* A model that is appropriate for the data at hand (this should include plots with explanations of what they show)
+* An explanation for why you chose to use the model chosen
+* An interpretation of the final model, including an interpretation of the coefficients for all of the predictors
+
+2. Using all of the tools we've learned so far in this class, use the `mammalsleep` data set to predict sleep using the remaining variables, fitting an appropriate model. Be sure to include:
+
+* A description of the data
+* Checks that all of the assumptions of the model you fit are met
+* A model that is appropriate for the data at hand (this should include plots with explanations of what they show)
+* An explanation for why you chose to use the model chosen
+* An interpretation of the final model, including an interpretation of the coefficients for all of the predictors
+
+ 

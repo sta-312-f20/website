@@ -45,3 +45,4 @@ $$\textrm{var}(\epsilon')=\sigma^2\mathbf{I}$$
 * Show that 
 
 $$\textrm{var}(\hat\beta)=(\mathbf{X}^T\Sigma^{-1}\mathbf{X})^{-1}\sigma^2$$
+

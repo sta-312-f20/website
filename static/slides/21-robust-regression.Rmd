@@ -130,7 +130,7 @@ mod <- rlm(y ~ x, data = data)
 You can examine the weights like this
 
 ```{r, eval = FALSE}
-mod$weights
+mod$w
 ```
 
 ---
