@@ -146,6 +146,6 @@ class: inverse
 
 ## `r fa("laptop")` `Application Exercise`
 
-* Fit a robust regression model to the `gala` data from the `faraway` package, predicting `Species` using `Area`, `Elevation`, `Nearest`, `Scrutz`, and `Adjacent`. 
+* Fit a robust regression model to the `gala` data from the `faraway` package, predicting `Species` using `Area`, `Elevation`, `Nearest`, `Scruz`, and `Adjacent`. 
 * Which observations result in weights less than one? 
 * What does this mean for these observations?
