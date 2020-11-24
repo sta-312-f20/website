@@ -1,0 +1,226 @@
+---
+title: "Building Reports in R Markdown"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## Harnessing the power of RMarkdown!
+
+* Code chunk options
+* Tables
+* Inline code
+* Output Formats
+
+---
+
+## Code chunk options
+
+* All chunk options can be found on [Yihui's website](http://yihui.name/knitr/options/)
+--
+
+* ````{r}`
+--
+
+* ````{r, echo = FALSE}`
+--
+
+* ````{r, eval = FALSE}`
+--
+
+* ````{r, message = FALSE, warning = FALSE}`
+--
+
+* ````{r, fig.cap = "PUT CAPTION HERE"}`
+
+---
+
+## Code Chunks
+
+* For these fancy reports, we want to see the R code, but we don't want it interspersed throughout the document. 
+* You can "hide" all of your chunks by adding this to the top of your .Rmd file
+
+.small[
+````
+`r ''````{r, echo = FALSE}
+library(knitr)
+opts_chunk$set(echo = FALSE)
+```
+````
+]
+
+--
+
+* **THEN** at the end of you document (in the Appendix) you can add
+
+.small[
+````
+`r ''````{r ref.label=knitr::all_labels(), echo = TRUE, eval = FALSE}
+```
+````
+]
+---
+
+class: inverse 
+## `r fa("laptop")` `Application Exercise`
+
+* Choose one of your analyses from the last Lab and copy it into a new R Markdown file
+* Edit the chunks so that:
+  * no messages or warnings are printed
+  * All figures have appropriate captions
+  * The code all is printed at the end of the document
+---
+
+## Tables
+
+* There are several packages for making pretty tables in RMarkdown
+--
+
+* [knitr]((https://cran.r-project.org/web/packages/knitr/)
+* [xtable](https://cran.r-project.org/web/packages/xtable/)
+* [stargazer](https://cran.r-project.org/web/packages/stargazer/)
+* [pander](http://rapporter.github.io/pander/)
+* [tables](https://cran.r-project.org/web/packages/tables/)
+* [ascii](http://eusebe.github.io/ascii/)
+---
+
+## Tables with knitr
+
+```{r}
+library(knitr)
+kable(mtcars[1:4, ], caption = "Look at all those cars!")
+```
+
+---
+
+## broom
+
+* Helps create "tidy" tables from your `lm` output
+
+--
+
+.pull-left[
+.small[
+```{r}
+lm(wt ~ am, data = mtcars)
+```
+]
+]
+
+.pull-right[
+.small[
+```{r}
+library(broom)
+m <- lm(wt ~ am, data = mtcars)
+tidy(m)
+```
+]
+
+]
+
+
+---
+
+## kable + broom
+
+* Use the `kable()` function to output a pretty table
+
+.small[
+```{r, eval = FALSE}
+library(knitr) #<<
+m <- lm(wt ~ am, data = mtcars)
+kable(tidy(m))
+```
+]
+.small[
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+library(knitr) 
+m <- lm(wt ~ am, data = mtcars)
+kable(tidy(m), format = "html")
+```
+]
+---
+
+class: inverse 
+
+## `r fa("laptop")` `Application Exercise`
+
+* Using the same document as the previous application exercise, update all model output to be in "nicely" formatted tables using `tidy` and `kable` (or a different table package of your choosing)
+
+---
+
+## Inline code
+
+* You can include _inline_ by using `r` 
+--
+
+* This is especially useful if you want to reference a numeric value.
+
+---
+
+class: inverse 
+
+## `r fa("laptop")` `Application Exercise`
+
+* Using the same document as the previous application exercise, update all references to numeric values using inline code. _Be sure to round numbers_.
+
+---
+
+## Output formats
+
+## Updating your `yaml`
+
+
+```{yaml}
+---
+title: "The title of your document"
+name: "Your name"
+output: pdf_document #<<
+---
+```
+
+---
+
+## Output formats
+
+## Updating your `yaml`
+
+
+```{yaml}
+---
+title: "The title of your document"
+name: "Your name"
+output: word_document #<<
+---
+```
+
+---
+
+class: inverse 
+
+## `r fa("laptop")` `Application Exercise`
+
+* Using the same document as the previous application exercise, update your file to output a word document. 
+
+
