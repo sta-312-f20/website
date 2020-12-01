@@ -280,7 +280,9 @@ lessons:
     video: "https://youtu.be/SlkOM2HsfVs"
   - title: "Week 15"
   - date: "Tues, Dec 1"
-    title: "Communicating Statistics"
+    title: "Visualizing Linear Models"
+    slides: "23-visualizing-linear-models.html"
+    video: "https://youtu.be/LpiB0Ntnf1I"
   - date: "Thurs, Dec 3"
     title: "Wrap-up"
   

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Visualizing Linear Models</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Visualizing Linear Models
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Lucy D'Agostino McGowan
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+## Visualizing linear models
+
+* Forest plots of the coefficients and confidence intervals
+
+--
+
+![](23-visualizing-linear-models_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+---
+
+## Building up to this plot!
+
+First, fit the model and tidy it
+
+
+```r
+library(broom)
+library(ggplot2)
+mod &lt;- lm(mpg ~ cyl + am + vs + gear, data = mtcars)
+mod_tidy &lt;- tidy(mod, conf.int = TRUE)
+mod_tidy &lt;- mod_tidy[-1, ] # drop the intercept
+```
+
+---
+
+## Building up to this plot!
+
+First, fit the model and tidy it
+
+
+```r
+library(broom)
+library(ggplot2)
+*mod &lt;- lm(mpg ~ cyl + am + vs + gear, data = mtcars)
+mod_tidy &lt;- tidy(mod, conf.int = TRUE)
+mod_tidy &lt;- mod_tidy[-1, ] # drop the intercept
+```
+
+---
+
+## Building up to this plot!
+
+First, fit the model and tidy it
+
+
+```r
+library(broom)
+library(ggplot2)
+mod &lt;- lm(mpg ~ cyl + am + vs + gear, data = mtcars)
+*mod_tidy &lt;- tidy(mod, conf.int = TRUE)
+mod_tidy &lt;- mod_tidy[-1, ] # drop the intercept
+```
+
+---
+
+## Building up to this plot!
+
+First, fit the model and tidy it
+
+
+```r
+library(broom)
+library(ggplot2)
+mod &lt;- lm(mpg ~ cyl + am + vs + gear, data = mtcars)
+mod_tidy &lt;- tidy(mod, conf.int = TRUE)
+*mod_tidy &lt;- mod_tidy[-1, ] # drop the intercept
+```
+
+---
+
+## Create a forest plot
+
+
+.pull-left[
+.small[
+
+```r
+ggplot(mod_tidy,
+       aes(x = term, y = estimate, 
+           ymin = conf.low,
+           ymax = conf.high)) +
+* geom_pointrange()
+```
+]
+]
+
+.pull-right[
+![](23-visualizing-linear-models_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+]
+
+--
+.question[
+What could be better?
+]
+
+---
+
+## Flip the x- and y-axis
+
+.pull-left[
+.small[
+
+```r
+ggplot(mod_tidy,
+       aes(x = term, y = estimate, 
+           ymin = conf.low,
+           ymax = conf.high)) +
+  geom_pointrange() +
+* coord_flip()
+```
+]
+]
+
+.pull-right[
+![](23-visualizing-linear-models_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Axis labels
+
+.pull-left[
+.small[
+
+```r
+ggplot(mod_tidy,
+       aes(x = term, y = estimate, 
+           ymin = conf.low,
+           ymax = conf.high)) +
+  geom_pointrange() +
+  coord_flip() +
+* labs(x = "",
+*      y = "Coefficient (95% CI)")
+```
+]
+]
+
+.pull-right[
+![](23-visualizing-linear-models_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Term labels
+
+
+.pull-left[
+.small[
+
+```r
+mod_tidy$labels &lt;- c(
+* "No. cylinders",
+* "Manual transmission",
+* "Straight engine",
+* "No. forward gears")
+ggplot(mod_tidy,
+*      aes(x = labels, y = estimate,
+           ymin = conf.low,
+           ymax = conf.high)) +
+  geom_pointrange() +
+  coord_flip() +
+  labs(x = "", 
+       y = "Coefficient (95% CI)") 
+```
+]
+]
+
+.pull-right[
+![](23-visualizing-linear-models_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+]
+
+--
+
+Better ways to do this (especially if you have lots of variables!)
+
+* `merge()`
+* `left_join()`
+
+---
+
+## Add a reference line at the null
+
+
+.pull-left[
+.small[
+
+```r
+ggplot(mod_tidy,
+       aes(x = labels, y = estimate, 
+           ymin = conf.low,
+           ymax = conf.high)) +
+  geom_pointrange() +
+* geom_hline(yintercept = 0, lty = 2) +
+  coord_flip() +
+  labs(x = "", 
+       y = "Coefficient (95% CI)") 
+```
+]
+]
+
+.pull-right[
+![](23-visualizing-linear-models_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Update the theme
+
+
+.pull-left[
+.small[
+
+```r
+ggplot(mod_tidy,
+       aes(x = labels, y = estimate, 
+           ymin = conf.low,
+           ymax = conf.high)) +
+  geom_pointrange() +
+  geom_hline(yintercept = 0, lty = 2) +
+  coord_flip() +
+  labs(x = "", 
+       y = "Coefficient (95% CI)") +
+* theme_minimal()
+```
+]
+]
+
+.pull-right[
+![](23-visualizing-linear-models_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+]
+
+--
+
+* Check out the available themes here: https://ggplot2.tidyverse.org/reference/ggtheme.html
+
+---
+
+## Higlight points of interest
+
+
+.pull-left[
+.small[
+
+```r
+ggplot(mod_tidy,
+       aes(x = labels, y = estimate, 
+           ymin = conf.low,
+           ymax = conf.high,
+*          color =
+*            ifelse(p.value &lt; 0.05,
+*                   "p &lt; 0.05",
+*                   "p &gt; 0.05"))) +
+  geom_pointrange() +
+  geom_hline(yintercept = 0, lty = 2) +
+  coord_flip() +
+* scale_color_manual("",
+*                    values = c(
+*                      "blue",
+*                      "black")) +
+  labs(x = "", 
+       y = "Coefficient (95% CI)") +
+  theme_minimal() 
+```
+]
+]
+
+.pull-right[
+![](23-visualizing-linear-models_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Annotate an important point
+
+
+.pull-left[
+.small[
+
+```r
+ggplot(mod_tidy,
+       aes(x = labels, y = estimate, 
+           ymin = conf.low,
+           ymax = conf.high,
+           color = 
+             ifelse(p.value &lt; 0.05, 
+                    "p &lt; 0.05", 
+                    "p &gt; 0.05"))) + 
+  geom_pointrange() +
+  geom_hline(yintercept = 0, lty = 2) +
+  coord_flip() +
+  scale_color_manual("", 
+                     values = c( 
+                       "blue", 
+                       "black")) + 
+  labs(x = "", 
+       y = "Coefficient (95% CI)") +
+* annotate("text", x = 2.25, y = 5.9,
+*          label = "Having manual transmission \n(versus automatic) \nyeilds an expected change in \nmiles per gallon of 4.32 \n(95% CI: 0.1, 8.5)",
+*          size = 2) +
+  theme_minimal() 
+```
+]
+]
+
+.pull-right[
+![](23-visualizing-linear-models_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Annotate an important point
+
+.pull-left[
+.small[
+
+```r
+ggplot(mod_tidy,
+       aes(x = labels, y = estimate, 
+           ymin = conf.low,
+           ymax = conf.high,
+           color = 
+             ifelse(p.value &lt; 0.05, 
+                    "p &lt; 0.05", 
+                    "p &gt; 0.05"))) + 
+  geom_pointrange() +
+  geom_hline(yintercept = 0, lty = 2) +
+  coord_flip() +
+  scale_color_manual("", 
+                     values = c( 
+                       "blue", 
+                       "black")) + 
+  labs(x = "", 
+       y = "Coefficient (95% CI)") +
+  annotate("text", x = 2.25, y = 5.9,
+           label = "Having manual transmission \n(versus automatic) \nyeilds an expected change in \nmiles per gallon of 4.32 \n(95% CI: 0.1, 8.5) holding all other \nvariables constant", 
+           size = 2) + 
+* annotate("curve", x = 1.5, y = 4.75,
+*          xend = 1.2, yend = 4.32,
+*          arrow = arrow(length = unit(0.03, "npc"))) +
+  theme_minimal() 
+```
+]
+]
+
+.pull-right[
+![](23-visualizing-linear-models_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## And there you have it!
+
+![](23-visualizing-linear-models_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+
+---
+
+class: inverse
+
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 640 512"&gt;&lt;path d="M624 416H381.54c-.74 19.81-14.71 32-32.74 32H288c-18.69 0-33.02-17.47-32.77-32H16c-8.8 0-16 7.2-16 16v16c0 35.2 28.8 64 64 64h512c35.2 0 64-28.8 64-64v-16c0-8.8-7.2-16-16-16zM576 48c0-26.4-21.6-48-48-48H112C85.6 0 64 21.6 64 48v336h512V48zm-64 272H128V64h384v256z"/&gt;&lt;/svg&gt;`Application Exercise`
+
+* Take the model you chose in the previous application exercise and create a figure like the one discussed today. Include a caption that explains what the figure demonstrates.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
